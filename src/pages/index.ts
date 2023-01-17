@@ -1,0 +1,1 @@
+export { default as Vault } from './vault'

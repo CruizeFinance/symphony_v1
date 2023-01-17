@@ -1,0 +1,27 @@
+@import '../../style/mixins.scss';
+@import '../../style/functions.scss';
+
+.header {
+  position: fixed;
+  top: 0;
+  width: -webkit-fill-available;
+  padding: toRem(22) toRem(68);
+  backdrop-filter: blur(toRem(32));
+  @include flex(row, center, space-between, '');
+  .logo-area {
+    @include flex(row, center, '', toRem(36));
+    .links {
+      @include flex(row, center, '', toRem(30));
+      .link {
+        font-family: GroteskSemiBold;
+        font-size: toRem(20);
+        line-height: toRem(24);
+        color: var(--link-inactive);
+        text-decoration: none;
+        &.active {
+          color: var(--black);
+        }
+      }
+    }
+  }
+}

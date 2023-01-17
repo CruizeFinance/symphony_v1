@@ -1,0 +1,17 @@
+:root {
+  --black: #000000;
+  --white: #ffffff;
+  --link-inactive: rgba(0, 0, 0, 0.4);
+  --vault-background: linear-gradient(
+    180deg,
+    rgba(64, 90, 175, 0.22) 0%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  --vault-card-background: linear-gradient(
+    143.82deg,
+    rgba(0, 0, 0, 0.1) 0%,
+    rgba(0, 0, 0, 0) 98.65%
+  );
+  --vault-card-border: rgba(0, 0, 0, 0.2);
+  --footer-border-top: rgba(0, 0, 0, 0.8);
+}

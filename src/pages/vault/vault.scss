@@ -1,0 +1,33 @@
+@import '../../style/mixins.scss';
+@import '../../style/functions.scss';
+
+.vault {
+  width: 100%;
+  height: 100%;
+  @include flex(column, center, center, toRem(70));
+  .page-title {
+    @include flex(column, center, center, '');
+    max-width: toRem(775);
+    text-align: center;
+    .title {
+      @include typography(GroteskSemiBold, toRem(56), toRem(72), var(--black));
+    }
+    .sub-title {
+      @include typography(GroteskMedium, toRem(22), toRem(30), var(--black));
+    }
+  }
+  .tvl-info {
+    @include flex(column, center, center, toRem(4));
+    margin-bottom: toRem(14);
+    text-align: center;
+    .tvl-label {
+      @include typography(GroteskMedium, toRem(24), toRem(30), var(--black));
+    }
+    .tvl-value {
+      @include typography(GroteskSemiBold, toRem(36), toRem(40), var(--black));
+    }
+  }
+  .vault-options {
+    @include flex(row, center, center, toRem(20));
+  }
+}

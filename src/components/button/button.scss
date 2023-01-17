@@ -1,0 +1,20 @@
+@import '../../style/functions.scss';
+@import '../../style/mixins.scss';
+
+.button {
+  border-radius: toRem(100);
+  background: var(--black);
+  padding: toRem(8) toRem(16);
+  @include flex(row, center, center, toRem(8));
+  @include typography(GroteskMedium, toRem(24), auto, var(--white));
+  border: none;
+  cursor: pointer;
+  svg {
+    color: var(--white);
+    fill: var(--white);
+  }
+  &:disabled {
+    background: rgba(0, 0, 0, 0.2);
+    cursor: not-allowed;
+  }
+}

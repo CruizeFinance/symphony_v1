@@ -1,0 +1,42 @@
+@font-face {
+  font-family: GroteskBold;
+  src: url('./fonts/ClashGrotesk-Bold.ttf') format('truetype');
+}
+@font-face {
+  font-family: GroteskSemiBold;
+  src: url('./fonts/ClashGrotesk-Semibold.ttf') format('truetype');
+}
+@font-face {
+  font-family: GroteskMedium;
+  src: url('./fonts/ClashGrotesk-Medium.ttf') format('truetype');
+}
+@font-face {
+  font-family: GroteskRegular;
+  src: url('./fonts/ClashGrotesk-Regular.ttf') format('truetype');
+}
+@font-face {
+  font-family: GroteskLight;
+  src: url('./fonts/ClashGrotesk-Light.ttf') format('truetype');
+}
+@font-face {
+  font-family: GroteskExtraLight;
+  src: url('./fonts/ClashGrotesk-Extralight.ttf') format('truetype');
+}
+@font-face {
+  font-family: GroteskVariable;
+  src: url('./fonts/ClashGrotesk-Variable.ttf') format('truetype');
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  width: 100%;
+}
+
+* {
+  font-family: GroteskRegular;
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+}

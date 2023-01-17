@@ -1,0 +1,38 @@
+@import '../../style/functions.scss';
+@import '../../style/mixins.scss';
+
+.vault-card {
+  padding: toRem(30);
+  border-radius: toRem(16);
+  @include flex(column, center, center, toRem(30));
+  max-width: toRem(425);
+  background: var(--vault-card-background);
+  border: toRem(1) solid var(--vault-card-border);
+  .card-section {
+    @include flex(column, center, center, toRem(8));
+    text-align: center;
+    .card-title {
+      @include typography(GroteskSemiBold, toRem(28), 120%, var(--black));
+    }
+    .card-info {
+      @include typography(GroteskRegular, toRem(20), 160%, var(--black));
+    }
+    .card-icons {
+      @include flex(row, center, center, '');
+      svg {
+        &:not(:first-child) {
+          margin-left: toRem(-8);
+        }
+      }
+    }
+    .vault-apy {
+      @include flex(column, center, center, '');
+      .apy-label {
+        @include typography(GroteskMedium, toRem(16), toRem(30), var(--black));
+      }
+      .apy-value {
+        @include typography(GroteskMedium, toRem(24), toRem(30), var(--black));
+      }
+    }
+  }
+}

@@ -1,0 +1,46 @@
+@import '../../style/mixins.scss';
+@import '../../style/functions.scss';
+
+.footer {
+  padding: toRem(120) toRem(96) toRem(48);
+  .row-1 {
+    @include flex(row, flex-start, space-between, '');
+    padding-bottom: toRem(64);
+    .col-1 {
+      @include flex(column, flex-start, center, toRem(32));
+      max-width: toRem(320);
+      .desc {
+        @include typography(GroteskMedium, toRem(16), toRem(24), var(--black));
+      }
+    }
+    .col-2 {
+      @include flex(column, flex-start, center, toRem(12));
+      .link-title {
+        @include typography(
+          GroteskSemiBold,
+          toRem(20),
+          toRem(20),
+          var(--black)
+        );
+        margin-bottom: toRem(4);
+      }
+      .link {
+        color: var(--black);
+        text-decoration: none;
+        cursor: pointer;
+        @include typography(GroteskMedium, toRem(16), toRem(24), var(--black));
+      }
+    }
+  }
+  .row-2 {
+    padding-top: toRem(32);
+    border-top: toRem(1) solid var(--footer-border-top);
+    @include flex(row, center, space-between, '');
+    .label {
+      @include typography(GroteskRegular, toRem(16), toRem(24), var(--black));
+    }
+    .socials {
+      @include flex(row, center, '', toRem(24));
+    }
+  }
+}
