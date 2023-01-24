@@ -29,7 +29,12 @@ const ConfirmStake = ({ open, hide, amount }: ConfirmStakeProps) => {
           <label className="stake-header-label">Summary</label>
         </div>
         <div className="transfer-area">
-          <div className="graphic-area">
+          <div
+            className="graphic-area"
+            {...(state.selectedTab === 'withdraw'
+              ? { style: { flexDirection: 'row-reverse' } }
+              : undefined)}
+          >
             <Sprite
               id={`big-${state.selectedAsset}-icon`}
               width={82}

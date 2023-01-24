@@ -1,12 +1,15 @@
 import './stakearea.scss'
 import { Button, Card, Input, Sprite, Tabs } from '../../../components'
 import ConfirmStake from './confirmstake'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { ConnectKitButton } from 'connectkit'
 import { useAccount } from 'wagmi'
+import { AppContext } from '../../../context'
 
 const StakeArea = () => {
   const { isConnected } = useAccount()
+
+  const [state] = useContext(AppContext)
 
   const [openConfirm, setOpenConfirm] = useState(false)
   const [inputValue, setInputValue] = useState('')
@@ -40,7 +43,7 @@ const StakeArea = () => {
           onClick={() => setOpenConfirm(true)}
           disabled={Number(inputValue) <= 0}
         >
-          Preview Deposit
+          Preview {state.selectedTab === 'deposit' ? 'Deposit' : 'Withdraw'}
         </Button>
       )}
       <label className="sub-text">
