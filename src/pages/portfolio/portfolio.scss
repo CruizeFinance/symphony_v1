@@ -1,0 +1,44 @@
+@import '../../style/mixins.scss';
+@import '../../style/functions.scss';
+
+.portfolio {
+  width: 100%;
+  height: 100%;
+  padding: toRem(90) 0;
+  .text {
+    width: 100%;
+    text-align: center;
+    font-family: GroteskBold;
+    font-size: 200px;
+    line-height: 200px;
+    background: var(--portfolio-text-color);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    &.on-it {
+      margin-bottom: toRem(120);
+    }
+    &.trust-us {
+      margin-top: toRem(110);
+    }
+    &.bottom-text,
+    &.trust-us {
+      font-size: toRem(130);
+      line-height: toRem(130);
+    }
+  }
+  .img {
+    &.sleeping {
+      margin-bottom: toRem(106);
+    }
+    &.king {
+      margin-bottom: toRem(58);
+    }
+  }
+  .row-img-container {
+    @include flex(row, center, center, '');
+  }
+  .col-img-container {
+    @include flex(column, center, center, '');
+  }
+}

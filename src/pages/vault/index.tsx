@@ -1,9 +1,19 @@
+import { useContext, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Sprite, VaultCard } from '../../components'
+import { AppContext } from '../../context'
+import { Actions } from '../../enums/actions'
+import { DROPDOWN_OPTIONS } from '../../utils'
 import './vault.scss'
 
 const Vault = () => {
   const navigate = useNavigate()
+
+  const [, dispatch] = useContext(AppContext)
+
+  useEffect(() => {
+    dispatch({ type: Actions.SET_BG_COLOR_VALUE, payload: 'vault' })
+  }, [])
 
   return (
     <div className="vault">
@@ -38,7 +48,7 @@ const Vault = () => {
               </a>
             </>
           }
-          cardIcons={['eth', 'wbtc']}
+          cardIcons={DROPDOWN_OPTIONS.slice(0, 2)}
           apy={'6.78'}
           buttonOptions={{
             label: 'Coming Soon',
@@ -63,12 +73,12 @@ const Vault = () => {
               </a>
             </>
           }
-          cardIcons={['eth', 'wbtc', 'usdc']}
+          cardIcons={DROPDOWN_OPTIONS}
           apy={'11.27'}
           buttonOptions={{
             label: 'Start Earning',
             buttonIcon: <Sprite id="arrow-left-icon" width={16} height={16} />,
-            onClick: () => navigate('/portfolio'),
+            onClick: () => navigate('/vault/principal'),
           }}
         />
       </div>

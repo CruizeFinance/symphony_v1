@@ -1,0 +1,51 @@
+@import '../../style/functions.scss';
+@import '../../style/mixins.scss';
+
+.page-not-found {
+  width: 100%;
+  height: 100%;
+  padding: toRem(96) 0;
+  .not-found-content {
+    padding: toRem(48) toRem(32);
+    @include flex(column, center, center, toRem(48));
+    .not-found-details {
+      @include flex(column, center, center, toRem(24));
+      .not-found-title {
+        @include typography(
+          GroteskSemiBold,
+          toRem(32),
+          toRem(32),
+          var(--black)
+        );
+      }
+      .not-found-desc {
+        @include typography(
+          GroteskRegular,
+          toRem(22),
+          toRem(32),
+          var(--wallet-balance-color)
+        );
+        text-align: center;
+      }
+    }
+    .buttons-container {
+      @include flex(row, center, center, toRem(12));
+      .go-back-button, .go-home-button {
+        font-family: GroteskMedium;
+        font-size: toRem(20);
+        line-height: auto;
+        padding: toRem(16) toRem(40);
+        border-radius: toRem(32);
+      }
+      .go-back-button {
+        background: transparent;
+        border: toRem(1) solid var(--go-back-button-border);
+        color: var(--black);
+        svg {
+            color: var(--black);
+            fill: var(--black);
+        }
+      }
+    }
+  }
+}

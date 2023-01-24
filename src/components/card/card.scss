@@ -1,0 +1,7 @@
+@import '../../style/functions.scss';
+
+.card {
+  background: var(--white);
+  border-radius: toRem(20);
+  box-shadow: 0 0 32px var(--default-card-box-shadow);
+}

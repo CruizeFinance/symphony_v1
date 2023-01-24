@@ -1,16 +1,19 @@
-import { useLocation } from 'react-router-dom'
+import { useContext } from 'react'
+import { AppContext } from '../context'
 import AppRoutes from '../routes'
 import Footer from './footer'
 import Header from './header'
 import './wrapper.scss'
 
 const Wrapper = () => {
-  const location = useLocation()
+  const [state] = useContext(AppContext)
 
   return (
     <div
       className="wrapper"
-      style={{ background: `var(--${location.pathname.slice(1)}-background)`, transition: 'background-color 1s ease-in' }}
+      style={{
+        background: `var(--${state.bgColor}-background)`,
+      }}
     >
       <Header />
       <div className="fake-div"></div>

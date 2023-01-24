@@ -1,0 +1,33 @@
+@import '../../style/functions.scss';
+@import '../../style/mixins.scss';
+
+.tabs-container {
+  display: inline-flex;
+  width: 100%;
+  .tab {
+    width: 100%;
+    &.outlined {
+      width: 100%;
+      padding: toRem(0) toRem(48) toRem(16);
+      border-bottom: toRem(4) solid var(--link-inactive);
+      cursor: pointer;
+      @include flex('', center, center, '');
+      .label {
+        @include typography(
+          GroteskSemiBold,
+          toRem(22),
+          toRem(24),
+          var(--link-inactive)
+        );
+        cursor: pointer;
+        text-transform: capitalize;
+      }
+      &.selected {
+        .label {
+          color: var(--black);
+        }
+        border-bottom: toRem(4) solid var(--black);
+      }
+    }
+  }
+}

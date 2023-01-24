@@ -6,13 +6,20 @@ interface ButtonProps {
   onClick?: () => void
   style?: CSSProperties
   disabled?: boolean
+  className?: string
 }
 
-const Button = ({ children, onClick, style, disabled }: ButtonProps) => {
+const Button = ({
+  children,
+  onClick,
+  style,
+  disabled,
+  className,
+}: ButtonProps) => {
   return (
     <button
-      className="button"
-      onClick={onClick}
+      className={`button ${className || ''}`}
+      onClick={!disabled ? () => onClick && onClick() : undefined}
       style={{ ...style }}
       disabled={disabled}
     >

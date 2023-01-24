@@ -1,0 +1,27 @@
+@import '../../../style/functions.scss';
+@import '../../../style/mixins.scss';
+
+.faq-card {
+  width: 100%;
+  .card-header {
+    padding: toRem(24) toRem(36);
+    background: var(--default-card-header-background);
+    border-radius: toRem(20) toRem(20) 0 0;
+    .label {
+      @include typography(GroteskMedium, toRem(30), toRem(42), var(--black));
+    }
+  }
+  .card-content {
+    @include flex(column, flex-start, center, toRem(48));
+    padding: toRem(20) toRem(36);
+    .faq-section {
+      @include flex(column, flex-start, center, toRem(12));
+      .faq-question {
+        @include typography(GroteskMedium, toRem(22), toRem(30), var(--black));
+      }
+      .faq-answer {
+        @include typography(GroteskRegular, toRem(20), toRem(24), var(--black));
+      }
+    }
+  }
+}

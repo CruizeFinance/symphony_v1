@@ -1,0 +1,72 @@
+@import '../../style/functions.scss';
+@import '../../style/mixins.scss';
+
+.input-area {
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  gap: rem(8);
+  width: 100%;
+  .input-label {
+    @include typography(GroteskSemiBold, toRem(16), 130%, var(--link-inactive));
+  }
+  .input-container {
+    background: transparent;
+    border: toRem(1) solid var(--input-box-border);
+    border-radius: toRem(8);
+    padding: toRem(12) toRem(16) toRem(8);
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .input-section {
+      @include flex(column, flex-start, center, '');
+      width: 50%;
+      .input-field {
+        width: -webkit-fill-available;
+        border: none;
+        background: inherit;
+        @include typography(GroteskMedium, toRem(20), 100%, var(--black));
+        &:focus-visible {
+          outline: none;
+        }
+      }
+      .usd-value {
+        @include typography(
+          GroteskMedium,
+          toRem(12),
+          130%,
+          var(--link-inactive)
+        );
+      }
+    }
+    .asset-section {
+      @include flex(column, center, center, toRem(8));
+      align-self: flex-end;
+      .balance-button-container {
+        @include flex(row, center, center, toRem(4));
+        .asset-balance {
+          @include typography(
+            GroteskMedium,
+            toRem(12),
+            toRem(12),
+            var(--link-inactive)
+          );
+        }
+        .max-button {
+          border: none;
+          padding: toRem(1) toRem(4);
+          background: var(--vault-card-border);
+          cursor: pointer;
+          border-radius: toRem(4);
+          @include typography(
+            GroteskSemiBold,
+            toRem(10),
+            toRem(12),
+            var(--black)
+          );
+        }
+      }
+    }
+  }
+}

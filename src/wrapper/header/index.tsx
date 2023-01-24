@@ -1,9 +1,15 @@
 import { Link, useLocation } from 'react-router-dom'
+import { useAccount } from 'wagmi'
 import { Sprite } from '../../components'
 import { NAV_LINKS } from '../../utils'
+import ConnectButtonDropdown from './connectbuttondropdown'
 import './header.scss'
+import NetworkDropdown from './networkdropdown'
 
 const Header = () => {
+
+  const { isConnected } = useAccount()
+
   const location = useLocation()
 
   return (
@@ -23,6 +29,10 @@ const Header = () => {
             </Link>
           ))}
         </div>
+      </div>
+      <div className="connection-area">
+        {isConnected ? <NetworkDropdown /> : null}
+        <ConnectButtonDropdown />
       </div>
     </div>
   )

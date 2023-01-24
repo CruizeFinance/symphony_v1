@@ -7,6 +7,8 @@
   width: -webkit-fill-available;
   padding: toRem(22) toRem(68);
   backdrop-filter: blur(toRem(32));
+  z-index: 99;
+  max-width: inherit;
   @include flex(row, center, space-between, '');
   .logo-area {
     @include flex(row, center, '', toRem(36));
@@ -23,5 +25,8 @@
         }
       }
     }
+  }
+  .connection-area {
+    @include flex(row, center, center, toRem(8));
   }
 }

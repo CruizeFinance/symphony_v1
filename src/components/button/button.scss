@@ -14,7 +14,7 @@
     fill: var(--white);
   }
   &:disabled {
-    background: rgba(0, 0, 0, 0.2);
+    background: var(--vault-card-border);
     cursor: not-allowed;
   }
 }

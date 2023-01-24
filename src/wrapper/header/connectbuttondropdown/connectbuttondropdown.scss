@@ -1,0 +1,169 @@
+@import '../../../style/mixins.scss';
+@import '../../../style/functions.scss';
+
+.connect-button-dropdown {
+  position: relative;
+  .connect-wallet-button {
+    padding: toRem(8) toRem(12);
+    @include typography(GroteskMedium, toRem(16), toRem(20), var(--white));
+  }
+  .wallet-dropdown-button {
+    background: var(--white);
+    padding: toRem(2);
+    border-radius: toRem(32);
+    .wallet-details {
+      padding: toRem(6) toRem(8);
+      background: var(--wallet-details-background);
+      border: none;
+      border-radius: inherit;
+      cursor: pointer;
+      @include flex(row, center, center, toRem(8));
+      .label {
+        @include typography(
+          GroteskMedium,
+          toRem(16),
+          toRem(20),
+          var(--wallet-address-color)
+        );
+        max-width: toRem(240);
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        cursor: inherit;
+      }
+    }
+  }
+  .wallet-dropdown {
+    position: absolute;
+    right: 0;
+    width: toRem(360);
+    background: var(--default-card-header-background);
+    backdrop-filter: brightness(6%);
+    border-radius: toRem(20);
+    box-shadow: 0px 8px 32px var(--dropdowns-box-shadow-color);
+    .wallet-info {
+      width: 100%;
+      border-radius: toRem(20) toRem(20) 0 0;
+      padding: toRem(24) toRem(18) toRem(18);
+      @include flex(column, center, center, toRem(14));
+      .wallet-name-balance {
+        @include flex(column, center, center, '');
+        width: 100%;
+        .wallet-name {
+          @include typography(
+            GroteskSemiBold,
+            toRem(18),
+            toRem(24),
+            var(--wallet-address-color)
+          );
+          max-width: 100%;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          overflow: hidden;
+        }
+        .wallet-balance {
+          @include typography(
+            GroteskMedium,
+            toRem(14),
+            toRem(18),
+            var(--wallet-balance-color)
+          );
+        }
+      }
+      .wallet-actions {
+        @include flex(row, center, center, toRem(8));
+        .action {
+          background: var(--white);
+          border-radius: toRem(8);
+          cursor: pointer;
+          width: toRem(102);
+          height: toRem(54);
+          @include flex(column, center, center, toRem(2));
+          .action-label {
+            @include typography(
+              GroteskMedium,
+              toRem(12),
+              toRem(18),
+              var(--black)
+            );
+          }
+        }
+      }
+    }
+    .transactions {
+      background: var(--white);
+      padding: toRem(24) 0;
+      border-radius: 0 0 toRem(24) toRem(24);
+      .title {
+        @include typography(
+          GroteskSemiBold,
+          toRem(14),
+          toRem(18),
+          var(--wallet-balance-color)
+        );
+        padding-left: toRem(24);
+        margin-bottom: toRem(8);
+      }
+      .list {
+        @include flex(column, center, center, '');
+        width: 100%;
+        .transaction {
+          padding: toRem(2) toRem(18);
+          width: 100%;
+          .details {
+            width: 100%;
+            padding: toRem(8);
+            border-radius: toRem(12);
+            @include flex(row, center, center, toRem(16));
+            cursor: pointer;
+            .icon {
+              width: 10%;
+            }
+            .loader {
+              width: toRem(28);
+              height: toRem(28);
+              border-radius: 50%;
+              display: inline-block;
+              border-top: toRem(4) solid var(--pending-status-loader-color);
+              border-right: toRem(4) solid transparent;
+              box-sizing: border-box;
+              animation: rotation 1s linear infinite;
+            }
+            .details-label {
+              width: 80%;
+              @include flex(column, flex-start, center, toRem(2));
+              .transaction-info {
+                @include typography(
+                  GroteskSemiBold,
+                  toRem(14),
+                  toRem(18),
+                  var(--wallet-address-color)
+                );
+              }
+              .transaction-status {
+                @include typography(
+                  GroteskRegular,
+                  toRem(14),
+                  toRem(18),
+                  var(--wallet-balance-color)
+                );
+              }
+            }
+            &:hover {
+              background: var(--network-dropdown-hover-color);
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

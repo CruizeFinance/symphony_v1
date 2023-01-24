@@ -1,0 +1,78 @@
+@import '../../style/mixins.scss';
+@import '../../style/functions.scss';
+
+.dropdown-container {
+  position: relative;
+  .dropdown {
+    @include flex(row, center, center, '');
+    background: inherit;
+    text-transform: uppercase;
+    cursor: pointer;
+    width: fit-content;
+    &.small {
+      padding: toRem(4) toRem(8);
+      border-radius: toRem(100);
+      border: toRem(1) solid var(--default-card-box-shadow);
+      gap: toRem(4);
+      @include typography(
+        GroteskMedium,
+        toRem(24),
+        toRem(24),
+        var(--small-dropdown-color)
+      );
+      svg {
+        color: var(--small-dropdown-color);
+        fill: var(--small-dropdown-color);
+      }
+    }
+    &.big {
+      gap: toRem(6);
+      @include typography(GroteskMedium, toRem(24), toRem(24), var(--black));
+      svg {
+        color: var(--black);
+        fill: var(--black);
+      }
+    }
+  }
+  .options {
+    position: absolute;
+    background: var(--white);
+    padding: toRem(6) toRem(4);
+    width: toRem(180);
+    border-radius: toRem(10);
+    box-shadow: 0px 8px 32px var(--dropdowns-box-shadow-color);
+    @include flex(column, flex-start, center, toRem(4));
+    .option {
+      width: 100%;
+      @include flex(row, center, flex-start, toRem(12));
+      padding: toRem(6);
+      border-radius: toRem(20);
+      cursor: pointer;
+      .label {
+        cursor: inherit;
+        text-transform: uppercase;
+        @include typography(
+          GroteskSemiBold,
+          toRem(16),
+          toRem(20),
+          var(--black)
+        );
+      }
+      &.selected {
+        background: var(--black);
+        .label {
+          color: var(--white);
+        }
+      }
+      &:hover {
+        background: var(--vault-card-border);
+        &.selected {
+          background: var(--black);
+          .label {
+            color: var(--white);
+          }
+        }
+      }
+    }
+  }
+}

@@ -15,7 +15,12 @@ const Footer = () => {
         <div className="col-2">
           <label className="link-title">Product</label>
           <a className="link">Principle Protected</a>
-          <a className="link">Downside Protected</a>
+          <a
+            className="link"
+            style={{ color: 'var(--vault-card-border)', cursor: 'not-allowed' }}
+          >
+            Downside Protected
+          </a>
         </div>
         <div className="col-2">
           <label className="link-title">Resources</label>

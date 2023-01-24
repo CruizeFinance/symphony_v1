@@ -1,0 +1,72 @@
+@import '../../../style/functions.scss';
+@import '../../../style/mixins.scss';
+
+.network-dropdown {
+  position: relative;
+  .picker {
+    padding: toRem(8);
+    @include flex(row, center, center, toRem(8));
+    background: var(--white);
+    border-radius: toRem(32);
+    cursor: pointer;
+    .picker-label {
+      text-transform: capitalize;
+      @include typography(GroteskSemiBold, toRem(16), toRem(20), var(--black));
+    }
+  }
+  .options {
+    position: absolute;
+    right: 0;
+    background: var(--white);
+    border-radius: toRem(16);
+    padding: toRem(24);
+    width: toRem(380);
+    box-shadow: 0px 8px 32px var(--dropdowns-box-shadow-color);
+    @include flex(column, flex-start, center, toRem(4));
+    .option {
+      padding: toRem(6) toRem(12) toRem(6) toRem(6);
+      border-radius: toRem(12);
+      cursor: pointer;
+      width: 100%;
+      @include flex(row, center, space-between, '');
+      .network-details {
+        @include flex(row, center, center, toRem(12));
+        .network-label {
+          text-transform: capitalize;
+          @include typography(
+            GroteskSemiBold,
+            toRem(16),
+            toRem(20),
+            var(--black)
+          );
+        }
+      }
+      .connected-area {
+        @include flex(row, center, center, toRem(8));
+        .connected-label {
+          @include typography(
+            GroteskSemiBold,
+            toRem(14),
+            toRem(28),
+            var(--white)
+          );
+        }
+      }
+      &.selected {
+        background: var(--black);
+        .network-label {
+          color: var(--white);
+        }
+      }
+      &:hover {
+        background: var(--network-dropdown-hover-color);
+        &.selected {
+          background: var(--black);
+          .network-label {
+            color: var(--white);
+          }
+        }
+      }
+    }
+  }
+}

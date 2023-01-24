@@ -1,0 +1,113 @@
+@import '../../../style/functions.scss';
+@import '../../../style/mixins.scss';
+
+.strategy-card {
+    width: 100%;
+    margin-bottom: toRem(84);
+    .card-header {
+      padding: toRem(24) toRem(36);
+      background: var(--default-card-header-background);
+      border-radius: toRem(20) toRem(20) 0 0;
+      @include flex(row, center, space-between, '');
+    }
+    .tvl {
+      @include flex(row, center, center, '');
+      .tvl-info {
+        padding: toRem(0) toRem(24);
+        @include flex(column, flex-start, '', '');
+        .tvl-info-value {
+          @include typography(
+            GroteskMedium,
+            toRem(24),
+            toRem(30),
+            var(--black)
+          );
+        }
+        .tvl-info-label {
+          @include typography(
+            GroteskMedium,
+            toRem(15),
+            toRem(24),
+            var(--tvl-info-label-color)
+          );
+        }
+        &:last-child {
+          padding-right: 0;
+        }
+        &:nth-child(2) {
+          border-right: 1px solid var(--tvl-info-border);
+          border-left: 1px solid var(--tvl-info-border);
+        }
+      }
+    }
+    .card-content {
+      padding: toRem(20) toRem(36);
+      @include flex(column, flex-start, center, toRem(38));
+      .section {
+        @include flex(column, flex-start, center, toRem(12));
+        width: 100%;
+        .card-section-title {
+          @include typography(
+            GroteskMedium,
+            toRem(24),
+            toRem(32),
+            var(--black)
+          );
+        }
+        .card-section-description {
+          @include typography(
+            GroteskRegular,
+            toRem(20),
+            toRem(32),
+            var(--small-dropdown-color)
+          );
+        }
+        .specification {
+          @include flex(row, center, flex-start, toRem(40));
+          .specification-info {
+            @include flex(column, flex-start, center, '');
+            .specification-info-value {
+              @include typography(
+                GroteskMedium,
+                toRem(24),
+                toRem(30),
+                var(--black)
+              );
+            }
+            .specification-info-label {
+              @include typography(
+                GroteskRegular,
+                toRem(15),
+                toRem(24),
+                var(--tvl-info-label-color)
+              );
+            }
+          }
+        }
+        .deposit-limit {
+          width: 100%;
+          height: toRem(40);
+          background: var(--vault-card-border);
+          border-radius: toRem(7);
+          @include flex(row, center, center, '');
+          position: relative;
+          .total-deposits {
+            height: 100%;
+            border-radius: inherit;
+            background: var(--small-dropdown-color);
+            position: absolute;
+            left: 0;
+          }
+          .deposit-info {
+            @include typography(
+              GroteskMedium,
+              toRem(20),
+              toRem(20),
+              var(--white)
+            );
+            z-index: 1;
+          }
+        }
+      }
+    }
+  }

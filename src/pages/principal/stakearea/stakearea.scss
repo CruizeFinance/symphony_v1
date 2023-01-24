@@ -1,0 +1,39 @@
+@import '../../../style/functions.scss';
+@import '../../../style/mixins.scss';
+
+.stake-area {
+  position: relative;
+  width: 40%;
+  padding: toRem(24) toRem(20);
+  @include flex(column, center, center, toRem(20));
+  position: sticky;
+  top: toRem(180);
+  .error-area {
+    background: var(--error-field-background);
+    border-radius: toRem(10);
+    padding: toRem(10);
+    width: 100%;
+    @include flex(column, flex-start, center, toRem(8));
+    .error-title {
+      @include flex(row, center, center, toRem(8));
+      .title-label {
+        @include typography(GroteskSemiBold, toRem(16), 130%, var(--error-text-color));
+      }
+    }
+    .error-text {
+      @include typography(GroteskMedium, toRem(16), 130%, var(--error-text-color));
+    }
+  }
+  .deposit-button {
+    @include typography(GroteskSemiBold, toRem(18), toRem(24), var(--white));
+    padding: toRem(12) auto;
+    width: 100%;
+  }
+  .sub-text {
+    @include typography(GroteskMedium, toRem(14), auto, var(--black));
+    .link {
+      @include typography(inherit, inherit, auto, var(--tutorial-link-color));
+      cursor: pointer;
+    }
+  }
+}
