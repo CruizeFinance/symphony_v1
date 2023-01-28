@@ -7,7 +7,18 @@ const initialState: State = {
   selectedAsset: Assets.WETH,
   connectedNetwork: NETWORK_CONFIG.TESTNET.ethereum,
   selectedTab: 'deposit',
-  assetPrice: 0
+  assetPrice: 0,
+  priceRange: {
+    upper_bound: 0,
+    lower_bound: 0
+  },
+  timeToExpiry: {
+    principal: {
+      days: 0,
+      hours: 0,
+      minutes: 0
+    }
+  }
 }
 
 export default initialState

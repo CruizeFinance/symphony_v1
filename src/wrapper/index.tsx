@@ -17,9 +17,7 @@ const Wrapper = () => {
     >
       <Header />
       <div className="fake-div"></div>
-      <div className="content">
-        <AppRoutes />
-      </div>
+      <AppRoutes />
       <Footer />
     </div>
   )

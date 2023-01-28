@@ -1,14 +1,14 @@
 import { Assets } from '../enums/assets'
 import { NetworkIDs, Networks } from '../enums/networks'
 
-export const NAV_LINKS = [
+export const VAULT_NAV_LINKS = [
   {
-    link: 'vault',
-    label: 'Vault',
+    link: 'principal',
+    label: 'Principal Protection',
   },
   {
-    link: 'portfolio',
-    label: 'Portfolio',
+    link: 'downside',
+    label: 'Downside Protection',
   },
 ]
 

@@ -15,19 +15,23 @@ const Principal = () => {
   }, [])
 
   return (
-    <div className="principal">
-      <button className="back-button" onClick={() => navigate('/')}>
-        <Sprite id="chevron-left-icon" width={5} height={10} />
-        Back to Home
-      </button>
-      <div className="container">
-        <div className="info-col">
-          <h1 className="title">Principal Protected Interest</h1>
-          <StrategyCard />
-          <YieldInfoCard />
-          <FaqCard />
+    <div className="principal-container">
+      <div className="principal">
+        <button className="back-button" onClick={() => navigate('/')}>
+          <Sprite id="chevron-left-icon" width={5} height={10} />
+          Back to Home
+        </button>
+        <div className="container">
+          <div className="info-col">
+            <h1 className="title">Protected Binary</h1>
+            <StrategyCard />
+            <YieldInfoCard />
+            <FaqCard />
+          </div>
+          <div className="stake-area">
+            <StakeArea />
+          </div>
         </div>
-        <StakeArea />
       </div>
     </div>
   )

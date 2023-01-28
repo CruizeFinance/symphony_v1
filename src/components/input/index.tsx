@@ -2,9 +2,10 @@ import './input.scss'
 import AssetDropdown from '../assetdropdown'
 import { useContext, useState } from 'react'
 import { AppContext } from '../../context'
+import { useAccount } from 'wagmi'
 
 interface InputProps {
-  prependSymbol?: string,
+  prependSymbol?: string
   onInputChange: (val: string) => void
 }
 
@@ -16,6 +17,8 @@ const inputRegex = RegExp(`^\\d*(?:\\\\[.])?\\d*$`)
 
 const Input = ({ prependSymbol, onInputChange }: InputProps) => {
   const [state, dispatch] = useContext(AppContext)
+
+  const { isConnected } = useAccount()
 
   const [input, setInputValue] = useState<string | undefined>('')
 
@@ -62,14 +65,20 @@ const Input = ({ prependSymbol, onInputChange }: InputProps) => {
             placeholder="0"
             className="input-field"
           />
-          <p className="usd-value">~{(Number(input || 0) * state.assetPrice).toFixed(4)}</p>
+          <p className="usd-value">
+            ~{(Number(input || 0) * state.assetPrice).toFixed(4)}
+          </p>
         </div>
         <div className="asset-section">
           <AssetDropdown optionsStyle={{ right: '0' }} />
-          <div className="balance-button-container">
-            <p className="asset-balance">Balance: 0.887</p>
-            <button className="max-button">MAX</button>
-          </div>
+          {isConnected ? (
+            <div className="balance-button-container">
+              <p className="asset-balance">
+                {state.selectedTab === 'deposit' ? 'Balance' : 'Limit'}: 0.887
+              </p>
+              <button className="max-button">MAX</button>
+            </div>
+          ) : null}
         </div>
       </div>
     </div>

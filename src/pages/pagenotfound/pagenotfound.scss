@@ -30,7 +30,8 @@
     }
     .buttons-container {
       @include flex(row, center, center, toRem(12));
-      .go-back-button, .go-home-button {
+      .go-back-button,
+      .go-home-button {
         font-family: GroteskMedium;
         font-size: toRem(20);
         line-height: auto;
@@ -42,10 +43,24 @@
         border: toRem(1) solid var(--go-back-button-border);
         color: var(--black);
         svg {
-            color: var(--black);
-            fill: var(--black);
+          color: var(--black);
+          fill: var(--black);
+        }
+      }
+      @media screen and (min-width: 320px) and (max-width: 1024px) {
+        width: 100%;
+        flex-direction: column-reverse;
+        .go-back-button,
+        .go-home-button {
+          width: 100%;
         }
       }
     }
+    @media screen and (min-width: 320px) and (max-width: 1024px) {
+      padding: 0;
+    }
+  }
+  @media screen and (min-width: 320px) and (max-width: 1024px) {
+    padding: toRem(96) toRem(16);
   }
 }

@@ -29,6 +29,16 @@ const reducer = (state: State, action: Action): State => {
         ...state,
         assetPrice: action.payload
       }
+    case Actions.SET_PRICE_RANGE:
+      return {
+        ...state,
+        priceRange: action.payload
+      }
+    case Actions.SET_PRINCIPAL_TIME_TO_EXPIRY:
+      return {
+        ...state,
+        timeToExpiry: action.payload
+      }
     default:
       return state
   }

@@ -12,21 +12,114 @@
   @include flex(row, center, space-between, '');
   .logo-area {
     @include flex(row, center, '', toRem(36));
-    .links {
-      @include flex(row, center, '', toRem(30));
-      .link {
-        font-family: GroteskSemiBold;
-        font-size: toRem(20);
-        line-height: toRem(24);
-        color: var(--link-inactive);
-        text-decoration: none;
-        &.active {
+  }
+  .links {
+    @include flex(row, center, '', toRem(30));
+    @media screen and (min-width: 320px) and (max-width: 1024px) {
+      display: none;
+    }
+  }
+  .vault-link {
+    @include flex(row, center, center, toRem(4));
+    .link-dropdown-icon {
+      position: relative;
+      cursor: pointer;
+    }
+    @media screen and (min-width: 320px) and (max-width: 1024px) {
+      justify-content: flex-start;
+    }
+  }
+  .vault-dropdown {
+    position: absolute;
+    right: 0;
+    background: var(--white);
+    padding: toRem(6) toRem(4);
+    width: toRem(200);
+    border-radius: toRem(10);
+    box-shadow: 0px 8px 32px var(--dropdowns-box-shadow-color);
+    @include flex(column, flex-start, center, toRem(4));
+    .vault-dropdown-option {
+      width: 100%;
+      padding: toRem(6);
+      border-radius: toRem(20);
+      text-decoration: none;
+      cursor: pointer;
+      .vault-label {
+        cursor: inherit;
+        text-transform: uppercase;
+        @include typography(
+          GroteskMedium,
+          toRem(16),
+          toRem(20),
+          var(--small-dropdown-color)
+        );
+      }
+      &.vault-selected {
+        .vault-label {
           color: var(--black);
         }
       }
     }
+    @media screen and (min-width: 320px) and (max-width: 1024px) {
+      position: relative;
+      width: 100%;
+      right: '';
+      background: var(--default-card-header-background);
+      box-shadow: none;
+      margin-top: 12px;
+    }
+  }
+  .link {
+    font-family: GroteskSemiBold;
+    font-size: toRem(20);
+    line-height: toRem(24);
+    color: var(--link-inactive);
+    text-decoration: none;
+    cursor: pointer;
+    &.active {
+      color: var(--black);
+    }
   }
   .connection-area {
     @include flex(row, center, center, toRem(8));
+    @media screen and (min-width: 320px) and (max-width: 1024px) {
+      display: none;
+    }
+  }
+  .mobile-hamburg-icon {
+    display: none;
+    @media screen and (min-width: 320px) and (max-width: 1024px) {
+      display: block;
+      cursor: pointer;
+    }
+  }
+  .mobile-header {
+    position: fixed;
+    overflow: hidden;
+    width: 100%;
+    top: toRem(70);
+    left: 0;
+    background: var(--white);
+    transition: height ease 0.7s;
+    backdrop-filter: toRem(8);
+    box-shadow: var(--mobile-header-box-shadow);
+    border-radius: 0 0 10px 10px;
+  }
+  .mobile-header-content {
+    width: 100%;
+  }
+  .mobile-header-section-container {
+    width: 100%;
+    padding: toRem(24) toRem(16);
+    &:not(:last-child) {
+      border-bottom: toRem(2) solid var(--default-card-box-shadow);
+    }
+  }
+  .mobile-connect-wallet-button {
+    width: 100%;
+  }
+  @media screen and (min-width: 320px) and (max-width: 1024px) {
+    padding: toRem(12) toRem(16);
+    background: var(--mobile-view-header-background);
   }
 }

@@ -7,4 +7,15 @@ export default interface State {
   connectedNetwork: typeof NETWORK_CONFIG['TESTNET']['ethereum']
   selectedTab: 'deposit' | 'withdraw'
   assetPrice: number
+  priceRange: {
+    upper_bound: number,
+    lower_bound: number
+  }
+  timeToExpiry: {
+    principal: {
+      days: number,
+      hours: number,
+      minutes: number
+    }
+  }
 }

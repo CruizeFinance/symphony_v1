@@ -1,6 +1,12 @@
 @import '../../style/functions.scss';
 @import '../../style/mixins.scss';
 
+.principal-container {
+  padding: toRem(60);
+  @media screen and (min-width: 320px) and (max-width: 1024px) {
+    padding: toRem(48) toRem(16);
+  }
+}
 .principal {
   width: 100%;
   height: 100%;
@@ -31,6 +37,24 @@
       .title {
         @include typography(GroteskMedium, toRem(48), toRem(54), var(--black));
         margin-bottom: toRem(20);
+      }
+    }
+    .stake-area {
+      display: block;
+      width: 40%;
+      position: sticky;
+      top: toRem(180);
+      @media screen and (min-width: 320px) and (max-width: 1024px) {
+        display: none;
+      }
+    }
+  }
+  @media screen and (min-width: 320px) and (max-width: 1024px) {
+    display: flex;
+    flex-direction: column;
+    .container {
+      .info-col {
+        width: 100%;
       }
     }
   }

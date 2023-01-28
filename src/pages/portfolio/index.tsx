@@ -65,7 +65,7 @@ const Portfolio = () => {
             alt="stocks-portfolio-icon"
             width={484}
             height={516}
-            className="img"
+            className="img work-out"
           />
           <img
             src="/assets/portfolio/excited-portfolio-icon.svg"

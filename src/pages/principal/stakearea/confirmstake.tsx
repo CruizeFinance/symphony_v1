@@ -76,14 +76,18 @@ const ConfirmStake = ({ open, hide, amount }: ConfirmStakeProps) => {
                 <label className="detail-label">Time to Next Expiry</label>
                 <Sprite id="tooltip-icon" width={21} height={20} />
               </div>
-              <label className="detail-value">4D 23H 27M</label>
+              <label className="detail-value">
+                {state.timeToExpiry.principal.days}D{' '}
+                {state.timeToExpiry.principal.hours}H{' '}
+                {state.timeToExpiry.principal.minutes}M
+              </label>
             </div>
             <div className="detail">
               <div className="detail-field">
                 <label className="detail-label">Vault</label>
                 <Sprite id="tooltip-icon" width={21} height={20} />
               </div>
-              <label className="detail-value">Principal Protected</label>
+              <label className="detail-value">Protected Binary</label>
             </div>
           </div>
         </div>

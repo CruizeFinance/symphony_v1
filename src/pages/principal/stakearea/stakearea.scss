@@ -1,13 +1,11 @@
 @import '../../../style/functions.scss';
 @import '../../../style/mixins.scss';
 
-.stake-area {
+.stake-card {
+  width: 100%;
   position: relative;
-  width: 40%;
   padding: toRem(24) toRem(20);
   @include flex(column, center, center, toRem(20));
-  position: sticky;
-  top: toRem(180);
   .error-area {
     background: var(--error-field-background);
     border-radius: toRem(10);
@@ -17,11 +15,21 @@
     .error-title {
       @include flex(row, center, center, toRem(8));
       .title-label {
-        @include typography(GroteskSemiBold, toRem(16), 130%, var(--error-text-color));
+        @include typography(
+          GroteskSemiBold,
+          toRem(16),
+          130%,
+          var(--error-text-color)
+        );
       }
     }
     .error-text {
-      @include typography(GroteskMedium, toRem(16), 130%, var(--error-text-color));
+      @include typography(
+        GroteskMedium,
+        toRem(16),
+        130%,
+        var(--error-text-color)
+      );
     }
   }
   .deposit-button {
@@ -35,5 +43,18 @@
       @include typography(inherit, inherit, auto, var(--tutorial-link-color));
       cursor: pointer;
     }
+  }
+}
+.mint-tokens-card {
+  padding: toRem(16);
+  margin-top: toRem(30);
+  @include flex(column, center, center, toRem(12));
+  .mint-tokens-label {
+    @include typography(GroteskMedium, toRem(14), toRem(20), var(--black));
+  }
+  .mint-tokens-button {
+    width: 100%;
+    padding: toRem(8) auto;
+    @include typography(GroteskMedium, toRem(12), toRem(24), var(--white));
   }
 }

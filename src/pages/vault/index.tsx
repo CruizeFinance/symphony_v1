@@ -16,6 +16,7 @@ const Vault = () => {
   }, [])
 
   return (
+    <div className="vault-container">
     <div className="vault">
       <div className="page-title">
         <h1 className="title">Vaults</h1>
@@ -78,10 +79,11 @@ const Vault = () => {
           buttonOptions={{
             label: 'Start Earning',
             buttonIcon: <Sprite id="arrow-left-icon" width={16} height={16} />,
-            onClick: () => navigate('/vault/principal'),
+            onClick: () => navigate('/vaults/principal'),
           }}
         />
       </div>
+    </div>
     </div>
   )
 }

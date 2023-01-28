@@ -1,6 +1,6 @@
 import { Assets } from '../enums/assets'
 import { fetchWrapper } from '../utils'
-import { AssetPrice } from './interfaces'
+import { AssetPrice, CurrentPriceRange } from './interfaces'
 
 /*
  * Used to fetch the asset's current price
@@ -18,6 +18,30 @@ export const getAssetPrice = async (asset: string) => {
   } catch (e) {
     return {
       price: 0,
+      error: e,
+    }
+  }
+}
+
+export const getCurrentPriceRange = async (asset: string, vault: string) => {
+  try {
+    const data: CurrentPriceRange = await fetchWrapper.get(
+      `http://www.beta.trident.v2.cruize.finance/vaults/price_range?asset_name=${asset}&vault=${vault}`,
+    )
+    if (data.message?.upper_bound && data.message?.lower_bound)
+      return {
+        message: {
+          upper_bound: data.message?.upper_bound,
+          lower_bound: data.message?.lower_bound,
+        },
+        error: null,
+      }
+  } catch (e) {
+    return {
+      message: {
+        upper_bound: 0,
+        lower_bound: 0,
+      },
       error: e,
     }
   }
