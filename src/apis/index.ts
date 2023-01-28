@@ -26,7 +26,7 @@ export const getAssetPrice = async (asset: string) => {
 export const getCurrentPriceRange = async (asset: string, vault: string) => {
   try {
     const data: CurrentPriceRange = await fetchWrapper.get(
-      `http://www.beta.trident.v2.cruize.finance/vaults/price_range?asset_name=${asset}&vault=${vault}`,
+      `https://www.beta.trident.v2.cruize.finance/vaults/price_range?asset_name=${asset}&vault=${vault}`,
     )
     if (data.message?.upper_bound && data.message?.lower_bound)
       return {
