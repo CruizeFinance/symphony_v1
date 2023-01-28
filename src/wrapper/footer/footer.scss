@@ -78,6 +78,7 @@
     width: -webkit-fill-available;
     background: var(--link-inactive);
     backdrop-filter: blur(2px);
+    z-index: 99;
     .stake-button {
       width: 100%;
       padding: toRem(12) auto;
