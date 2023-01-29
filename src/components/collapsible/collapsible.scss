@@ -1,0 +1,8 @@
+.collapsible-content {
+  height: 0;
+  overflow: hidden;
+  transition: all 500ms ease-in-out;
+  &.open {
+    height: var(--collapsible-content-height);
+  }
+}

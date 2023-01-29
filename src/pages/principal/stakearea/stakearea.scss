@@ -34,7 +34,7 @@
   }
   .deposit-button {
     @include typography(GroteskSemiBold, toRem(18), toRem(24), var(--white));
-    padding: toRem(12) auto;
+    padding: toRem(10) auto;
     width: 100%;
   }
   .sub-text {

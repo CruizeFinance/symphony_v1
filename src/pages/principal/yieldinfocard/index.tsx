@@ -8,7 +8,7 @@ const YieldInfoCard = () => {
         <label className="yield-info-label">How does yield work?</label>
       </div>
       <div className="card-content">
-        <p className="info-text">
+        <p className="yield-info-text">
           At the end of the vault’s 7 day period, one of the below scenarios can
           play out:
         </p>

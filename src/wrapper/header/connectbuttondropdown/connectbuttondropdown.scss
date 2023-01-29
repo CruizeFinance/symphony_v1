@@ -4,7 +4,7 @@
 .connect-button-dropdown {
   position: relative;
   .connect-wallet-button {
-    padding: toRem(8) toRem(12);
+    padding: toRem(10) toRem(16);
     @include typography(GroteskMedium, toRem(16), toRem(20), var(--white));
   }
   .wallet-dropdown-button {

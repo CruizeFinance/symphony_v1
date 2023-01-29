@@ -81,7 +81,7 @@
     z-index: 99;
     .stake-button {
       width: 100%;
-      padding: toRem(12) auto;
+      padding: toRem(12) toRem(32);
       font-size: toRem(18);
       line-height: toRem(24);
     }

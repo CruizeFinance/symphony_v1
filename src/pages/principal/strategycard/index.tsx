@@ -159,7 +159,7 @@ const StrategyCard = () => {
           <div className="deposit-limit">
             <div
               className="total-deposits"
-              style={{ width: '82%', transition: 'width 0.5s ease-in' }}
+              style={{ width: '82%', transition: 'width 0.3s ease-in' }}
             />
             <label className="deposit-info">8.2k ETH / 10k ETH</label>
           </div>

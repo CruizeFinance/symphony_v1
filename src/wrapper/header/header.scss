@@ -34,7 +34,7 @@
     right: 0;
     background: var(--white);
     padding: toRem(6) toRem(4);
-    width: toRem(200);
+    width: max-content;
     border-radius: toRem(10);
     box-shadow: 0px 8px 32px var(--dropdowns-box-shadow-color);
     @include flex(column, flex-start, center, toRem(4));
@@ -46,7 +46,7 @@
       cursor: pointer;
       .vault-label {
         cursor: inherit;
-        text-transform: uppercase;
+        text-transform: capitalize;
         @include typography(
           GroteskMedium,
           toRem(16),
@@ -104,6 +104,12 @@
     backdrop-filter: toRem(8);
     box-shadow: var(--mobile-header-box-shadow);
     border-radius: 0 0 10px 10px;
+    transform-origin: top;
+    max-height: 0;
+    transition: all 0.5s ease-in-out;
+    &.open {
+      max-height: toRem(500);
+    }
   }
   .mobile-header-content {
     width: 100%;

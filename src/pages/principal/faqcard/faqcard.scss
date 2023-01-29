@@ -24,7 +24,7 @@
     .faq-section {
       border-radius: toRem(10);
       padding: toRem(32);
-      @include flex(row, flex-start, center, toRem(26));
+      @include flex(row, flex-start, center, toRem(24));
       .faq-content {
         @include flex(column, flex-start, center, toRem(12));
         .faq-question {
@@ -34,18 +34,32 @@
             toRem(30),
             var(--black)
           );
+          @media screen and (min-width: 320px) and (max-width: 1024px) {
+            font-size: toRem(20);
+            line-height: toRem(24);
+          }
         }
         .faq-answer {
           @include typography(
             GroteskRegular,
             toRem(20),
             toRem(24),
-            var(--black)
+            var(--small-dropdown-color)
           );
-          overflow: hidden;
-          transition: all 0.5s ease-in-out;
+          @media screen and (min-width: 320px) and (max-width: 1024px) {
+            font-size: toRem(16);
+            line-height: toRem(20);
+          }
         }
       }
+      @media screen and (min-width: 320px) and (max-width: 1024px) {
+        padding: toRem(10) toRem(20);
+        gap: toRem(10);
+        flex-direction: row-reverse;
+      }
+    }
+    @media screen and (min-width: 320px) and (max-width: 1024px) {
+      padding: toRem(16);
     }
   }
 }

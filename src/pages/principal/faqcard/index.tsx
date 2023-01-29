@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Card } from '../../../components'
+import { Card, Collapsible } from '../../../components'
 import './faqcard.scss'
 
 const data = [
@@ -103,12 +103,7 @@ const FaqCard = () => {
               >
                 {data.question}
               </p>
-              <p
-                className="faq-answer"
-                style={{ maxHeight: data.isOpen ? '1000px' : '0' }}
-              >
-                {data.answer}
-              </p>
+              <Collapsible isOpen={data.isOpen} content={<p className='faq-answer'>{data.answer}</p>} />
             </div>
           </div>
         ))}

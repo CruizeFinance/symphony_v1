@@ -1,6 +1,5 @@
 import { useState } from 'react'
-import { Button, Sprite } from '../../components'
-import Modal from '../../components/modal'
+import { Button, Sprite, Modal } from '../../components'
 import StakeCard from '../../pages/principal/stakearea'
 import { rem } from '../../utils'
 import NetworkDropdown from '../header/networkdropdown'
@@ -94,11 +93,11 @@ const Footer = () => {
             </a>
           </div>
         </div>
-        {location.pathname.includes('principal') ? (
+        {location.pathname === '/vaults/principal' ? (
           <div className="mobile-fake-div" />
         ) : null}
       </div>
-      {location.pathname.includes('principal') ? (
+      {location.pathname === '/vaults/principal' ? (
         <div className="stake-button-container">
           <Button
             className="stake-button"
@@ -111,7 +110,7 @@ const Footer = () => {
       <Modal
         open={openStakeModal}
         hide={() => setOpenStakeModal(false)}
-        modalContentStyle={{ borderRadius: rem(20) }}
+        modalContentStyle={{ borderRadius: rem(20), bottom: 0 }}
       >
         <div className="network-wallet-area">
           <div className="network-wallet-container">

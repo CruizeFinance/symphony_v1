@@ -4,7 +4,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useAccount } from 'wagmi'
 import { Button, Sprite } from '../../components'
 import { useOutsideAlerter } from '../../hooks'
-import { VAULT_NAV_LINKS } from '../../utils'
+import { rem, VAULT_NAV_LINKS } from '../../utils'
 import ConnectButtonDropdown from './connectbuttondropdown'
 import './header.scss'
 import NetworkDropdown from './networkdropdown'
@@ -21,11 +21,7 @@ const Header = () => {
   const [openMobileVaultLinks, setOpenMobileVaultLinks] = useState(false)
   const [openMobileHeader, setOpenMobileHeader] = useState(false)
 
-  const VaultLinks = ({
-    type,
-  }: {
-    type: 'desktop' | 'mobile'
-  }) => (
+  const VaultLinks = ({ type }: { type: 'desktop' | 'mobile' }) => (
     <>
       {VAULT_NAV_LINKS.map((link, index) => (
         <span
@@ -44,26 +40,53 @@ const Header = () => {
                 },
               })}
         >
-          <label className="vault-label">{link.label}</label>
+          <label className="vault-label">
+            {link.label}
+            {link.link === 'downside' ? (
+              <>
+                &nbsp;
+                <span
+                  style={{
+                    padding: `${rem(2)} ${rem(4)}`,
+                    borderRadius: rem(30),
+                    textTransform: 'lowercase',
+                    fontSize: rem(12),
+                    lineHeight: rem(12),
+                    background: 'var(--soon-tag-background)',
+                    color: 'var(--soon-tag-text-color)',
+                  }}
+                >
+                  soon
+                </span>
+              </>
+            ) : null}
+          </label>
         </span>
       ))}
     </>
   )
-
-  useEffect(() => {
-    if (!openMobileVaultLinks) setOpenMobileHeader(false)
-  }, [openMobileVaultLinks])
 
   return (
     <div className="header">
       <div className="logo-area">
         <Sprite id="cruize-header-icon" width={128} height={46} />
         <div className="links">
-          <div className="vault-link">
+          <Link
+            to={`/vaults`}
+            className={`link ${
+              location.pathname === '/vaults' ? ' active' : ''
+            }`}
+          >
+            {'Home'}
+          </Link>
+          <div
+            className="vault-link"
+            onMouseEnter={() => setOpenVaultLinks(true)}
+            onMouseLeave={() => setOpenVaultLinks(false)}
+          >
             <span
-              onClick={() => navigate('/vaults')}
               className={`link ${
-                location.pathname.includes('vaults') ? ' active' : ''
+                location.pathname.includes('vaults/principal') ? ' active' : ''
               }`}
             >
               Vaults
@@ -73,7 +96,6 @@ const Header = () => {
                 id="dropdown-expand-icon"
                 width={20}
                 height={20}
-                onClick={() => setOpenVaultLinks(!openVaultLinks)}
                 style={{
                   cursor: 'pointer',
                   transform: `rotate(${openVaultLinks ? '180deg' : '0deg'})`,
@@ -107,10 +129,7 @@ const Header = () => {
         className={`mobile-hamburg-icon`}
         onClick={() => setOpenMobileHeader(!openMobileHeader)}
       />
-      <div
-        className="mobile-header"
-        style={{ height: openMobileHeader ? '82vh' : 0 }}
-      >
+      <div className={`mobile-header ${openMobileHeader ? 'open' : ''}`}>
         <div className="mobile-header-content">
           {!isConnected ? (
             <div className="mobile-header-section-container">
@@ -129,6 +148,17 @@ const Header = () => {
             </div>
           ) : (
             <div className="mobile-header-content">
+            <div className="mobile-header-section-container">
+              <Link
+                to={`/vaults`}
+                className={`link ${
+                  location.pathname === '/vaults' ? ' active' : ''
+                }`}
+                onClick={() => setOpenMobileHeader(false)}
+              >
+                {'Home'}
+              </Link>
+            </div>
               <div className="mobile-header-section-container">
                 <div
                   className="vault-link"
@@ -136,7 +166,7 @@ const Header = () => {
                 >
                   <span
                     className={`link ${
-                      location.pathname.includes('vaults') ? ' active' : ''
+                      location.pathname.includes('vaults/principal') ? ' active' : ''
                     }`}
                   >
                     Vaults
@@ -154,7 +184,7 @@ const Header = () => {
                   />
                 </div>
                 {openMobileVaultLinks ? (
-                  <div className="vault-dropdown">
+                  <div className={`vault-dropdown`}>
                     <span
                       className={`vault-dropdown-option`}
                       onClick={() => {
@@ -164,9 +194,7 @@ const Header = () => {
                     >
                       <label className={`vault-label`}>{'Vaults Home'}</label>
                     </span>
-                    <VaultLinks
-                      type="mobile"
-                    />
+                    <VaultLinks type="mobile" />
                   </div>
                 ) : null}
               </div>
