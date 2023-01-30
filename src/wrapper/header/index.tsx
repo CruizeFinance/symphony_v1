@@ -37,6 +37,7 @@ const Header = () => {
                   type === 'mobile'
                     ? setOpenMobileVaultLinks(false)
                     : setOpenVaultLinks(false)
+                  setOpenMobileHeader(false)
                 },
               })}
         >
@@ -86,7 +87,7 @@ const Header = () => {
           >
             <span
               className={`link ${
-                location.pathname.includes('vaults/principal') ? ' active' : ''
+                location.pathname.includes('vaults/twinpeaks') ? ' active' : ''
               }`}
             >
               Vaults
@@ -166,7 +167,7 @@ const Header = () => {
                 >
                   <span
                     className={`link ${
-                      location.pathname.includes('vaults/principal') ? ' active' : ''
+                      location.pathname.includes('vaults/twinpeaks') ? ' active' : ''
                     }`}
                   >
                     Vaults
@@ -185,15 +186,6 @@ const Header = () => {
                 </div>
                 {openMobileVaultLinks ? (
                   <div className={`vault-dropdown`}>
-                    <span
-                      className={`vault-dropdown-option`}
-                      onClick={() => {
-                        navigate('/vaults')
-                        setOpenMobileVaultLinks(false)
-                      }}
-                    >
-                      <label className={`vault-label`}>{'Vaults Home'}</label>
-                    </span>
                     <VaultLinks type="mobile" />
                   </div>
                 ) : null}

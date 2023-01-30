@@ -1,21 +1,26 @@
 import { useContext } from 'react'
 import { Button, Sprite } from '../../../components'
 import { AppContext } from '../../../context'
+import { rem } from '../../../utils'
 import './confirmstake.scss'
 
 interface ConfirmStakeProps {
   open: boolean
   hide: () => void
   amount: string
+  onConfirm: () => void
 }
 
-const ConfirmStake = ({ open, hide, amount }: ConfirmStakeProps) => {
+const ConfirmStake = ({ open, hide, amount, onConfirm }: ConfirmStakeProps) => {
   const [state] = useContext(AppContext)
 
   return (
     <div
       className="confirm-stake-container"
-      style={{ width: open ? '100%' : 0 }}
+      style={{
+        width: open ? '100%' : 0,
+        border: open ? `${rem(1)} solid var(--vault-card-border)` : '',
+      }}
     >
       <div className="stake-content">
         <div className="stake-header">
@@ -65,7 +70,6 @@ const ConfirmStake = ({ open, hide, amount }: ConfirmStakeProps) => {
                   {state.selectedTab === 'deposit' ? 'Deposit' : 'Withdraw'}{' '}
                   amount
                 </label>
-                <Sprite id="tooltip-icon" width={21} height={20} />
               </div>
               <label className="detail-value">
                 {amount} {state.selectedAsset.toUpperCase()}
@@ -74,7 +78,6 @@ const ConfirmStake = ({ open, hide, amount }: ConfirmStakeProps) => {
             <div className="detail">
               <div className="detail-field">
                 <label className="detail-label">Time to Next Expiry</label>
-                <Sprite id="tooltip-icon" width={21} height={20} />
               </div>
               <label className="detail-value">
                 {state.timeToExpiry.principal.days}D{' '}
@@ -85,13 +88,23 @@ const ConfirmStake = ({ open, hide, amount }: ConfirmStakeProps) => {
             <div className="detail">
               <div className="detail-field">
                 <label className="detail-label">Vault</label>
-                <Sprite id="tooltip-icon" width={21} height={20} />
               </div>
-              <label className="detail-value">Protected Binary</label>
+              <label className="detail-value">Protected Twin Peaks</label>
             </div>
           </div>
         </div>
-        <Button className="deposit-button">Confirm</Button>
+        <Button
+          className="deposit-button"
+          onClick={() => onConfirm()}
+          disabled={state.transactionDetails.loading}
+          style={{
+            background: state.transactionDetails.loading
+              ? 'var(--vault-card-border)'
+              : '',
+          }}
+        >
+          {state.transactionDetails.loading ? 'Pending Transaction' : 'Confirm'}
+        </Button>
       </div>
     </div>
   )

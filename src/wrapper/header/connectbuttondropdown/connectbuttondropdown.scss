@@ -36,6 +36,7 @@
   .wallet-dropdown {
     position: absolute;
     right: 0;
+    top: toRem(62);
     width: toRem(360);
     background: var(--default-card-header-background);
     backdrop-filter: brightness(6%);
@@ -66,17 +67,18 @@
             GroteskMedium,
             toRem(14),
             toRem(18),
-            var(--wallet-balance-color)
+            var(--black)
           );
         }
       }
       .wallet-actions {
         @include flex(row, center, center, toRem(8));
+        width: 100%;
         .action {
           background: var(--white);
           border-radius: toRem(8);
           cursor: pointer;
-          width: toRem(102);
+          width: 50%;
           height: toRem(54);
           @include flex(column, center, center, toRem(2));
           .action-label {
@@ -99,7 +101,7 @@
           GroteskSemiBold,
           toRem(14),
           toRem(18),
-          var(--wallet-balance-color)
+          var(--black)
         );
         padding-left: toRem(24);
         margin-bottom: toRem(8);
@@ -145,7 +147,7 @@
                   GroteskRegular,
                   toRem(14),
                   toRem(18),
-                  var(--wallet-balance-color)
+                  var(--black)
                 );
               }
             }
@@ -156,9 +158,25 @@
         }
       }
     }
+    .no-transactions {
+      padding: toRem(8) toRem(30);
+      background: var(--network-dropdown-hover-color);
+      border-radius: toRem(12);
+      @include flex(column, center, center, toRem(4));
+      margin: toRem(8) toRem(24) 0;
+      .no-transactions-label {
+        @include typography(
+          GroteskSemiBold,
+          toRem(14),
+          toRem(18),
+          var(--black)
+        );
+      }
+    }
     @media screen and (min-width: 320px) and (max-width: 1024px) {
       z-index: 1;
       left: -50%;
+      top: auto;
     }
   }
 }

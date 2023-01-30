@@ -18,7 +18,17 @@ const initialState: State = {
       hours: 0,
       minutes: 0
     }
-  }
+  },
+  cruizeContract: null,
+  selectedAssetContract: null,
+  selectedAssetApproved: false,
+  assetBalance: '0',
+  transactionDetails: {
+    loading: false,
+    hash: '',
+    status: 0
+  },
+  mintTokenContract: null
 }
 
 export default initialState

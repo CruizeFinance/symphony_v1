@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Button, Sprite, Modal } from '../../components'
-import StakeCard from '../../pages/principal/stakearea'
+import StakeCard from '../../pages/twinpeaks/stakearea'
 import { rem } from '../../utils'
 import NetworkDropdown from '../header/networkdropdown'
 import ConnectButtonDropdown from '../header/connectbuttondropdown'
@@ -41,23 +41,101 @@ const Footer = () => {
           </div>
           <div className="col-2">
             <label className="link-title">Resources</label>
-            <a className="link">Help center</a>
-            <a className="link">Tutorials</a>
-            <a className="link">Support</a>
+            <a
+              className="link"
+              href="https://docs.cruize.finance/"
+              target={'_blank'}
+              rel={'noreferrer noopener'}
+            >
+              Docs
+            </a>
+            <a
+              className="link"
+              href="https://discord.gg/cruize"
+              target={'_blank'}
+              rel={'noreferrer noopener'}
+            >
+              Help center
+            </a>
+            <a
+              className="link"
+              style={{
+                color: 'var(--vault-card-border)',
+                cursor: 'not-allowed',
+              }}
+            >
+              Tutorials
+            </a>
           </div>
           <div className="col-2">
             <label className="link-title">Company</label>
-            <a className="link">About us</a>
-            <a className="link">Careers</a>
-            <a className="link">Terms</a>
-            <a className="link">Privacy</a>
-            <a className="link">Contact</a>
+            <a
+              className="link"
+              href="https://www.cruize.finance"
+              target={'_blank'}
+              rel="noreferrer noopener"
+            >
+              Home
+            </a>
+            <a
+              className="link"
+              href="https://www.cruize.finance/about"
+              target={'_blank'}
+              rel="noreferrer noopener"
+            >
+              About
+            </a>
+            <a
+              className="link"
+              href="https://cruize-finance.notion.site/Careers-at-Cruize-e9fa839414ac491ca84f285911ad39fb"
+              target={'_blank'}
+              rel="noreferrer noopener"
+            >
+              Careers
+            </a>
+            <a
+              className="link"
+              href="https://www.cruize.finance/terms-page"
+              target={'_blank'}
+              rel="noreferrer noopener"
+            >
+              Terms
+            </a>
           </div>
           <div className="col-2">
             <label className="link-title">Social</label>
-            <a className="link">Twitter</a>
-            <a className="link">LinkedIn</a>
-            <a className="link">GitHub</a>
+            <a
+              className="link"
+              href="https://discord.gg/cruize"
+              target={'_blank'}
+              rel={'noreferrer noopener'}
+            >
+              Discord
+            </a>
+            <a
+              className="link"
+              href="https://twitter.com/CruizeFinance"
+              target={'_blank'}
+              rel={'noreferrer noopener'}
+            >
+              Twitter
+            </a>
+            <a
+              className="link"
+              href="https://www.linkedin.com/company/cruize-protocol"
+              target={'_blank'}
+              rel={'noreferrer noopener'}
+            >
+              LinkedIn
+            </a>
+            <a
+              className="link"
+              href="https://github.com/CruizeFinance"
+              target={'_blank'}
+              rel={'noreferrer noopener'}
+            >
+              GitHub
+            </a>
           </div>
         </div>
         <div className="row-2">
@@ -93,11 +171,11 @@ const Footer = () => {
             </a>
           </div>
         </div>
-        {location.pathname === '/vaults/principal' ? (
+        {location.pathname === '/vaults/twinpeaks' ? (
           <div className="mobile-fake-div" />
         ) : null}
       </div>
-      {location.pathname === '/vaults/principal' ? (
+      {location.pathname === '/vaults/twinpeaks' ? (
         <div className="stake-button-container">
           <Button
             className="stake-button"

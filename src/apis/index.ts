@@ -1,6 +1,6 @@
 import { Assets } from '../enums/assets'
 import { fetchWrapper } from '../utils'
-import { AssetPrice, CurrentPriceRange } from './interfaces'
+import { AssetPrice, CurrentPriceRange } from '../interfaces'
 
 /*
  * Used to fetch the asset's current price

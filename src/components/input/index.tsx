@@ -1,12 +1,14 @@
 import './input.scss'
 import AssetDropdown from '../assetdropdown'
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { AppContext } from '../../context'
 import { useAccount } from 'wagmi'
 
 interface InputProps {
   prependSymbol?: string
   onInputChange: (val: string) => void
+  onMaxClick?: (val: string) => void
+  inputValue: string
 }
 
 function escapeRegExp(string: string): string {
@@ -15,8 +17,8 @@ function escapeRegExp(string: string): string {
 
 const inputRegex = RegExp(`^\\d*(?:\\\\[.])?\\d*$`)
 
-const Input = ({ prependSymbol, onInputChange }: InputProps) => {
-  const [state, dispatch] = useContext(AppContext)
+const Input = ({ prependSymbol, onInputChange, onMaxClick, inputValue }: InputProps) => {
+  const [state] = useContext(AppContext)
 
   const { isConnected } = useAccount()
 
@@ -32,6 +34,10 @@ const Input = ({ prependSymbol, onInputChange }: InputProps) => {
       )
     }
   }
+
+  useEffect(() => {
+    setInputValue(inputValue)
+  }, [inputValue])
 
   return (
     <div className="input-area">
@@ -74,9 +80,17 @@ const Input = ({ prependSymbol, onInputChange }: InputProps) => {
           {isConnected ? (
             <div className="balance-button-container">
               <p className="asset-balance">
-                {state.selectedTab === 'deposit' ? 'Balance' : 'Limit'}: 0.887
+                {state.selectedTab === 'deposit' ? 'Balance' : 'Limit'}:{' '}
+                {Number(state.assetBalance.slice(0, 12))}
               </p>
-              <button className="max-button">MAX</button>
+              <button
+                className="max-button"
+                onClick={() => {
+                  onMaxClick && onMaxClick(state.assetBalance)
+                }}
+              >
+                MAX
+              </button>
             </div>
           ) : null}
         </div>

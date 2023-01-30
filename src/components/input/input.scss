@@ -41,7 +41,7 @@
       }
     }
     .asset-section {
-      @include flex(column, center, center, toRem(8));
+      @include flex(column, flex-end, center, toRem(8));
       align-self: flex-end;
       .balance-button-container {
         @include flex(row, center, center, toRem(4));

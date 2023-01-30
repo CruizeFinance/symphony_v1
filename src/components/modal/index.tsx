@@ -16,10 +16,9 @@ const Modal = ({
   modalContentStyle,
   modalStyle,
 }: ModalProps) => {
-  if (!open) return null
 
   return (
-    <div className="modal-container" onClick={hide} style={{ ...modalStyle }}>
+    <div className={`modal-container ${open ? 'show' : ''}`} onClick={hide} style={{ ...modalStyle }}>
       <div
         className="modal-content-style"
         style={{ ...modalContentStyle }}

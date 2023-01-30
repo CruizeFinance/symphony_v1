@@ -42,14 +42,14 @@ const NetworkDropdown = () => {
 
   return (
     <div className="network-dropdown" ref={networkRef}>
-      <div className="picker" onClick={() => setShowNetworks(!showNetworks)}>
+      <div className="network-picker" onClick={() => setShowNetworks(!showNetworks)}>
         <img
           src={`/assets/network/${state.connectedNetwork?.icon}-network-icon.png`}
           alt="network-icon"
           width={24}
           height={24}
         />
-        <label className="picker-label">{state.connectedNetwork?.label}</label>
+        <label className="network-picker-label">{state.connectedNetwork?.label}</label>
         <Sprite
           id="dropdown-expand-icon"
           width={24}
@@ -60,12 +60,12 @@ const NetworkDropdown = () => {
         />
       </div>
       {showNetworks ? (
-        <div className={`options`}>
+        <div className={`network-options`}>
           {Object.values(NETWORK_CONFIG.TESTNET).map((network, index) => (
             <div
-              className={`option  ${
+              className={`network-option  ${
                 state.connectedNetwork.chainId === network.chainId
-                  ? 'selected'
+                  ? 'selected-network'
                   : ''
               }`}
               key={`${network}-${index}`}
@@ -81,8 +81,8 @@ const NetworkDropdown = () => {
                 <label className="network-label">{network.label}</label>
               </div>
               {state.connectedNetwork.chainId === network.chainId ? (
-                <div className="connected-area">
-                  <label className="connected-label">Connected</label>
+                <div className="network-connected-area">
+                  <label className="network-connected-label">Connected</label>
                   <Sprite id="connected-dot-icon" width={6} height={6} />
                 </div>
               ) : null}

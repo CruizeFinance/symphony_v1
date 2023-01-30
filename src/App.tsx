@@ -2,23 +2,21 @@ import { BrowserRouter, Routes as Switch, Route } from 'react-router-dom'
 import { AppContextProvider } from './context'
 import './style/app.scss'
 import Wrapper from './wrapper'
-import { configureChains, goerli } from '@wagmi/core'
-import { polygonMumbai, optimismGoerli, arbitrumGoerli } from '@wagmi/chains'
+import { configureChains } from '@wagmi/core'
 import { publicProvider } from '@wagmi/core/providers/public'
 import { infuraProvider } from '@wagmi/core/providers/infura'
 import { MetaMaskConnector } from '@wagmi/core/connectors/metaMask'
 import { WalletConnectConnector } from '@wagmi/core/connectors/walletConnect'
 import { WagmiConfig, createClient } from 'wagmi'
 import { ConnectKitProvider } from 'connectkit'
-
-const supportedChains = [goerli, polygonMumbai, optimismGoerli, arbitrumGoerli]
+import { SUPPORTED_CHAINS } from './utils'
 
 const App = () => {
   const {
     chains,
     provider,
     webSocketProvider,
-  } = configureChains(supportedChains, [
+  } = configureChains(SUPPORTED_CHAINS, [
     infuraProvider({ apiKey: process.env.REACT_APP_INFURA_ID!, priority: 0 }),
     publicProvider({ priority: 1 }),
   ])

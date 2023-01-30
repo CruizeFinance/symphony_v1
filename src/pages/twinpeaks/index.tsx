@@ -2,12 +2,12 @@ import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Sprite } from '../../components'
 import FaqCard from './faqcard'
-import './principal.scss'
+import './twinpeaks.scss'
 import StakeArea from './stakearea'
 import StrategyCard from './strategycard'
 import YieldInfoCard from './yieldinfocard'
 
-const Principal = () => {
+const TwinPeaks = () => {
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -23,7 +23,7 @@ const Principal = () => {
         </button>
         <div className="container">
           <div className="info-col">
-            <h1 className="title">Protected Binary</h1>
+            <h1 className="title">Protected Twin Peaks</h1>
             <StrategyCard />
             <YieldInfoCard />
             <FaqCard />
@@ -37,4 +37,4 @@ const Principal = () => {
   )
 }
 
-export default Principal
+export default TwinPeaks

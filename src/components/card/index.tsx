@@ -1,13 +1,14 @@
-import { ReactNode } from 'react'
+import { CSSProperties, ReactNode } from 'react'
 import './card.scss'
 
 interface CardProps {
   children: ReactNode,
-  className?: string
+  className?: string,
+  style?: CSSProperties
 }
 
-const Card = ({ children, className }: CardProps) => {
-  return <div className={`card ${className || ''}`}>{children}</div>
+const Card = ({ children, className, style }: CardProps) => {
+  return <div className={`card ${className || ''}`} style={{ ...style }}>{children}</div>
 }
 
 export default Card

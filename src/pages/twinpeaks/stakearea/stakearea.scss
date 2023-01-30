@@ -30,6 +30,13 @@
         130%,
         var(--error-text-color)
       );
+      text-overflow: ellipsis;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 4;
+      -webkit-box-orient: vertical;
+      width: 100%;
+      word-break: break-all;
     }
   }
   .deposit-button {

@@ -3,7 +3,11 @@ import { AppContext } from '../../context'
 import { Actions } from '../../enums/actions'
 import './tabs.scss'
 
-const Tabs = () => {
+interface TabsProps {
+  onChange?: (val: string) => void
+}
+
+const Tabs = ({ onChange }: TabsProps) => {
   const [state, dispatch] = useContext(AppContext)
 
   return (
@@ -12,9 +16,10 @@ const Tabs = () => {
         className={`tab outlined ${
           state.selectedTab === 'deposit' ? 'selected' : ''
         }`}
-        onClick={() =>
+        onClick={() => {
           dispatch({ type: Actions.SET_SELECTED_TAB, payload: 'deposit' })
-        }
+          onChange && onChange('deposit')
+        }}
       >
         <label className="label">deposit</label>
       </div>
@@ -22,9 +27,10 @@ const Tabs = () => {
         className={`tab outlined ${
           state.selectedTab === 'withdraw' ? 'selected' : ''
         }`}
-        onClick={() =>
+        onClick={() => {
           dispatch({ type: Actions.SET_SELECTED_TAB, payload: 'withdraw' })
-        }
+          onChange && onChange('withdraw')
+        }}
       >
         <label className="label">withdraw</label>
       </div>

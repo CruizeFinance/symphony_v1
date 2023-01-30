@@ -39,6 +39,36 @@ const reducer = (state: State, action: Action): State => {
         ...state,
         timeToExpiry: action.payload
       }
+    case Actions.SET_CRUIZE_CONTRACT:
+      return {
+        ...state,
+        cruizeContract: action.payload
+      }
+    case Actions.SET_SELECTED_ASSET_CONTRACT:
+      return {
+        ...state,
+        selectedAssetContract: action.payload
+      }
+    case Actions.SET_SELCTED_ASSET_APPROVED:
+      return {
+        ...state,
+        selectedAssetApproved: action.payload
+      }
+    case Actions.SET_ASSET_BALANCE:
+      return {
+        ...state,
+        assetBalance: action.payload
+      }
+    case Actions.SET_TRANSACTION_DETAILS:
+      return {
+        ...state,
+        transactionDetails: action.payload
+      }
+    case Actions.SET_MINT_TOKEN_CONTRACT:
+      return {
+        ...state,
+        mintTokenContract: action.payload
+      }
     default:
       return state
   }

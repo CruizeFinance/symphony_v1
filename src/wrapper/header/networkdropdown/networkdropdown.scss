@@ -3,13 +3,13 @@
 
 .network-dropdown {
   position: relative;
-  .picker {
+  .network-picker {
     padding: toRem(8);
     @include flex(row, center, center, toRem(8));
     background: var(--white);
     border-radius: toRem(32);
     cursor: pointer;
-    .picker-label {
+    .network-picker-label {
       text-transform: capitalize;
       @include typography(GroteskSemiBold, toRem(16), toRem(20), var(--black));
       @media screen and (min-width: 320px) and (max-width: 1024px) {
@@ -17,16 +17,17 @@
       }
     }
   }
-  .options {
+  .network-options {
     position: absolute;
     right: 0;
+    top: toRem(62);
     background: var(--white);
     border-radius: toRem(16);
-    padding: toRem(24);
+    padding: toRem(4);
     width: toRem(380);
     box-shadow: 0px 8px 32px var(--dropdowns-box-shadow-color);
     @include flex(column, flex-start, center, toRem(4));
-    .option {
+    .network-option {
       padding: toRem(6) toRem(12) toRem(6) toRem(6);
       border-radius: toRem(12);
       cursor: pointer;
@@ -44,9 +45,9 @@
           );
         }
       }
-      .connected-area {
+      .network-connected-area {
         @include flex(row, center, center, toRem(8));
-        .connected-label {
+        .network-connected-label {
           @include typography(
             GroteskSemiBold,
             toRem(14),
@@ -55,7 +56,7 @@
           );
         }
       }
-      &.selected {
+      &.selected-network {
         background: var(--black);
         .network-label {
           color: var(--white);
@@ -63,7 +64,7 @@
       }
       &:hover {
         background: var(--network-dropdown-hover-color);
-        &.selected {
+        &.selected-network {
           background: var(--black);
           .network-label {
             color: var(--white);
@@ -74,6 +75,7 @@
     @media screen and (min-width: 320px) and (max-width: 1024px) {
       z-index: 1;
       left: toRem(-15);
+      top: auto;
     }
   }
 }
