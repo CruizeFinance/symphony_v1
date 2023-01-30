@@ -36,16 +36,13 @@ const AssetDropdown = ({
     dispatch({ type: Actions.SET_SELECTED_ASSET, payload: val })
     setOpenOptions(false)
     setAssetPrice(API_PARAMS[val as typeof state.selectedAsset])
+    dispatch({ type: Actions.SET_BG_COLOR_VALUE, payload: val })
   }
 
   const setAssetPrice = async (val: string) => {
     const response = await getAssetPrice(val)
     dispatch({ type: Actions.SET_ASSET_PRICE, payload: response.price })
   }
-
-  useEffect(() => {
-    dispatch({ type: Actions.SET_BG_COLOR_VALUE, payload: state.selectedAsset })
-  }, [state.selectedAsset])
 
   return (
     <div className={'dropdown-container'} ref={dropdownRef}>

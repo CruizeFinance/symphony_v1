@@ -44,9 +44,8 @@
         &:last-child {
           padding-right: 0;
         }
-        &:nth-child(2) {
+        &:first-child {
           border-right: 1px solid var(--tvl-info-border);
-          border-left: 1px solid var(--tvl-info-border);
         }
         @media screen and (min-width: 320px) and (max-width: 1024px) {
           padding: toRem(0) toRem(22);

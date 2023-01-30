@@ -10,6 +10,7 @@ import { WalletConnectConnector } from '@wagmi/core/connectors/walletConnect'
 import { WagmiConfig, createClient } from 'wagmi'
 import { ConnectKitProvider } from 'connectkit'
 import { SUPPORTED_CHAINS } from './utils'
+import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client'
 
 const App = () => {
   const {
@@ -38,20 +39,28 @@ const App = () => {
     webSocketProvider,
   })
 
+  const graphClient = new ApolloClient({
+    uri:
+      'https://api.studio.thegraph.com/query/41560/cruize-testing-vaults/v0.0.7',
+    cache: new InMemoryCache(),
+  })
+
   return (
-    <WagmiConfig client={client}>
-      <ConnectKitProvider theme='soft'>
-        <AppContextProvider>
-          <div className="app">
-            <BrowserRouter>
-              <Switch>
-                <Route path="/*" element={<Wrapper />} />
-              </Switch>
-            </BrowserRouter>
-          </div>
-        </AppContextProvider>
-      </ConnectKitProvider>
-    </WagmiConfig>
+    <ApolloProvider client={graphClient}>
+      <WagmiConfig client={client}>
+        <ConnectKitProvider theme="soft">
+          <AppContextProvider>
+            <div className="app">
+              <BrowserRouter>
+                <Switch>
+                  <Route path="/*" element={<Wrapper />} />
+                </Switch>
+              </BrowserRouter>
+            </div>
+          </AppContextProvider>
+        </ConnectKitProvider>
+      </WagmiConfig>
+    </ApolloProvider>
   )
 }
 

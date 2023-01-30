@@ -16,10 +16,26 @@ import CRUIZECONTRACTABI from '../abi/cruizecontract.json'
 import MINTTOKENABI from '../abi/minttoken.json'
 import { useOnceCall } from '../hooks'
 import { BigNumber, Contract, ethers, Signer } from 'ethers'
+import { gql, useQuery } from '@apollo/client'
 
 interface ContextProps {
   children: ReactNode
 }
+
+const GET_TRANSACTIONS = gql`
+  {
+    transactions(last: 3) {
+      id
+      asset
+      type
+      amount
+      txHash
+      status
+      decimals
+      timestamp
+    }
+  }
+`
 
 export const AppContext = createContext<[State, React.Dispatch<Action>]>([
   initialState,
@@ -33,6 +49,8 @@ export const AppContextProvider = ({ children }: ContextProps) => {
   const { chain } = useNetwork()
   const { data: signer } = useSigner()
   const { address } = useAccount()
+
+  const { data } = useQuery(GET_TRANSACTIONS)
 
   const initialAPICall = async () => {
     const response = await getAssetPrice(API_PARAMS[state.selectedAsset])

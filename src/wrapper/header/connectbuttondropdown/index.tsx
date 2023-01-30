@@ -25,8 +25,6 @@ const ConnectButtonDropdown = () => {
 
   const [showDropdown, setShowDropdown] = useState(false)
 
-  console.log(state.transactionDetails)
-
   return (
     <div className="connect-button-dropdown" ref={dropdownRef}>
       {!isConnected ? (

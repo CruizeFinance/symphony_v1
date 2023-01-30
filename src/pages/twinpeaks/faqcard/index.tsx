@@ -8,7 +8,7 @@ const data = [
     isOpen: true,
     question: 'What currency will my returns from the vault be paid in?',
     answer:
-      'Yes, you can try us for free for 30 days. If you want, we’ll provide you with a free, personalized 30-minute onboarding call to get you up and running as soon as possible.',
+      'The returns will be paid in the form of the token that you deposited in the vault. Eg: If you deposited WETH, the returns added to your portfolio will be in WETH.',
   },
   {
     id: 2,
@@ -103,7 +103,10 @@ const FaqCard = () => {
               >
                 {data.question}
               </p>
-              <Collapsible isOpen={data.isOpen} content={<p className='faq-answer'>{data.answer}</p>} />
+              <Collapsible
+                isOpen={data.isOpen}
+                content={<p className="faq-answer">{data.answer}</p>}
+              />
             </div>
           </div>
         ))}

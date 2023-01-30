@@ -35,4 +35,7 @@ export default interface State {
     hash: string
     status: number
   }
+  /* transactionData: {
+    amount
+  } */
 }
