@@ -70,7 +70,7 @@ export const AppContextProvider = ({ children }: ContextProps) => {
   }, [chain])
 
   useEffect(() => {
-    if (signer && address && SUPPORTED_CHAINS.some(chain => chain.id === state.connectedNetwork.chainId)) {
+    if (signer && address && state.connectedNetwork && SUPPORTED_CHAINS.some(chain => chain.id === state.connectedNetwork.chainId)) {
       const cruizeContract = new ethers.Contract(
         CONTRACT_CONFIG[state.connectedNetwork.chainId].CRUIZE_CONTRACT.address,
         CRUIZECONTRACTABI,

@@ -1,4 +1,3 @@
-import { arbitrumGoerli } from '@wagmi/chains'
 import { goerli } from 'wagmi'
 import { Assets } from '../enums/assets'
 import { NetworkIDs, Networks } from '../enums/networks'
@@ -33,11 +32,11 @@ export const NETWORK_CONFIG = {
       label: Networks.OPTIMISM_GOERLI,
       icon: Networks.OPTIMISM,
     }, */
-    [Networks.ARBITRUM]: {
+    /* [Networks.ARBITRUM]: {
       chainId: NetworkIDs.ARBITRUM_GOERLI,
       label: Networks.ARBITRUM_GOERLI,
       icon: Networks.ARBITRUM,
-    },
+    }, */
   },
 }
 
