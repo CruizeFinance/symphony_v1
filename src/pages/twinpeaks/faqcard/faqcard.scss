@@ -56,6 +56,8 @@
         padding: toRem(10) toRem(20);
         gap: toRem(10);
         flex-direction: row-reverse;
+        width: 100%;
+        justify-content: space-between;
       }
     }
     @media screen and (min-width: 320px) and (max-width: 1024px) {
