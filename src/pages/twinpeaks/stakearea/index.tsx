@@ -22,8 +22,6 @@ const StakeCard = () => {
   const [state, dispatch] = useContext(AppContext)
 
   const [openConfirm, setOpenConfirm] = useState(false)
-  const [inputValue, setInputValue] = useState('')
-  const [error, setError] = useState('')
 
   /*
    * a function to get user balance of the asset
@@ -42,15 +40,14 @@ const StakeCard = () => {
     }
     dispatch({
       type: Actions.SET_ASSET_BALANCE,
-      payload:
-        ethers.utils.formatUnits(
-          state.selectedTab === 'withdraw'
-          ? (balance as DepositReceiptsInterface).amount as BigNumber
-          : balance as BigNumber,
-              CONTRACT_CONFIG[state.connectedNetwork.chainId][
-                state.selectedAsset.toUpperCase()
-              ].decimals,
-            ),
+      payload: ethers.utils.formatUnits(
+        state.selectedTab === 'withdraw'
+          ? ((balance as DepositReceiptsInterface).amount as BigNumber)
+          : (balance as BigNumber),
+        CONTRACT_CONFIG[state.connectedNetwork.chainId][
+          state.selectedAsset.toUpperCase()
+        ].decimals,
+      ),
     })
   }
 
@@ -65,6 +62,7 @@ const StakeCard = () => {
           loading: false,
           hash: '',
           status: 0,
+          type: 'approve'
         },
       })
       const tx = await state.selectedAssetContract!.approve(
@@ -72,27 +70,59 @@ const StakeCard = () => {
           .address,
         ethers.constants.MaxUint256,
       )
-      const data: TransactionReceipt = await transactionExecution(tx)
+      const data: TransactionReceipt = await transactionExecution(tx, 'approve')
       dispatch({
         type: Actions.SET_SELCTED_ASSET_APPROVED,
         payload: data.status === 1,
       })
     } catch (e: any) {
-      setError(e.message)
+      dispatch({type: Actions.SET_APP_ERROR, payload: e.message})
       resetTransactionDetails()
     }
   }
 
-  const transactionExecution = async (tx: TransactionResponse) => {
+  const transactionExecution = async (tx: TransactionResponse, type: string) => {
     dispatch({
       type: Actions.SET_TRANSACTION_DETAILS,
       payload: {
         ...state.transactionDetails,
         loading: true,
         hash: tx.hash,
+        type
       },
     })
     const data: TransactionReceipt = await tx.wait()
+    dispatch({
+      type: Actions.SET_TRANSACTION_DATA,
+      payload: [
+        {
+          account: address,
+          asset: {
+            reserve: {
+              symbol: state.selectedAsset.toUpperCase(),
+            },
+            id:
+              CONTRACT_CONFIG[state.connectedNetwork.chainId][
+                state.selectedAsset.toUpperCase()
+              ].address,
+          },
+          decimals:
+            CONTRACT_CONFIG[state.connectedNetwork.chainId][
+              state.selectedAsset.toUpperCase()
+            ].decimals,
+          txHash: tx.hash,
+          type: state.selectedTab.toUpperCase(),
+          status: data.status === 1 ? 'SUCCESS' : 'FAILED',
+          amount: ethers.utils.parseUnits(
+            state.userInputValue,
+            CONTRACT_CONFIG[state.connectedNetwork.chainId][
+              state.selectedAsset.toUpperCase()
+            ].decimals,
+          ).toString(),
+        },
+        ...state.transactionData,
+      ],
+    })
     dispatch({
       type: Actions.SET_TRANSACTION_DETAILS,
       payload: {
@@ -103,7 +133,10 @@ const StakeCard = () => {
       },
     })
     setOpenConfirm(false)
-    setInputValue('')
+    dispatch({
+      type: Actions.SET_USER_INPUT_VALUE,
+      payload: '',
+    })
     return data
   }
 
@@ -114,9 +147,13 @@ const StakeCard = () => {
         loading: false,
         hash: '',
         status: 0,
+        type: '',
       },
     })
-    setInputValue('')
+    dispatch({
+      type: Actions.SET_USER_INPUT_VALUE,
+      payload: '',
+    })
     setOpenConfirm(false)
   }
 
@@ -128,6 +165,7 @@ const StakeCard = () => {
           loading: false,
           hash: '',
           status: 0,
+          type: 'transaction',
         },
       })
       writeContract(
@@ -137,7 +175,7 @@ const StakeCard = () => {
             state.selectedAsset.toUpperCase()
           ].address,
           ethers.utils.parseUnits(
-            inputValue || '0',
+            state.userInputValue || '0',
             CONTRACT_CONFIG[state.connectedNetwork.chainId][
               state.selectedAsset.toUpperCase()
             ].decimals,
@@ -145,7 +183,7 @@ const StakeCard = () => {
         ],
       )
     } catch (e: any) {
-      setError(e.message)
+      dispatch({type: Actions.SET_APP_ERROR, payload: e.message})
       resetTransactionDetails()
     }
   }
@@ -156,9 +194,9 @@ const StakeCard = () => {
   ) => {
     try {
       const tx = await state.cruizeContract![functionName](...args)
-      await transactionExecution(tx)
+      await transactionExecution(tx, 'transaction')
     } catch (e: any) {
-      setError(e.message)
+      dispatch({type: Actions.SET_APP_ERROR, payload: e.message})
       resetTransactionDetails()
     }
   }
@@ -171,6 +209,7 @@ const StakeCard = () => {
           loading: false,
           hash: '',
           status: 0,
+          type: 'mint',
         },
       })
       const tx = await state.mintTokenContract!.mint(
@@ -181,9 +220,9 @@ const StakeCard = () => {
           ].decimals || '',
         ),
       )
-      await transactionExecution(tx)
+      await transactionExecution(tx, 'mint')
     } catch (e: any) {
-      setError(e.message)
+      dispatch({type: Actions.SET_APP_ERROR, payload: e.message})
       resetTransactionDetails()
     }
   }
@@ -201,30 +240,47 @@ const StakeCard = () => {
   ])
 
   useEffect(() => {
-    if (error) {
+    if (state.appError) {
       const timeout = setTimeout(() => {
-        setError('')
+        dispatch({type: Actions.SET_APP_ERROR, payload: ''})
         clearTimeout(timeout)
       }, 7000)
     }
-  }, [error])
+  }, [state.appError])
 
   return (
     <>
       <Card className="stake-card">
-        <Tabs onChange={() => setInputValue('')} />
-        <Input
-          onInputChange={(val) => setInputValue(val)}
-          inputValue={inputValue}
-          onMaxClick={(val) => setInputValue(val)}
+        <Tabs
+          onChange={() =>
+            dispatch({
+              type: Actions.SET_USER_INPUT_VALUE,
+              payload: '',
+            })
+          }
         />
-        {error ? (
+        <Input
+          onInputChange={(val) =>
+            dispatch({
+              type: Actions.SET_USER_INPUT_VALUE,
+              payload: val,
+            })
+          }
+          inputValue={state.userInputValue}
+          onMaxClick={(val) =>
+            dispatch({
+              type: Actions.SET_USER_INPUT_VALUE,
+              payload: val,
+            })
+          }
+        />
+        {state.appError ? (
           <div className="error-area">
             <div className="error-title">
               <Sprite id="error-icon" width={17} height={16} />
               <label className="title-label">ERROR</label>
             </div>
-            <p className="error-text">{error}</p>
+            <p className="error-text">{state.appError}</p>
           </div>
         ) : null}
         {!isConnected ? (
@@ -246,7 +302,8 @@ const StakeCard = () => {
                 : () => approveToken()
             }
             disabled={
-              Number(inputValue) <= 0 || state.transactionDetails.loading
+              Number(state.userInputValue) <= 0 ||
+              state.transactionDetails.loading
             }
           >
             {state.transactionDetails.loading
@@ -264,7 +321,7 @@ const StakeCard = () => {
         <ConfirmStake
           open={openConfirm}
           hide={() => setOpenConfirm(false)}
-          amount={inputValue}
+          amount={state.userInputValue}
           onConfirm={() => onConfirm()}
         />
       </Card>
@@ -275,12 +332,12 @@ const StakeCard = () => {
             className="mint-tokens-button"
             style={{
               background:
-                openConfirm || state.transactionDetails.loading || error !== ''
+                openConfirm || state.transactionDetails.loading || state.appError !== ''
                   ? `var(--vault-card-border)`
                   : `var(--${state.selectedAsset}-mint-button-background)`,
             }}
             disabled={
-              openConfirm || state.transactionDetails.loading || error !== ''
+              openConfirm || state.transactionDetails.loading || state.appError !== ''
             }
             onClick={mintToken}
           >

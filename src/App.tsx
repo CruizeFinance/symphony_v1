@@ -17,7 +17,7 @@ const App = () => {
     chains,
     provider,
     webSocketProvider,
-  } = configureChains([goerli], [
+  } = configureChains(SUPPORTED_CHAINS, [
     infuraProvider({ apiKey: process.env.REACT_APP_INFURA_ID!, priority: 0 }),
     publicProvider({ priority: 1 }),
   ])
@@ -41,7 +41,7 @@ const App = () => {
 
   const graphClient = new ApolloClient({
     uri:
-      'https://api.studio.thegraph.com/query/41560/cruize-testing-vaults/v0.0.7',
+      'https://api.studio.thegraph.com/query/41560/cruize-testing-vaults/v0.0.10',
     cache: new InMemoryCache(),
   })
 

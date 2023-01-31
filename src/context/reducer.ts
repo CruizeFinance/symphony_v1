@@ -69,6 +69,21 @@ const reducer = (state: State, action: Action): State => {
         ...state,
         mintTokenContract: action.payload
       }
+    case Actions.SET_TRANSACTION_DATA:
+      return {
+        ...state,
+        transactionData: action.payload
+      }
+    case Actions.SET_USER_INPUT_VALUE:
+      return {
+        ...state,
+        userInputValue: action.payload
+      }
+    case Actions.SET_APP_ERROR:
+      return {
+        ...state,
+        appError: action.payload
+      }
     default:
       return state
   }

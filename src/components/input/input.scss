@@ -52,6 +52,10 @@
             toRem(12),
             var(--link-inactive)
           );
+          max-width: 15ch;
+          text-overflow: ellipsis;
+          overflow: hidden;
+          white-space: nowrap;
         }
         .max-button {
           border: none;

@@ -34,8 +34,22 @@ export default interface State {
     loading: boolean
     hash: string
     status: number
+    type: 'mint' | 'approve' | 'transaction'
   }
-  /* transactionData: {
-    amount
-  } */
+  transactionData: {
+    account: string
+    asset: {
+      reserve: {
+        symbol: string
+      }
+      id: string
+    }
+    decimals: string
+    txHash: string
+    type: string
+    status: string
+    amount: string
+  }[]
+  userInputValue: string
+  appError: string
 }

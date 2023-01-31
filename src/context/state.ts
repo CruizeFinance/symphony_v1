@@ -26,9 +26,13 @@ const initialState: State = {
   transactionDetails: {
     loading: false,
     hash: '',
-    status: 0
+    status: 0,
+    type: 'transaction'
   },
-  mintTokenContract: null
+  mintTokenContract: null,
+  transactionData: [],
+  userInputValue: '',
+  appError: ''
 }
 
 export default initialState

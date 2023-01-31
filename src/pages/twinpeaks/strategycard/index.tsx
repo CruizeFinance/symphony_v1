@@ -15,6 +15,11 @@ const StrategyCard = () => {
       state.selectedAsset.toUpperCase(),
       'principal_protection',
     )
+    if (!response || response.error)
+      dispatch({
+        type: Actions.SET_APP_ERROR,
+        payload: 'Could not set price range.',
+      })
     dispatch({
       type: Actions.SET_PRICE_RANGE,
       payload: {
@@ -106,12 +111,11 @@ const StrategyCard = () => {
           <label className="card-section-title">Strategy</label>
           <p className="card-section-description">
             This weekly strategy earns interest through an exotic option
-            strategy called{' '}
-            <span style={{ fontFamily: 'GroteskMedium' }}>Double No-Touch</span>
-            . It allows investors to earn a high return if the price settles
-            within a specified range at expiration. A guaranteed minimum coupon
-            is earned even if the range is breached. The principal always
-            remains protected in every condition.&nbsp;
+            strategy called&nbsp;
+            <span style={{ fontFamily: 'GroteskMedium' }}>Twin Peaks</span>. The
+            strategy captures a linearly increasing rate of return for price
+            movements in both directions up to the upper and lower barriers
+            respectively.&nbsp;
             <a
               href="https://docs.cruize.finance"
               rel="noreferrer noopener"

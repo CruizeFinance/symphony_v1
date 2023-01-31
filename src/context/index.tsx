@@ -1,41 +1,25 @@
-import {
-  createContext,
-  ReactNode,
-  useEffect,
-  useReducer,
-} from 'react'
+import { createContext, ReactNode, useEffect, useReducer } from 'react'
 import initialState from './state'
 import State from './statemodel'
 import { Action } from './action'
 import reducer from './reducer'
 import { erc20ABI, useAccount, useNetwork, useSigner } from 'wagmi'
 import { Actions } from '../enums/actions'
-import { API_PARAMS, CONTRACT_CONFIG, NETWORK_CONFIG, SUPPORTED_CHAINS } from '../utils'
+import {
+  API_PARAMS,
+  CONTRACT_CONFIG,
+  NETWORK_CONFIG,
+  SUPPORTED_CHAINS,
+} from '../utils'
 import { getAssetPrice } from '../apis'
 import CRUIZECONTRACTABI from '../abi/cruizecontract.json'
 import MINTTOKENABI from '../abi/minttoken.json'
 import { useOnceCall } from '../hooks'
 import { BigNumber, Contract, ethers, Signer } from 'ethers'
-import { gql, useQuery } from '@apollo/client'
 
 interface ContextProps {
   children: ReactNode
 }
-
-const GET_TRANSACTIONS = gql`
-  {
-    transactions(last: 3) {
-      id
-      asset
-      type
-      amount
-      txHash
-      status
-      decimals
-      timestamp
-    }
-  }
-`
 
 export const AppContext = createContext<[State, React.Dispatch<Action>]>([
   initialState,
@@ -50,10 +34,10 @@ export const AppContextProvider = ({ children }: ContextProps) => {
   const { data: signer } = useSigner()
   const { address } = useAccount()
 
-  const { data } = useQuery(GET_TRANSACTIONS)
-
   const initialAPICall = async () => {
     const response = await getAssetPrice(API_PARAMS[state.selectedAsset])
+    if (!response || response.error)
+      dispatch({ type: Actions.SET_APP_ERROR, payload: 'Could not fetch asset price' })
     dispatch({ type: Actions.SET_ASSET_PRICE, payload: response.price })
   }
 
@@ -70,21 +54,35 @@ export const AppContextProvider = ({ children }: ContextProps) => {
   }, [chain])
 
   useEffect(() => {
-    if (signer && address && state.connectedNetwork && SUPPORTED_CHAINS.some(chain => chain.id === state.connectedNetwork.chainId)) {
+    if (
+      signer &&
+      address &&
+      state.connectedNetwork &&
+      SUPPORTED_CHAINS.some(
+        (chain) => chain.id === state.connectedNetwork.chainId,
+      )
+    ) {
       const cruizeContract = new ethers.Contract(
         CONTRACT_CONFIG[state.connectedNetwork.chainId].CRUIZE_CONTRACT.address,
         CRUIZECONTRACTABI,
-        signer as Signer
+        signer as Signer,
       )
       dispatch({ type: Actions.SET_CRUIZE_CONTRACT, payload: cruizeContract })
       const selectedAssetContract = new ethers.Contract(
-        CONTRACT_CONFIG[state.connectedNetwork.chainId][state.selectedAsset.toUpperCase()].address,
+        CONTRACT_CONFIG[state.connectedNetwork.chainId][
+          state.selectedAsset.toUpperCase()
+        ].address,
         erc20ABI,
-        signer as Signer
+        signer as Signer,
       )
-      dispatch({ type: Actions.SET_SELECTED_ASSET_CONTRACT, payload: selectedAssetContract })
+      dispatch({
+        type: Actions.SET_SELECTED_ASSET_CONTRACT,
+        payload: selectedAssetContract,
+      })
       const mintContract: Contract = new ethers.Contract(
-        CONTRACT_CONFIG[state.connectedNetwork.chainId][state.selectedAsset.toUpperCase()].address,
+        CONTRACT_CONFIG[state.connectedNetwork.chainId][
+          state.selectedAsset.toUpperCase()
+        ].address,
         MINTTOKENABI,
         signer as Signer,
       )
@@ -92,24 +90,25 @@ export const AppContextProvider = ({ children }: ContextProps) => {
       checkAllowance(selectedAssetContract)
     }
   }, [state.connectedNetwork, address, signer, state.selectedAsset])
-  
+
   /*
-  * function to check token allowance
-  */
- const checkAllowance = async (contract: Contract) => {
-   try {
-     const data: BigNumber = await contract.allowance(
-       address!,
-       CONTRACT_CONFIG[state.connectedNetwork.chainId]['CRUIZE_CONTRACT'].address,
-     )
-     dispatch({
-       type: Actions.SET_SELCTED_ASSET_APPROVED,
-       payload: BigNumber.from(data).gt(BigNumber.from('0')),
-     })
-   } catch (e) {
-     console.log(e)
-   }
- }
+   * function to check token allowance
+   */
+  const checkAllowance = async (contract: Contract) => {
+    try {
+      const data: BigNumber = await contract.allowance(
+        address!,
+        CONTRACT_CONFIG[state.connectedNetwork.chainId]['CRUIZE_CONTRACT']
+          .address,
+      )
+      dispatch({
+        type: Actions.SET_SELCTED_ASSET_APPROVED,
+        payload: BigNumber.from(data).gt(BigNumber.from('0')),
+      })
+    } catch (e) {
+      console.log(e)
+    }
+  }
 
   return (
     <AppContext.Provider value={[state, dispatch]}>

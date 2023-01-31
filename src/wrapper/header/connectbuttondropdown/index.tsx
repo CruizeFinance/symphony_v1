@@ -1,14 +1,45 @@
 import { ConnectKitButton } from 'connectkit'
-import { useContext, useRef, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import Jazzicon from 'react-jazzicon/dist/Jazzicon'
 import { useAccount, useBalance, useDisconnect, useEnsName } from 'wagmi'
 import { Button, Sprite } from '../../../components'
 import { AppContext } from '../../../context'
 import { useOutsideAlerter } from '../../../hooks'
 import './connectbuttondropdown.scss'
+import { gql, useQuery } from '@apollo/client'
+import { Actions } from '../../../enums/actions'
+import { ethers } from 'ethers'
+import { CONTRACT_CONFIG } from '../../../utils'
+
+const GET_TRANSACTIONS = gql`
+  query Transactions($account: String!) {
+    transactions(
+      orderBy: timestamp
+      orderDirection: desc
+      where: { account: $account }
+    ) {
+      amount
+      status
+      type
+      asset {
+        id
+        reserve {
+          name
+          symbol
+          decimals
+        }
+      }
+      account
+      timestamp
+      txHash
+      decimals
+      id
+    }
+  }
+`
 
 const ConnectButtonDropdown = () => {
-  const [state] = useContext(AppContext)
+  const [state, dispatch] = useContext(AppContext)
 
   const { address: accountAddress, isConnected } = useAccount()
   const { data: ensName } = useEnsName({
@@ -22,6 +53,21 @@ const ConnectButtonDropdown = () => {
 
   const dropdownRef = useRef(null)
   useOutsideAlerter(dropdownRef, () => setShowDropdown(false))
+
+  const { data: transactionData, loading } = useQuery(GET_TRANSACTIONS, {
+    variables: {
+      account: accountAddress,
+    },
+  })
+
+  useEffect(() => {
+    if (transactionData) {
+      dispatch({
+        type: Actions.SET_TRANSACTION_DATA,
+        payload: [...transactionData.transactions],
+      })
+    }
+  }, [transactionData])
 
   const [showDropdown, setShowDropdown] = useState(false)
 
@@ -105,17 +151,27 @@ const ConnectButtonDropdown = () => {
           </div>
           <div className="transactions">
             <label className="title">Recent Transactions</label>
-            {false ? (
-              <>
-                {/* <div className="list">
+            {state.transactionDetails.loading &&
+            state.transactionDetails.type === 'transaction' ? (
+              <div className="list">
                 <div className="transaction">
-                  <div className="details">
+                  <div
+                    className="details"
+                    onClick={() =>
+                      window.open(
+                        `https://goerli.etherscan.io/tx/${state.transactionDetails.hash}`,
+                        '_blank',
+                        'noreferrer noopener',
+                      )
+                    }
+                  >
                     <div className="icon">
-                      <div className="loader" />
+                      <div className="loader"></div>
                     </div>
                     <div className="details-label">
                       <label className="transaction-info">
-                        Deposit 1 ETH to PP Vault
+                        {state.selectedTab.toUpperCase()} {state.userInputValue}{' '}
+                        {state.selectedAsset.toUpperCase()} to TP Vault
                       </label>
                       <label className="transaction-status">Pending</label>
                     </div>
@@ -124,72 +180,91 @@ const ConnectButtonDropdown = () => {
                     </div>
                   </div>
                 </div>
-                <div className="transaction">
-                  <div className="details">
-                    <div className="icon">
+              </div>
+            ) : null}
+            {state.transactionData.length ? (
+              <div className="list">
+                {state.transactionData.slice(0, 3).map((transaction) => (
+                  <div className="transaction" key={transaction.txHash}>
+                    <div
+                      className="details"
+                      onClick={() => {
+                        window.open(
+                          `https://goerli.etherscan.io/tx/${transaction.txHash}`,
+                          '_blank',
+                          'noreferrer noopener',
+                        )
+                      }}
+                    >
                       <Sprite
-                        id="transaction-failed-icon"
+                        id={`transaction-${transaction.status.toLowerCase()}-icon`}
                         width={28}
                         height={28}
                       />
-                    </div>
-                    <div className="details-label">
-                      <label className="transaction-info">
-                        Deposit 1 ETH to PP Vault
-                      </label>
-                      <label
-                        className="transaction-status"
-                        style={{
-                          color: 'var(--transaction-failed-label-color)',
-                        }}
-                      >
-                        Failed
-                      </label>
-                    </div>
-                    <div className="icon">
-                      <Sprite id="redirect-link-icon" width={24} height={24} />
-                    </div>
-                  </div>
-                </div>
-                <div className="transaction">
-                  <div className="details">
-                    <div className="icon">
-                      <Sprite
-                        id="transaction-success-icon"
-                        width={28}
-                        height={28}
-                      />
-                    </div>
-                    <div className="details-label">
-                      <label className="transaction-info">
-                        Deposit 3 ETH to DP Vault
-                      </label>
-                      <label className="transaction-status">Confirmed</label>
-                    </div>
-                    <div className="icon">
-                      <Sprite id="redirect-link-icon" width={24} height={24} />
+                      <div className="details-label">
+                        <label className="transaction-info">
+                          <>
+                            {transaction.type.toUpperCase()}{' '}
+                            {ethers.utils.formatUnits(
+                              transaction.amount,
+                              transaction.decimals,
+                            )}{' '}
+                            {transaction.asset.reserve.symbol} to TP Vault
+                          </>
+                        </label>
+                        <label className="transaction-status">
+                          {transaction.status.toLowerCase()}
+                        </label>
+                      </div>
+                      <div className="icon">
+                        <Sprite
+                          id="redirect-link-icon"
+                          width={24}
+                          height={24}
+                        />
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div className="transaction">
-                  <div className="details">
-                    <div className="details-label" style={{ width: '90%' }}>
-                      <label className="transaction-info">
-                        View more on Etherscan
-                      </label>
-                    </div>
-                    <div className="icon">
-                      <Sprite id="redirect-link-icon" width={24} height={24} />
+                ))}
+                {state.transactionData.length > 3 ? (
+                  <div className="transaction">
+                    <div
+                      className="details"
+                      onClick={() =>
+                        window.open(
+                          `https://goerli.etherscan.io/address/${
+                            CONTRACT_CONFIG[state.connectedNetwork.chainId][
+                              'CRUIZE_CONTRACT'
+                            ]['address']
+                          }`,
+                          '_blank',
+                          'noreferrer noopener',
+                        )
+                      }
+                    >
+                      <div className="details-label" style={{ width: '90%' }}>
+                        <label className="transaction-info">
+                          View more on Etherscan
+                        </label>
+                      </div>
+                      <div className="icon">
+                        <Sprite
+                          id="redirect-link-icon"
+                          width={24}
+                          height={24}
+                        />
+                      </div>
                     </div>
                   </div>
-                </div>
-              </div> */}
-              </>
-            ) : (
+                ) : null}
+              </div>
+            ) : state.transactionDetails.loading ? null : (
               <div className="no-transactions">
                 <Sprite id="transaction-coins-icon" width={50} height={50} />
                 <label className="no-transactions-label">
-                  You haven't made any transactions yet
+                  {loading
+                    ? 'Loading your transactions'
+                    : "You haven't made any transactions yet"}
                 </label>
               </div>
             )}

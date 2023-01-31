@@ -49,8 +49,8 @@ const Input = ({ prependSymbol, onInputChange, onMaxClick, inputValue }: InputPr
             autoComplete="off"
             autoCorrect="off"
             pattern="^[0-9]*[.,]?[0-9]*$"
-            maxLength={10}
-            size={10}
+            maxLength={15}
+            size={15}
             type={'text'}
             value={prependSymbol && input ? prependSymbol + input : input || ''}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -81,7 +81,7 @@ const Input = ({ prependSymbol, onInputChange, onMaxClick, inputValue }: InputPr
             <div className="balance-button-container">
               <p className="asset-balance">
                 {state.selectedTab === 'deposit' ? 'Balance' : 'Limit'}:{' '}
-                {Number(state.assetBalance.slice(0, 12))}
+                {Number(state.assetBalance.slice(0, 10))}
               </p>
               <button
                 className="max-button"
