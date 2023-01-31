@@ -26,10 +26,10 @@ const Vault = () => {
             through novel structured products
           </h3>
         </div>
-        {/* <div className="tvl-info">
+        <div className="tvl-info">
           <label className="tvl-label">Total Value Locked in Cruize</label>
-          <label className="tvl-value">$4,763,634.00</label>
-        </div> */}
+          <label className="tvl-value">$5,300,000.00</label>
+        </div>
         <div className="vault-options">
           <VaultCard
             cardTitle="Downside Protection"

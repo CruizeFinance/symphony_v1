@@ -62,7 +62,7 @@ export const CONTRACT_CONFIG = {
   },
 }
 
-export const SUPPORTED_CHAINS = [goerli, arbitrumGoerli]
+export const SUPPORTED_CHAINS = [goerli]
 
 export const API_PARAMS = {
   [Assets.WETH]: 'ethereum',
