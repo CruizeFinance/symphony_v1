@@ -92,10 +92,12 @@ const StrategyCard = () => {
       <div className="card-header">
         <AssetDropdown type="big" />
         <div className="tvl">
-          {/* <div className="tvl-info">
-            <label className="tvl-info-value">$5.25M</label>
-            <label className="tvl-info-label">TVL</label>
-          </div> */}
+          {state.assetTVL ? (
+            <div className="tvl-info">
+              <label className="tvl-info-value">${state.assetTVL}</label>
+              <label className="tvl-info-label">TVL</label>
+            </div>
+          ) : null}
           <div className="tvl-info">
             <label className="tvl-info-value">2.00%</label>
             <label className="tvl-info-label">Base APY</label>

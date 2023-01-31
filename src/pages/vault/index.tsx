@@ -1,5 +1,6 @@
 import { useContext, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { getTVL } from '../../apis'
 import { Sprite, VaultCard } from '../../components'
 import { AppContext } from '../../context'
 import { Actions } from '../../enums/actions'
@@ -9,9 +10,22 @@ import './vault.scss'
 const Vault = () => {
   const navigate = useNavigate()
 
-  const [, dispatch] = useContext(AppContext)
+  const [state, dispatch] = useContext(AppContext)
+
+  const calcTVL = async () => {
+    try {
+      const totalTVL = await getTVL()
+      dispatch({ type: Actions.SET_TOTAL_TVL, payload: (totalTVL.message || 0).toLocaleString() })
+    } catch (e) {
+      dispatch({
+        type: Actions.SET_APP_ERROR,
+        payload: 'Could not calculate TVL',
+      })
+    }
+  }
 
   useEffect(() => {
+    calcTVL()
     dispatch({ type: Actions.SET_BG_COLOR_VALUE, payload: 'vault' })
   }, [])
 
@@ -28,7 +42,7 @@ const Vault = () => {
         </div>
         <div className="tvl-info">
           <label className="tvl-label">Total Value Locked in Cruize</label>
-          <label className="tvl-value">$5,300,000.00</label>
+          <label className="tvl-value">{state.totalTVL && state.totalTVL !== '0' ? `$${state.totalTVL}` : <>&mdash;</>}</label>
         </div>
         <div className="vault-options">
           <VaultCard

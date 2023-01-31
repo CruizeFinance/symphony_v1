@@ -8,10 +8,11 @@ import { Actions } from '../enums/actions'
 import {
   API_PARAMS,
   CONTRACT_CONFIG,
+  formatNumberSuffix,
   NETWORK_CONFIG,
   SUPPORTED_CHAINS,
 } from '../utils'
-import { getAssetPrice } from '../apis'
+import { getAssetPrice, getTVL } from '../apis'
 import CRUIZECONTRACTABI from '../abi/cruizecontract.json'
 import MINTTOKENABI from '../abi/minttoken.json'
 import { useOnceCall } from '../hooks'
@@ -37,11 +38,51 @@ export const AppContextProvider = ({ children }: ContextProps) => {
   const initialAPICall = async () => {
     const response = await getAssetPrice(API_PARAMS[state.selectedAsset])
     if (!response || response.error)
-      dispatch({ type: Actions.SET_APP_ERROR, payload: 'Could not fetch asset price' })
+      dispatch({
+        type: Actions.SET_APP_ERROR,
+        payload: 'Could not fetch asset price',
+      })
     dispatch({ type: Actions.SET_ASSET_PRICE, payload: response.price })
+    calcTVL()
   }
 
   useOnceCall(initialAPICall)
+
+  const calcTVL = async () => {
+    try {
+      const totalTVL = await getTVL()
+      dispatch({ type: Actions.SET_TOTAL_TVL, payload: (totalTVL.message || 0).toLocaleString() })
+      const assetTVL = await getTVL(state.selectedAsset.toUpperCase())
+      dispatch({
+        type: Actions.SET_ASSET_TVL,
+        payload: formatNumberSuffix(assetTVL.message || 0),
+      })
+    } catch (e) {
+      dispatch({
+        type: Actions.SET_APP_ERROR,
+        payload: 'Could not calculate TVL',
+      })
+    }
+  }
+
+  /*
+   * function to check token allowance
+   */
+  const checkAllowance = async (contract: Contract) => {
+    try {
+      const data: BigNumber = await contract.allowance(
+        address!,
+        CONTRACT_CONFIG[state.connectedNetwork.chainId]['CRUIZE_CONTRACT']
+          .address,
+      )
+      dispatch({
+        type: Actions.SET_SELCTED_ASSET_APPROVED,
+        payload: BigNumber.from(data).gt(BigNumber.from('0')),
+      })
+    } catch (e) {
+      console.log(e)
+    }
+  }
 
   useEffect(() => {
     if (chain)
@@ -90,25 +131,6 @@ export const AppContextProvider = ({ children }: ContextProps) => {
       checkAllowance(selectedAssetContract)
     }
   }, [state.connectedNetwork, address, signer, state.selectedAsset])
-
-  /*
-   * function to check token allowance
-   */
-  const checkAllowance = async (contract: Contract) => {
-    try {
-      const data: BigNumber = await contract.allowance(
-        address!,
-        CONTRACT_CONFIG[state.connectedNetwork.chainId]['CRUIZE_CONTRACT']
-          .address,
-      )
-      dispatch({
-        type: Actions.SET_SELCTED_ASSET_APPROVED,
-        payload: BigNumber.from(data).gt(BigNumber.from('0')),
-      })
-    } catch (e) {
-      console.log(e)
-    }
-  }
 
   return (
     <AppContext.Provider value={[state, dispatch]}>

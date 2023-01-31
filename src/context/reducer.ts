@@ -84,6 +84,16 @@ const reducer = (state: State, action: Action): State => {
         ...state,
         appError: action.payload
       }
+    case Actions.SET_TOTAL_TVL:
+      return {
+        ...state,
+        totalTVL: action.payload
+      }
+    case Actions.SET_ASSET_TVL:
+      return {
+        ...state,
+        assetTVL: action.payload
+      }
     default:
       return state
   }

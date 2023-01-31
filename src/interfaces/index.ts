@@ -81,3 +81,8 @@ export interface CurrentPriceRange {
   } | null
   error: null | unknown
 }
+
+export interface TVL {
+  message: number | null,
+  error: null | unknown
+}

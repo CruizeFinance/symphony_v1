@@ -1,6 +1,6 @@
 import { Assets } from '../enums/assets'
-import { fetchWrapper } from '../utils'
-import { AssetPrice, CurrentPriceRange } from '../interfaces'
+import { fetchWrapper, formatNumberSuffix } from '../utils'
+import { AssetPrice, CurrentPriceRange, TVL } from '../interfaces'
 
 /*
  * Used to fetch the asset's current price
@@ -43,6 +43,23 @@ export const getCurrentPriceRange = async (asset: string, vault: string) => {
         lower_bound: 0,
       },
       error: e,
+    }
+  }
+}
+
+export const getTVL = async (asset?: string) => {
+  try {
+    const data: TVL = await fetchWrapper.get(
+      `https://www.beta.trident.v2.cruize.finance/vaults/${asset ? `asset_tvl?asset_symbol=${asset}` : 'total_tvl'}`
+    )
+    return {
+      message: data.message,
+      error: data.error
+    }
+  } catch (e) {
+    return {
+      message: null,
+      error: e
     }
   }
 }

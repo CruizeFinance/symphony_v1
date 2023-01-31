@@ -32,7 +32,9 @@ const initialState: State = {
   mintTokenContract: null,
   transactionData: [],
   userInputValue: '',
-  appError: ''
+  appError: '',
+  totalTVL: '',
+  assetTVL: ''
 }
 
 export default initialState

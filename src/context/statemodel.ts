@@ -52,4 +52,6 @@ export default interface State {
   }[]
   userInputValue: string
   appError: string
+  assetTVL: string
+  totalTVL: string
 }
