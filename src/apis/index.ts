@@ -73,7 +73,7 @@ export const getTVL = async () => {
 export const getCurrentDeposits = async (asset: string) => {
   try {
     const data: CurrentDeposit = await fetchWrapper.get(
-      `http://www.beta.trident.v2.cruize.finance/vaults/asset_tvl?asset_symbol=${asset}`
+      `https://www.beta.trident.v2.cruize.finance/vaults/asset_tvl?asset_symbol=${asset}`
     )
     return {
       message: {

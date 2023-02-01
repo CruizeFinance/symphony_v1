@@ -88,8 +88,6 @@ const StrategyCard = () => {
     storePriceRange()
   }, [state.selectedAsset])
 
-  console.log(state.currentDeposit)
-
   return (
     <Card className="strategy-card">
       <div className="card-header">
