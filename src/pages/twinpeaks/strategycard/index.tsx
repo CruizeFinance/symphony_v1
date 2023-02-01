@@ -3,7 +3,7 @@ import { getCurrentPriceRange } from '../../../apis'
 import { AssetDropdown, Card } from '../../../components'
 import { AppContext } from '../../../context'
 import { Actions } from '../../../enums/actions'
-import { formatNumberSuffix } from '../../../utils'
+import { formatNumberSuffix, percentge } from '../../../utils'
 import './strategycard.scss'
 
 const StrategyCard = () => {
@@ -88,6 +88,8 @@ const StrategyCard = () => {
     storePriceRange()
   }, [state.selectedAsset])
 
+  console.log(state.currentDeposit)
+
   return (
     <Card className="strategy-card">
       <div className="card-header">
@@ -95,7 +97,13 @@ const StrategyCard = () => {
         <div className="tvl">
           {state.assetPrice && state.assetPrice[state.selectedAsset] ? (
             <div className="tvl-info">
-              <label className="tvl-info-value">${formatNumberSuffix(state.assetPrice[state.selectedAsset] * state.lockedAsset[state.selectedAsset])}</label>
+              <label className="tvl-info-value">
+                $
+                {formatNumberSuffix(
+                  state.assetPrice[state.selectedAsset] *
+                    state.lockedAsset[state.selectedAsset],
+                )}
+              </label>
               <label className="tvl-info-label">TVL</label>
             </div>
           ) : null}
@@ -161,16 +169,29 @@ const StrategyCard = () => {
             </div>
           </div>
         </div>
-        <div className="section">
-          <label className="card-section-title">Current Deposits</label>
-          <div className="deposit-limit">
-            <div
-              className="total-deposits"
-              style={{ width: '82%', transition: 'width 0.3s ease-in' }}
-            />
-            <label className="deposit-info">8.2k ETH / 10k ETH</label>
+        {state.currentDeposit ? (
+          <div className="section">
+            <label className="card-section-title">Current Deposits</label>
+            <div className="deposit-limit">
+              <div
+                className="total-deposits"
+                style={{
+                  width: `${percentge(
+                    state.currentDeposit.tvl,
+                    state.currentDeposit.vault_cap,
+                  )}%`,
+                  transition: 'width 0.3s ease-in',
+                }}
+              />
+              <label className="deposit-info">
+                {formatNumberSuffix(state.currentDeposit.tvl)}{' '}
+                {state.selectedAsset.toUpperCase()} /{' '}
+                {formatNumberSuffix(state.currentDeposit.vault_cap)}{' '}
+                {state.selectedAsset.toUpperCase()}
+              </label>
+            </div>
           </div>
-        </div>
+        ) : null}
       </div>
     </Card>
   )

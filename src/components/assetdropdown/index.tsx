@@ -1,4 +1,5 @@
 import { CSSProperties, useContext, useRef, useState } from 'react'
+import { getCurrentDeposits } from '../../apis'
 import { AppContext } from '../../context'
 import { Actions } from '../../enums/actions'
 import { useOutsideAlerter } from '../../hooks'
@@ -35,6 +36,18 @@ const AssetDropdown = ({
     dispatch({ type: Actions.SET_SELECTED_ASSET, payload: val })
     setOpenOptions(false)
     dispatch({ type: Actions.SET_BG_COLOR_VALUE, payload: val })
+    setCurrentDeposit(val.toUpperCase())
+  }
+
+  const setCurrentDeposit = async (val: string) => {
+    const currentDeposit = await getCurrentDeposits(val)
+    dispatch({
+      type: Actions.SET_CURRENT_DEPOSIT,
+      payload: {
+        tvl: currentDeposit.message?.tvl || 0,
+        vault_cap: currentDeposit.message?.vault_cap || 0,
+      },
+    })
   }
 
   return (

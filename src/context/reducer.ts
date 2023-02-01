@@ -89,6 +89,11 @@ const reducer = (state: State, action: Action): State => {
         ...state,
         lockedAsset: action.payload
       }
+    case Actions.SET_CURRENT_DEPOSIT:
+      return {
+        ...state,
+        currentDeposit: action.payload
+      }
     default:
       return state
   }

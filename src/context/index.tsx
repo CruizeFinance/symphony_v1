@@ -12,7 +12,7 @@ import {
   NETWORK_CONFIG,
   SUPPORTED_CHAINS,
 } from '../utils'
-import { getAssetPrice, getTVL } from '../apis'
+import { getAssetPrice, getCurrentDeposits, getTVL } from '../apis'
 import CRUIZECONTRACTABI from '../abi/cruizecontract.json'
 import MINTTOKENABI from '../abi/minttoken.json'
 import { useOnceCall } from '../hooks'
@@ -43,15 +43,25 @@ export const AppContextProvider = ({ children }: ContextProps) => {
       const [wbtc, weth, usdc] = await Promise.all([
         getAssetPrice(API_PARAMS['wbtc']),
         getAssetPrice(API_PARAMS['weth']),
-        getAssetPrice(API_PARAMS['usdc'])
+        getAssetPrice(API_PARAMS['usdc']),
       ])
       dispatch({
         type: Actions.SET_ASSET_PRICE,
         payload: {
           wbtc: wbtc.price,
           weth: weth.price,
-          usdc: usdc.price
-        }
+          usdc: usdc.price,
+        },
+      })
+      const currentDeposit = await getCurrentDeposits(
+        state.selectedAsset.toUpperCase(),
+      )
+      dispatch({
+        type: Actions.SET_CURRENT_DEPOSIT,
+        payload: {
+          tvl: currentDeposit.message?.tvl || 0,
+          vault_cap: currentDeposit.message?.vault_cap || 0,
+        },
       })
     } catch (e) {
       dispatch({

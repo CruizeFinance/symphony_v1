@@ -42,6 +42,10 @@ const initialState: State = {
     [Assets.WBTC]: 0,
     [Assets.USDC]: 0
   },
+  currentDeposit: {
+    tvl: 0,
+    vault_cap: 0
+  }
 }
 
 export default initialState

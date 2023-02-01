@@ -61,4 +61,8 @@ export default interface State {
     [Assets.WBTC]: number,
     [Assets.USDC]: number
   }
+  currentDeposit: {
+    tvl: number,
+    vault_cap: number
+  }
 }

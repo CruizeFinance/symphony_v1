@@ -91,3 +91,11 @@ export interface TVL {
   } | null,
   error: null | unknown
 }
+
+export interface CurrentDeposit {
+  message: {
+    tvl: number,
+    vault_cap: number
+  } | null,
+  error: null | unknown
+}
