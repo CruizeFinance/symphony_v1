@@ -17,6 +17,7 @@ import CRUIZECONTRACTABI from '../abi/cruizecontract.json'
 import MINTTOKENABI from '../abi/minttoken.json'
 import { useOnceCall } from '../hooks'
 import { BigNumber, Contract, ethers, Signer } from 'ethers'
+import { Assets } from '../enums/assets'
 
 interface ContextProps {
   children: ReactNode
@@ -36,34 +37,31 @@ export const AppContextProvider = ({ children }: ContextProps) => {
   const { address } = useAccount()
 
   const initialAPICall = async () => {
-    const response = await getAssetPrice(API_PARAMS[state.selectedAsset])
-    if (!response || response.error)
-      dispatch({
-        type: Actions.SET_APP_ERROR,
-        payload: 'Could not fetch asset price',
-      })
-    dispatch({ type: Actions.SET_ASSET_PRICE, payload: response.price })
-    calcTVL()
-  }
-
-  useOnceCall(initialAPICall)
-
-  const calcTVL = async () => {
     try {
       const totalTVL = await getTVL()
-      dispatch({ type: Actions.SET_TOTAL_TVL, payload: (totalTVL.message || 0).toLocaleString() })
-      const assetTVL = await getTVL(state.selectedAsset.toUpperCase())
+      dispatch({ type: Actions.SET_LOCKED_ASSET, payload: totalTVL.message })
+      const [wbtc, weth, usdc] = await Promise.all([
+        getAssetPrice(API_PARAMS['wbtc']),
+        getAssetPrice(API_PARAMS['weth']),
+        getAssetPrice(API_PARAMS['usdc'])
+      ])
       dispatch({
-        type: Actions.SET_ASSET_TVL,
-        payload: formatNumberSuffix(assetTVL.message || 0),
+        type: Actions.SET_ASSET_PRICE,
+        payload: {
+          wbtc: wbtc.price,
+          weth: weth.price,
+          usdc: usdc.price
+        }
       })
     } catch (e) {
       dispatch({
         type: Actions.SET_APP_ERROR,
-        payload: 'Could not calculate TVL',
+        payload: 'Error calling API',
       })
     }
   }
+
+  useOnceCall(initialAPICall)
 
   /*
    * function to check token allowance

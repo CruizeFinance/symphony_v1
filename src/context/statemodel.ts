@@ -13,7 +13,11 @@ export default interface State {
   selectedAsset: Assets.USDC | Assets.WBTC | Assets.WETH
   connectedNetwork: typeof NETWORK_CONFIG['TESTNET']['ethereum']
   selectedTab: 'deposit' | 'withdraw'
-  assetPrice: number
+  assetPrice: {
+    [Assets.WETH]: number,
+    [Assets.WBTC]: number,
+    [Assets.USDC]: number
+  }
   priceRange: {
     upper_bound: number
     lower_bound: number
@@ -52,6 +56,9 @@ export default interface State {
   }[]
   userInputValue: string
   appError: string
-  assetTVL: string
-  totalTVL: string
+  lockedAsset: {
+    [Assets.WETH]: number,
+    [Assets.WBTC]: number,
+    [Assets.USDC]: number
+  }
 }

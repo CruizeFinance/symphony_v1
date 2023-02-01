@@ -1,9 +1,8 @@
-import { CSSProperties, useContext, useEffect, useRef, useState } from 'react'
-import { getAssetPrice, getTVL } from '../../apis'
+import { CSSProperties, useContext, useRef, useState } from 'react'
 import { AppContext } from '../../context'
 import { Actions } from '../../enums/actions'
 import { useOutsideAlerter } from '../../hooks'
-import { API_PARAMS, DROPDOWN_OPTIONS } from '../../utils'
+import { DROPDOWN_OPTIONS } from '../../utils'
 import Sprite from '../sprite'
 import './assetdropdown.scss'
 
@@ -35,18 +34,7 @@ const AssetDropdown = ({
     onChange && onChange(val)
     dispatch({ type: Actions.SET_SELECTED_ASSET, payload: val })
     setOpenOptions(false)
-    setAssetPrice(API_PARAMS[val as typeof state.selectedAsset])
-    setAssetTVL(val)
     dispatch({ type: Actions.SET_BG_COLOR_VALUE, payload: val })
-  }
-
-  const setAssetPrice = async (val: string) => {
-    const response = await getAssetPrice(val)
-    dispatch({ type: Actions.SET_ASSET_PRICE, payload: response.price })
-  }
-
-  const setAssetTVL = async (val: string) => {
-    await getTVL(val.toUpperCase())
   }
 
   return (

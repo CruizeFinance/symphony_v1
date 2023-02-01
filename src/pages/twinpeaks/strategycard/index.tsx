@@ -3,6 +3,7 @@ import { getCurrentPriceRange } from '../../../apis'
 import { AssetDropdown, Card } from '../../../components'
 import { AppContext } from '../../../context'
 import { Actions } from '../../../enums/actions'
+import { formatNumberSuffix } from '../../../utils'
 import './strategycard.scss'
 
 const StrategyCard = () => {
@@ -92,9 +93,9 @@ const StrategyCard = () => {
       <div className="card-header">
         <AssetDropdown type="big" />
         <div className="tvl">
-          {state.assetTVL ? (
+          {state.assetPrice && state.assetPrice[state.selectedAsset] ? (
             <div className="tvl-info">
-              <label className="tvl-info-value">${state.assetTVL}</label>
+              <label className="tvl-info-value">${formatNumberSuffix(state.assetPrice[state.selectedAsset] * state.lockedAsset[state.selectedAsset])}</label>
               <label className="tvl-info-label">TVL</label>
             </div>
           ) : null}
@@ -154,7 +155,7 @@ const StrategyCard = () => {
             </div>
             <div className="specification-info">
               <label className="specification-info-value">
-                ${state.assetPrice}
+                ${state.assetPrice[state.selectedAsset]}
               </label>
               <label className="specification-info-label">Current Price</label>
             </div>

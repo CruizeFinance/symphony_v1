@@ -7,7 +7,11 @@ const initialState: State = {
   selectedAsset: Assets.WETH,
   connectedNetwork: NETWORK_CONFIG.TESTNET.ethereum,
   selectedTab: 'deposit',
-  assetPrice: 0,
+  assetPrice: {
+    [Assets.WETH]: 0,
+    [Assets.WBTC]: 0,
+    [Assets.USDC]: 0
+  },
   priceRange: {
     upper_bound: 0,
     lower_bound: 0
@@ -33,8 +37,11 @@ const initialState: State = {
   transactionData: [],
   userInputValue: '',
   appError: '',
-  totalTVL: '',
-  assetTVL: ''
+  lockedAsset: {
+    [Assets.WETH]: 0,
+    [Assets.WBTC]: 0,
+    [Assets.USDC]: 0
+  },
 }
 
 export default initialState

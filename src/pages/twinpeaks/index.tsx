@@ -8,31 +8,13 @@ import StrategyCard from './strategycard'
 import YieldInfoCard from './yieldinfocard'
 import { AppContext } from '../../context'
 import { Actions } from '../../enums/actions'
-import { getTVL } from '../../apis'
-import { formatNumberSuffix } from '../../utils'
 
 const TwinPeaks = () => {
   const [state, dispatch] = useContext(AppContext)
 
   const navigate = useNavigate()
 
-  const calcTVL = async () => {
-    try {
-      const assetTVL = await getTVL(state.selectedAsset.toUpperCase())
-      dispatch({
-        type: Actions.SET_ASSET_TVL,
-        payload: formatNumberSuffix(assetTVL.message || 0),
-      })
-    } catch (e) {
-      dispatch({
-        type: Actions.SET_APP_ERROR,
-        payload: 'Could not calculate TVL',
-      })
-    }
-  }
-
   useEffect(() => {
-    calcTVL()
     window.scrollTo(0, 0)
     dispatch({ type: Actions.SET_BG_COLOR_VALUE, payload: state.selectedAsset })
   }, [])

@@ -1,5 +1,5 @@
 import { Assets } from '../enums/assets'
-import { fetchWrapper, formatNumberSuffix } from '../utils'
+import { fetchWrapper } from '../utils'
 import { AssetPrice, CurrentPriceRange, TVL } from '../interfaces'
 
 /*
@@ -12,7 +12,9 @@ export const getAssetPrice = async (asset: string) => {
       `https://api.coingecko.com/api/v3/simple/price?ids=${asset}&vs_currencies=usd`,
     )
     return {
-      price: Object.keys(data).length ? data[asset]['usd'] : 0,
+      price: Object.keys(data).length
+        ? data[asset]['usd']
+        : 0,
       error: null,
     }
   } catch (e) {
@@ -47,19 +49,23 @@ export const getCurrentPriceRange = async (asset: string, vault: string) => {
   }
 }
 
-export const getTVL = async (asset?: string) => {
+export const getTVL = async () => {
   try {
     const data: TVL = await fetchWrapper.get(
-      `https://www.beta.trident.v2.cruize.finance/vaults/${asset ? `asset_tvl?asset_symbol=${asset}` : 'total_tvl'}`
+      `https://www.beta.trident.v2.cruize.finance/vaults/total_tvl`,
     )
     return {
-      message: data.message,
-      error: data.error
+      message: {
+        wbtc: data.message?.WBTC || 0,
+        weth: data.message?.WETH || 0,
+        usdc: data.message?.USDC || 0,
+      },
+      error: data.error,
     }
   } catch (e) {
     return {
       message: null,
-      error: e
+      error: e,
     }
   }
 }

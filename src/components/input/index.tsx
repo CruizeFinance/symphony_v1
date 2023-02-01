@@ -72,7 +72,7 @@ const Input = ({ prependSymbol, onInputChange, onMaxClick, inputValue }: InputPr
             className="input-field"
           />
           <p className="usd-value">
-            ~{(Number(input || 0) * state.assetPrice).toFixed(4)}
+            ~{(Number(input || 0) * state.assetPrice[state.selectedAsset]).toFixed(4)}
           </p>
         </div>
         <div className="asset-section">

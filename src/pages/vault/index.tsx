@@ -1,6 +1,5 @@
-import { useContext, useEffect } from 'react'
+import { useContext, useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { getTVL } from '../../apis'
 import { Sprite, VaultCard } from '../../components'
 import { AppContext } from '../../context'
 import { Actions } from '../../enums/actions'
@@ -12,22 +11,19 @@ const Vault = () => {
 
   const [state, dispatch] = useContext(AppContext)
 
-  const calcTVL = async () => {
-    try {
-      const totalTVL = await getTVL()
-      dispatch({ type: Actions.SET_TOTAL_TVL, payload: (totalTVL.message || 0).toLocaleString() })
-    } catch (e) {
-      dispatch({
-        type: Actions.SET_APP_ERROR,
-        payload: 'Could not calculate TVL',
-      })
-    }
-  }
-
   useEffect(() => {
-    calcTVL()
     dispatch({ type: Actions.SET_BG_COLOR_VALUE, payload: 'vault' })
   }, [])
+
+  const totalTVL = useMemo(
+    () =>
+      state.lockedAsset && state.assetPrice
+        ? state.lockedAsset['usdc'] * state.assetPrice['usdc'] +
+          state.lockedAsset['weth'] * state.assetPrice['weth'] +
+          state.lockedAsset['wbtc'] * state.assetPrice['wbtc']
+        : 0,
+    [state.lockedAsset, state.assetPrice],
+  )
 
   return (
     <div className="vault-container">
@@ -42,7 +38,9 @@ const Vault = () => {
         </div>
         <div className="tvl-info">
           <label className="tvl-label">Total Value Locked in Cruize</label>
-          <label className="tvl-value">{state.totalTVL && state.totalTVL !== '0' ? `$${state.totalTVL}` : <>&mdash;</>}</label>
+          <label className="tvl-value">
+            {totalTVL ? `$${totalTVL.toLocaleString()}` : <>&#8212;</>}
+          </label>
         </div>
         <div className="vault-options">
           <VaultCard

@@ -1,4 +1,5 @@
 import { BigNumber } from 'ethers'
+import { Assets } from '../enums/assets'
 
 // transaction interface
 export interface Transaction {
@@ -83,6 +84,10 @@ export interface CurrentPriceRange {
 }
 
 export interface TVL {
-  message: number | null,
+  message: {
+    USDC: number,
+    WBTC: number,
+    WETH: number
+  } | null,
   error: null | unknown
 }
