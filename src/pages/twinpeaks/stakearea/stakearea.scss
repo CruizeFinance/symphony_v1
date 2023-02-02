@@ -39,6 +39,33 @@
       word-break: break-all;
     }
   }
+  .withdraw-details-area {
+    width: 100%;
+    @include flex(column, center, center, toRem(8));
+    .withdraw-detail {
+      width: 100%;
+      @include flex(row, center, space-between, '');
+      .withdraw-detail-field {
+        @include flex(row, center, center, toRem(4));
+        .withdraw-detail-label {
+          @include typography(
+            GroteskMedium,
+            toRem(16),
+            130%,
+            var(--small-dropdown-color)
+          )
+        }
+        .withdraw-detail-value {
+          @include typography(
+            GroteskMedium,
+            toRem(14),
+            130%,
+            var(--small-dropdown-color)
+          )
+        }
+      }
+    }
+  }
   .deposit-button {
     @include typography(GroteskSemiBold, toRem(18), toRem(24), var(--white));
     padding: toRem(10) auto;

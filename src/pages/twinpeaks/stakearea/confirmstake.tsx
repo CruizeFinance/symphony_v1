@@ -75,7 +75,7 @@ const ConfirmStake = ({ open, hide, amount, onConfirm }: ConfirmStakeProps) => {
                 {amount} {state.selectedAsset.toUpperCase()}
               </label>
             </div>
-            <div className="detail">
+            {state.selectedTab === 'deposit' || state.withdrawType !== 'instant' ? <div className="detail">
               <div className="detail-field">
                 <label className="detail-label">Time to Next Expiry</label>
               </div>
@@ -84,7 +84,7 @@ const ConfirmStake = ({ open, hide, amount, onConfirm }: ConfirmStakeProps) => {
                 {state.timeToExpiry.principal.hours}H{' '}
                 {state.timeToExpiry.principal.minutes}M
               </label>
-            </div>
+            </div> : null}
             <div className="detail">
               <div className="detail-field">
                 <label className="detail-label">Vault</label>

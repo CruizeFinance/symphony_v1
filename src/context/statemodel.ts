@@ -33,7 +33,16 @@ export default interface State {
   selectedAssetContract: Contract | null
   mintTokenContract: Contract | null
   selectedAssetApproved: boolean
-  assetBalance: string
+  balances: {
+    depositBalance:string
+    withdraw: {
+      instantBalance: string,
+      standardBalance: {
+        fundsInQueue: string,
+        fundsInActiveUse: string
+      }
+    }
+  }
   transactionDetails: {
     loading: boolean
     hash: string
@@ -65,4 +74,5 @@ export default interface State {
     tvl: number,
     vault_cap: number
   }
+  withdrawType: 'standard' | 'instant'
 }

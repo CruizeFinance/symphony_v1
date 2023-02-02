@@ -38,7 +38,7 @@ export const AppContextProvider = ({ children }: ContextProps) => {
 
   const initialAPICall = async () => {
     try {
-      const totalTVL = await getTVL()
+      const totalTVL = await getTVL(state.connectedNetwork.chainId)
       dispatch({ type: Actions.SET_LOCKED_ASSET, payload: totalTVL.message })
       const [wbtc, weth, usdc] = await Promise.all([
         getAssetPrice(API_PARAMS['wbtc']),
@@ -55,6 +55,7 @@ export const AppContextProvider = ({ children }: ContextProps) => {
       })
       const currentDeposit = await getCurrentDeposits(
         state.selectedAsset.toUpperCase(),
+        state.connectedNetwork.chainId
       )
       dispatch({
         type: Actions.SET_CURRENT_DEPOSIT,

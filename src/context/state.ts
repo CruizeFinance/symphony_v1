@@ -26,7 +26,16 @@ const initialState: State = {
   cruizeContract: null,
   selectedAssetContract: null,
   selectedAssetApproved: false,
-  assetBalance: '0',
+  balances: {
+    depositBalance: '0',
+    withdraw: {
+      standardBalance: {
+        fundsInActiveUse: '',
+        fundsInQueue: ''
+      },
+      instantBalance: '0'
+    }
+  },
   transactionDetails: {
     loading: false,
     hash: '',
@@ -45,7 +54,8 @@ const initialState: State = {
   currentDeposit: {
     tvl: 0,
     vault_cap: 0
-  }
+  },
+  withdrawType: 'standard'
 }
 
 export default initialState

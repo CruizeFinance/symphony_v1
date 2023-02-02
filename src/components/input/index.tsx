@@ -1,6 +1,6 @@
 import './input.scss'
 import AssetDropdown from '../assetdropdown'
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useMemo, useState } from 'react'
 import { AppContext } from '../../context'
 import { useAccount } from 'wagmi'
 
@@ -17,7 +17,12 @@ function escapeRegExp(string: string): string {
 
 const inputRegex = RegExp(`^\\d*(?:\\\\[.])?\\d*$`)
 
-const Input = ({ prependSymbol, onInputChange, onMaxClick, inputValue }: InputProps) => {
+const Input = ({
+  prependSymbol,
+  onInputChange,
+  onMaxClick,
+  inputValue,
+}: InputProps) => {
   const [state] = useContext(AppContext)
 
   const { isConnected } = useAccount()
@@ -34,6 +39,20 @@ const Input = ({ prependSymbol, onInputChange, onMaxClick, inputValue }: InputPr
       )
     }
   }
+
+  const assetBalance = useMemo(
+    () =>
+      state.selectedTab === 'deposit'
+        ? state.balances.depositBalance
+        : state.selectedTab === 'withdraw'
+        ? state.withdrawType === 'instant'
+          ? state.balances.withdraw.instantBalance
+          : state.balances.withdraw.standardBalance.fundsInActiveUse
+        : '0' || '0',
+    [
+      state.balances,
+    ],
+  )
 
   useEffect(() => {
     setInputValue(inputValue)
@@ -72,7 +91,10 @@ const Input = ({ prependSymbol, onInputChange, onMaxClick, inputValue }: InputPr
             className="input-field"
           />
           <p className="usd-value">
-            ~{(Number(input || 0) * state.assetPrice[state.selectedAsset]).toFixed(4)}
+            ~
+            {(
+              Number(input || 0) * state.assetPrice[state.selectedAsset]
+            ).toFixed(4)}
           </p>
         </div>
         <div className="asset-section">
@@ -81,12 +103,12 @@ const Input = ({ prependSymbol, onInputChange, onMaxClick, inputValue }: InputPr
             <div className="balance-button-container">
               <p className="asset-balance">
                 {state.selectedTab === 'deposit' ? 'Balance' : 'Limit'}:{' '}
-                {Number(state.assetBalance.slice(0, 10))}
+                {assetBalance ? Number(assetBalance.slice(0, 10)) : 0}
               </p>
               <button
                 className="max-button"
                 onClick={() => {
-                  onMaxClick && onMaxClick(state.assetBalance)
+                  onMaxClick && onMaxClick(assetBalance)
                 }}
               >
                 MAX

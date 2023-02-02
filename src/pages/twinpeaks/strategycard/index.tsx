@@ -96,10 +96,13 @@ const StrategyCard = () => {
           {state.assetPrice && state.assetPrice[state.selectedAsset] ? (
             <div className="tvl-info">
               <label className="tvl-info-value">
-                $
-                {formatNumberSuffix(
-                  state.assetPrice[state.selectedAsset] *
-                    state.lockedAsset[state.selectedAsset],
+                {state.assetPrice && state.lockedAsset ? (
+                  `$${formatNumberSuffix(
+                    state.assetPrice[state.selectedAsset] *
+                      state.lockedAsset[state.selectedAsset],
+                  )}`
+                ) : (
+                  <>&#8212;</>
                 )}
               </label>
               <label className="tvl-info-label">TVL</label>
@@ -175,6 +178,9 @@ const StrategyCard = () => {
                 className="total-deposits"
                 style={{
                   width: `${percentge(
+                    state.currentDeposit.tvl,
+                    state.currentDeposit.vault_cap,
+                  ) > 100 ? '100' : percentge(
                     state.currentDeposit.tvl,
                     state.currentDeposit.vault_cap,
                   )}%`,

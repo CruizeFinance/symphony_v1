@@ -1,0 +1,22 @@
+@import '../../style/mixins.scss';
+@import '../../style/functions.scss';
+
+.tooltip-container {
+  position: relative;
+  top: toRem(2);
+  display: inline-block;
+}
+
+.tooltip {
+  position: absolute;
+  bottom: 150%;
+  left: 50%;
+  transform: translate(-50%, 10px);
+  width: toRem(220);
+  background-color: var(--white);
+  @include typography(GroteskMedium, toRem(12), toRem(18), var(--black));
+  padding: toRem(8) toRem(12);
+  border-radius: toRem(8);
+  z-index: 1;
+  box-shadow: var(--mobile-header-box-shadow);
+}

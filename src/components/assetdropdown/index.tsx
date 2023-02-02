@@ -40,7 +40,7 @@ const AssetDropdown = ({
   }
 
   const setCurrentDeposit = async (val: string) => {
-    const currentDeposit = await getCurrentDeposits(val)
+    const currentDeposit = await getCurrentDeposits(val, state.connectedNetwork.chainId)
     dispatch({
       type: Actions.SET_CURRENT_DEPOSIT,
       payload: {

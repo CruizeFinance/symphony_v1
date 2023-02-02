@@ -31,6 +31,8 @@
     "name": "AssetNotAllowed",
     "type": "error"
   },
+  { "inputs": [], "name": "FailedToTransferETH", "type": "error" },
+  { "inputs": [], "name": "InvalidManagementFee", "type": "error" },
   {
     "inputs": [
       {
@@ -79,6 +81,17 @@
       { "internalType": "uint256", "name": "limit", "type": "uint256" }
     ],
     "name": "TokenReachedDepositLimit",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "WithdrawalAlreadyExists",
+        "type": "uint256"
+      }
+    ],
+    "name": "WithdrawalAlreadyExists",
     "type": "error"
   },
   {
@@ -256,6 +269,31 @@
         "type": "address"
       },
       {
+        "indexed": true,
+        "internalType": "address",
+        "name": "token",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "InitiateStandardWithdrawal",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      },
+      {
         "indexed": false,
         "internalType": "uint256",
         "name": "amount",
@@ -263,9 +301,9 @@
       },
       {
         "indexed": false,
-        "internalType": "uint256",
+        "internalType": "uint16",
         "name": "currentRound",
-        "type": "uint256"
+        "type": "uint16"
       },
       {
         "indexed": true,
@@ -275,6 +313,25 @@
       }
     ],
     "name": "InstantWithdrawal",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "managementFee",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "newManagementFee",
+        "type": "uint256"
+      }
+    ],
+    "name": "ManagementFeeSet",
     "type": "event"
   },
   {
@@ -341,31 +398,6 @@
     "type": "event"
   },
   {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "account",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "token",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      }
-    ],
-    "name": "initiateStandardWithdrawal",
-    "type": "event"
-  },
-  {
     "inputs": [],
     "name": "avatar",
     "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
@@ -378,6 +410,16 @@
       { "internalType": "address", "name": "account", "type": "address" }
     ],
     "name": "balanceOf",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "_token", "type": "address" },
+      { "internalType": "address", "name": "user", "type": "address" }
+    ],
+    "name": "balanceOfUser",
     "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"
@@ -441,7 +483,8 @@
         "internalType": "uint128",
         "name": "unredeemedShares",
         "type": "uint128"
-      }
+      },
+      { "internalType": "uint104", "name": "lockedAmount", "type": "uint104" }
     ],
     "stateMutability": "view",
     "type": "function"
@@ -470,6 +513,18 @@
     "type": "function"
   },
   {
+    "inputs": [
+      { "internalType": "address", "name": "user", "type": "address" },
+      { "internalType": "address", "name": "token", "type": "address" }
+    ],
+    "name": "getUserLockedAmount",
+    "outputs": [
+      { "internalType": "uint256", "name": "amount", "type": "uint256" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [],
     "name": "guard",
     "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
@@ -489,7 +544,7 @@
   {
     "inputs": [
       { "internalType": "address", "name": "token", "type": "address" },
-      { "internalType": "uint256", "name": "amount", "type": "uint256" }
+      { "internalType": "uint256", "name": "numShares", "type": "uint256" }
     ],
     "name": "initiateWithdrawal",
     "outputs": [],
@@ -548,8 +603,8 @@
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "newCap", "type": "uint256" },
-      { "internalType": "address", "name": "token", "type": "address" }
+      { "internalType": "address", "name": "token", "type": "address" },
+      { "internalType": "uint256", "name": "newCap", "type": "uint256" }
     ],
     "name": "setCap",
     "outputs": [],
@@ -558,7 +613,11 @@
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "feeRecipient_", "type": "address" }
+      {
+        "internalType": "address",
+        "name": "newFeeRecipient",
+        "type": "address"
+      }
     ],
     "name": "setFeeRecipient",
     "outputs": [],
@@ -576,7 +635,11 @@
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "managementFee_", "type": "uint256" }
+      {
+        "internalType": "uint256",
+        "name": "newManagementFee",
+        "type": "uint256"
+      }
     ],
     "name": "setManagementFee",
     "outputs": [],

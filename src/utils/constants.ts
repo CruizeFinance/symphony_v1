@@ -43,7 +43,7 @@ export const NETWORK_CONFIG = {
 export const CONTRACT_CONFIG = {
   [goerli.id]: {
     CRUIZE_CONTRACT: {
-      address: '0xB2637b0AD76eCc5c2DADbb7d4966D38751932aEe',
+      address: '0x63C3F2C4A88f5F98EC544b11b774034d26efD9F2',
       decimals: 0,
     },
     [Assets.WETH.toUpperCase()]: {

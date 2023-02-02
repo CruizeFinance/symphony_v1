@@ -6,7 +6,7 @@ import NetworkDropdown from '../header/networkdropdown'
 import ConnectButtonDropdown from '../header/connectbuttondropdown'
 import './footer.scss'
 import { useAccount } from 'wagmi'
-import { useLocation } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 
 const Footer = () => {
   const { isConnected } = useAccount()
@@ -28,7 +28,12 @@ const Footer = () => {
           </div>
           <div className="col-2">
             <label className="link-title">Product</label>
-            <a className="link">Principle Protected</a>
+            <Link
+              className="link"
+              to="/vaults/twinpeaks"
+            >
+              Protected Twin Peaks
+            </Link>
             <a
               className="link"
               style={{

@@ -54,10 +54,10 @@ const reducer = (state: State, action: Action): State => {
         ...state,
         selectedAssetApproved: action.payload
       }
-    case Actions.SET_ASSET_BALANCE:
+    case Actions.SET_BALANCES:
       return {
         ...state,
-        assetBalance: action.payload
+        balances: action.payload
       }
     case Actions.SET_TRANSACTION_DETAILS:
       return {
@@ -93,6 +93,11 @@ const reducer = (state: State, action: Action): State => {
       return {
         ...state,
         currentDeposit: action.payload
+      }
+    case Actions.SET_WITHDRAW_TYPE:
+      return {
+        ...state,
+        withdrawType: action.payload
       }
     default:
       return state
