@@ -13,7 +13,7 @@ const YieldInfoCard = () => {
           play out:
         </p>
         <div className="yield-info-section">
-          <label className="yield-info-title">Scenario 1: Max yield up to 26.00%</label>
+          <label className="yield-info-title">Scenario 1: Max yield up to 15.00%</label>
           <ul>
             <li>
               <p className="yield-info-text">
@@ -23,7 +23,7 @@ const YieldInfoCard = () => {
           </ul>
         </div>
         <div className="yield-info-section">
-          <label className="yield-info-title">Scenario 2: Base yield of 0.5%</label>
+          <label className="yield-info-title">Scenario 2: Base yield of 2%</label>
           <ul>
             <li>
               <p className="yield-info-text">
