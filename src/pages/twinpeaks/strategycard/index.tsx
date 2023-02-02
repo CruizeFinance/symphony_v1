@@ -164,7 +164,9 @@ const StrategyCard = () => {
             </div>
             <div className="specification-info">
               <label className="specification-info-value">
-                ${state.assetPrice[state.selectedAsset]}
+                {state.assetPrice
+                  ? `$${state.assetPrice[state.selectedAsset]}`
+                  : null}
               </label>
               <label className="specification-info-label">Current Price</label>
             </div>
@@ -177,13 +179,17 @@ const StrategyCard = () => {
               <div
                 className="total-deposits"
                 style={{
-                  width: `${percentge(
-                    state.currentDeposit.tvl,
-                    state.currentDeposit.vault_cap,
-                  ) > 100 ? '100' : percentge(
-                    state.currentDeposit.tvl,
-                    state.currentDeposit.vault_cap,
-                  )}%`,
+                  width: `${
+                    percentge(
+                      state.currentDeposit.tvl,
+                      state.currentDeposit.vault_cap,
+                    ) > 100
+                      ? '100'
+                      : percentge(
+                          state.currentDeposit.tvl,
+                          state.currentDeposit.vault_cap,
+                        )
+                  }%`,
                   transition: 'width 0.3s ease-in',
                 }}
               />
