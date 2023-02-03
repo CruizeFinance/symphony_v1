@@ -49,10 +49,10 @@ export const getCurrentPriceRange = async (asset: string, vault: string) => {
   }
 }
 
-export const getTVL = async (network: number) => {
+export const getTVL = async () => {
   try {
     const data: TVL = await fetchWrapper.get(
-      `https://www.beta.trident.v2.cruize.finance/vaults/total_tvl?network_id=${network}`,
+      `https://www.beta.trident.v2.cruize.finance/vaults/total_tvl`,
     )
     return {
       message: {

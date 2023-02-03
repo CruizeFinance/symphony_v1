@@ -1,3 +1,4 @@
+import { arbitrumGoerli } from '@wagmi/chains'
 import { goerli } from 'wagmi'
 import { Assets } from '../enums/assets'
 import { NetworkIDs, Networks } from '../enums/networks'
@@ -32,11 +33,11 @@ export const NETWORK_CONFIG = {
       label: Networks.OPTIMISM_GOERLI,
       icon: Networks.OPTIMISM,
     }, */
-    /* [Networks.ARBITRUM]: {
+    [Networks.ARBITRUM]: {
       chainId: NetworkIDs.ARBITRUM_GOERLI,
       label: Networks.ARBITRUM_GOERLI,
       icon: Networks.ARBITRUM,
-    }, */
+    },
   },
 }
 
@@ -59,9 +60,27 @@ export const CONTRACT_CONFIG = {
       decimals: 8,
     },
   },
+  [arbitrumGoerli.id]: {
+    CRUIZE_CONTRACT: {
+      address: "0xc904C95D0cbf50342FD92C8ab4764819F5641808",
+      decimals: 0,
+    },
+    [Assets.WETH.toUpperCase()]: {
+      address: "0xd428690148436dA9c7422698eEe15F51C8cec871",
+      decimals: 18,
+    },
+    [Assets.USDC.toUpperCase()]: {
+      address: "0xf75d5E70028a8bAc82d82D4E53689860bfcb04c5",
+      decimals: 6,
+    },
+    [Assets.WBTC.toUpperCase()]: {
+      address: "0x5cc7c91690b2cbaee19a513473d73403e13fb431",
+      decimals: 18,
+    }
+  }
 }
 
-export const SUPPORTED_CHAINS = [goerli]
+export const SUPPORTED_CHAINS = [goerli, arbitrumGoerli]
 
 export const API_PARAMS = {
   [Assets.WETH]: 'ethereum',

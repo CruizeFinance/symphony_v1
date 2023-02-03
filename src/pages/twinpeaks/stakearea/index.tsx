@@ -9,6 +9,7 @@ import { BigNumber, ethers } from 'ethers'
 import { Actions } from '../../../enums/actions'
 import { CONTRACT_CONFIG } from '../../../utils'
 import { TransactionReceipt, TransactionResponse } from '../../../interfaces'
+import { arbitrumGoerli } from '@wagmi/chains'
 
 interface WithdrawDetail {
   label: string
@@ -81,35 +82,40 @@ const StakeCard = () => {
               ].decimals,
             )
           : 0
-        dispatch({
-          type: Actions.SET_BALANCES,
-          payload: {
-            ...state.balances,
-            withdraw: {
-              instantBalance: ethers.utils.formatUnits(
-                depositReceipts.amount,
+      dispatch({
+        type: Actions.SET_BALANCES,
+        payload: {
+          ...state.balances,
+          withdraw: {
+            instantBalance: ethers.utils.formatUnits(
+              depositReceipts.amount,
+              CONTRACT_CONFIG[state.connectedNetwork.chainId][
+                state.selectedAsset.toUpperCase()
+              ].decimals,
+            ),
+            standardBalance: {
+              fundsInQueue: fundsInQueue,
+              fundsInActiveUse: ethers.utils.formatUnits(
+                lockedAmount,
                 CONTRACT_CONFIG[state.connectedNetwork.chainId][
                   state.selectedAsset.toUpperCase()
                 ].decimals,
               ),
-              standardBalance: {
-                fundsInQueue: fundsInQueue,
-                fundsInActiveUse: ethers.utils.formatUnits(
-                  lockedAmount,
-                  CONTRACT_CONFIG[state.connectedNetwork.chainId][
-                    state.selectedAsset.toUpperCase()
-                  ].decimals,
-                ),
-              }
             },
           },
-        })
-        setDisableStandard(depositReceipts.round === vault.round || Number(ethers.utils.formatUnits(
-          lockedAmount,
-          CONTRACT_CONFIG[state.connectedNetwork.chainId][
-            state.selectedAsset.toUpperCase()
-          ].decimals,
-        )) <= 0)
+        },
+      })
+      setDisableStandard(
+        depositReceipts.round === vault.round ||
+          Number(
+            ethers.utils.formatUnits(
+              lockedAmount,
+              CONTRACT_CONFIG[state.connectedNetwork.chainId][
+                state.selectedAsset.toUpperCase()
+              ].decimals,
+            ),
+          ) <= 0,
+      )
       /* 
         if depositReceipt.round === currentRound -> vaults(assetAddress) -> will provide current round
         then depositReceipt.amount will be the funds in queue else 0
@@ -319,7 +325,11 @@ const StakeCard = () => {
           type: 'mint',
         },
       })
-      const tx = await state.mintTokenContract!.mint(
+      const tx = await state.mintTokenContract![
+        state.connectedNetwork.chainId === arbitrumGoerli.id
+          ? 'freeMint'
+          : 'mint'
+      ](
         ethers.utils.parseUnits(
           state.selectedAsset === 'usdc' ? '100' : '1',
           CONTRACT_CONFIG[state.connectedNetwork.chainId][

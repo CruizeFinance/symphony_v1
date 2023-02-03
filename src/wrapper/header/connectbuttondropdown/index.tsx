@@ -1,7 +1,13 @@
 import { ConnectKitButton } from 'connectkit'
 import { useContext, useEffect, useRef, useState } from 'react'
 import Jazzicon from 'react-jazzicon/dist/Jazzicon'
-import { useAccount, useBalance, useDisconnect, useEnsName } from 'wagmi'
+import {
+  goerli,
+  useAccount,
+  useBalance,
+  useDisconnect,
+  useEnsName,
+} from 'wagmi'
 import { Button, Sprite } from '../../../components'
 import { AppContext } from '../../../context'
 import { useOutsideAlerter } from '../../../hooks'
@@ -171,7 +177,9 @@ const ConnectButtonDropdown = () => {
                     <div className="details-label">
                       <label className="transaction-info">
                         {state.selectedTab.toUpperCase()} {state.userInputValue}{' '}
-                        {state.selectedAsset.toUpperCase()} to TP Vault
+                        {state.selectedAsset.toUpperCase()}{' '}
+                        {state.selectedTab === 'deposit' ? 'to' : 'from'} TP
+                        Vault
                       </label>
                       <label className="transaction-status">Pending</label>
                     </div>
@@ -209,7 +217,11 @@ const ConnectButtonDropdown = () => {
                               transaction.amount,
                               transaction.decimals,
                             )}{' '}
-                            {transaction.asset.reserve.symbol} to TP Vault
+                            {transaction.asset.reserve.symbol}{' '}
+                            {transaction.type.toLowerCase() === 'deposit'
+                              ? 'to'
+                              : 'from'}{' '}
+                            TP Vault
                           </>
                         </label>
                         <label className="transaction-status">
@@ -232,7 +244,11 @@ const ConnectButtonDropdown = () => {
                       className="details"
                       onClick={() =>
                         window.open(
-                          `https://goerli.etherscan.io/address/${
+                          `https://${
+                            state.connectedNetwork.chainId === goerli.id
+                              ? 'goerli.etherscan'
+                              : 'testnet.arbiscan'
+                          }.io/address/${
                             CONTRACT_CONFIG[state.connectedNetwork.chainId][
                               'CRUIZE_CONTRACT'
                             ]['address']

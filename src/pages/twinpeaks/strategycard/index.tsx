@@ -96,10 +96,10 @@ const StrategyCard = () => {
           {state.assetPrice && state.assetPrice[state.selectedAsset] ? (
             <div className="tvl-info">
               <label className="tvl-info-value">
-                {state.assetPrice && state.lockedAsset ? (
+                {state.assetPrice && state.currentDeposit ? (
                   `$${formatNumberSuffix(
                     state.assetPrice[state.selectedAsset] *
-                      state.lockedAsset[state.selectedAsset],
+                      state.currentDeposit.tvl || 0,
                   )}`
                 ) : (
                   <>&#8212;</>
