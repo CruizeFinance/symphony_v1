@@ -93,12 +93,16 @@ const YieldInfoCard = () => {
                 domain={['dataMin', 'dataMax']}
                 interval="preserveStartEnd"
                 allowDataOverflow={false}
+                tick={false}
+                label={'Price Change Percentage'}
               />
               <YAxis
                 dataKey="result"
                 domain={['dataMin', 'dataMax']}
                 interval="preserveStartEnd"
                 allowDataOverflow={false}
+                tick={false}
+                label={'APY'}
               />
               <Tooltip
                 contentStyle={{ textTransform: 'capitalize' }}
