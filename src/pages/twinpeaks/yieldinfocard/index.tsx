@@ -106,7 +106,7 @@ const YieldInfoCard = () => {
                 interval="preserveStartEnd"
                 allowDataOverflow={false}
                 tick={false}
-                label={'APY %'}
+                label={'APY'}
               />
               <Tooltip
                 contentStyle={{ textTransform: 'capitalize' }}
