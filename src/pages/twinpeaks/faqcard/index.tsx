@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { Card, Collapsible } from '../../../components'
+import { AppContext } from '../../../context'
 import './faqcard.scss'
 
 const data = [
@@ -56,6 +57,8 @@ const data = [
 ]
 
 const FaqCard = () => {
+  const [state] = useContext(AppContext)
+
   const [openQuestions, setOpenQuestions] = useState(false)
   const [faqData, setFaqData] = useState(data)
 
@@ -105,7 +108,7 @@ const FaqCard = () => {
               </p>
               <Collapsible
                 isOpen={data.isOpen}
-                content={<p className="faq-answer">{data.answer}</p>}
+                content={<p className="faq-answer">{data.answer.replaceAll('WETH', state.selectedAsset.toUpperCase())}</p>}
               />
             </div>
           </div>
