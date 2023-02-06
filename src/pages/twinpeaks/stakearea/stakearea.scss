@@ -1,0 +1,94 @@
+@import '../../../style/functions.scss';
+@import '../../../style/mixins.scss';
+
+.stake-card {
+  width: 100%;
+  position: relative;
+  padding: toRem(24) toRem(20);
+  @include flex(column, center, center, toRem(20));
+  .error-area {
+    background: var(--error-field-background);
+    border-radius: toRem(10);
+    padding: toRem(10);
+    width: 100%;
+    @include flex(column, flex-start, center, toRem(8));
+    .error-title {
+      @include flex(row, center, center, toRem(8));
+      .title-label {
+        @include typography(
+          GroteskSemiBold,
+          toRem(16),
+          130%,
+          var(--error-text-color)
+        );
+      }
+    }
+    .error-text {
+      @include typography(
+        GroteskMedium,
+        toRem(16),
+        130%,
+        var(--error-text-color)
+      );
+      text-overflow: ellipsis;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 4;
+      -webkit-box-orient: vertical;
+      width: 100%;
+      word-break: break-all;
+    }
+  }
+  .withdraw-details-area {
+    width: 100%;
+    @include flex(column, center, center, toRem(8));
+    .withdraw-detail {
+      width: 100%;
+      @include flex(row, center, space-between, '');
+      .withdraw-detail-field {
+        @include flex(row, center, center, toRem(4));
+        .withdraw-detail-label {
+          @include typography(
+            GroteskMedium,
+            toRem(16),
+            130%,
+            var(--small-dropdown-color)
+          )
+        }
+        .withdraw-detail-value {
+          @include typography(
+            GroteskMedium,
+            toRem(14),
+            130%,
+            var(--small-dropdown-color)
+          )
+        }
+      }
+    }
+  }
+  .deposit-button {
+    @include typography(GroteskSemiBold, toRem(18), toRem(24), var(--white));
+    padding: toRem(10) auto;
+    width: 100%;
+  }
+  .sub-text {
+    @include typography(GroteskMedium, toRem(14), auto, var(--black));
+    .link {
+      @include typography(inherit, inherit, auto, var(--tutorial-link-color));
+      cursor: pointer;
+    }
+  }
+}
+.mint-tokens-card {
+  padding: toRem(16);
+  margin-top: toRem(30);
+  @include flex(column, center, center, toRem(12));
+  .mint-tokens-label {
+    @include typography(GroteskMedium, toRem(14), toRem(20), var(--black));
+  }
+  .mint-tokens-button {
+    width: 100%;
+    padding: toRem(8) auto;
+    @include typography(GroteskMedium, toRem(12), toRem(24), var(--white));
+  }
+}

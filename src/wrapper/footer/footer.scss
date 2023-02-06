@@ -12,6 +12,11 @@
       .desc {
         @include typography(GroteskMedium, toRem(16), toRem(24), var(--black));
       }
+      @media screen and (min-width: 320px) and (max-width: 1024px) {
+        margin-bottom: toRem(48);
+        flex: 1 1 100%;
+        max-width: 100%;
+      }
     }
     .col-2 {
       @include flex(column, flex-start, center, toRem(12));
@@ -30,6 +35,13 @@
         cursor: pointer;
         @include typography(GroteskMedium, toRem(16), toRem(24), var(--black));
       }
+      @media screen and (min-width: 320px) and (max-width: 1024px) {
+        margin-top: toRem(32);
+        flex: 1 1 50%;
+      }
+    }
+    @media screen and (min-width: 320px) and (max-width: 1024px) {
+      flex-wrap: wrap;
     }
   }
   .row-2 {
@@ -41,6 +53,53 @@
     }
     .socials {
       @include flex(row, center, '', toRem(24));
+    }
+    @media screen and (min-width: 320px) and (max-width: 1024px) {
+      flex-direction: column-reverse;
+      align-items: flex-start;
+      gap: 24px;
+    }
+  }
+  @media screen and (min-width: 320px) and (max-width: 1024px) {
+    padding: toRem(40) toRem(16);
+    .mobile-fake-div {
+      width: 100%;
+      height: toRem(72);
+    }
+  }
+}
+.stake-button-container {
+  display: none;
+  @media screen and (min-width: 320px) and (max-width: 1024px) {
+    display: block;
+    padding: toRem(16) toRem(32);
+    position: fixed;
+    bottom: 0;
+    width: -webkit-fill-available;
+    background: var(--link-inactive);
+    backdrop-filter: blur(2px);
+    z-index: 99;
+    .stake-button {
+      width: 100%;
+      padding: toRem(12) toRem(32);
+      font-size: toRem(18);
+      line-height: toRem(24);
+    }
+  }
+}
+.network-wallet-area {
+  display: none;
+  @media screen and (min-width: 320px) and (max-width: 1024px) {
+    display: block;
+    border-radius: toRem(28);
+    padding: toRem(24) toRem(20);
+    width: 100%;
+    .network-wallet-container {
+      width: 100%;
+      @include flex(row, center, space-between, '');
+      .dropdown-options {
+        @include flex(row, center, center, toRem(8));
+      }
     }
   }
 }

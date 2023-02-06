@@ -1,0 +1,78 @@
+@import '../../style/mixins.scss';
+@import '../../style/functions.scss';
+
+.portfolio {
+  width: 100%;
+  height: auto;
+  padding: toRem(90) 0;
+  .text {
+    width: 100%;
+    text-align: center;
+    font-family: GroteskBold;
+    font-size: 200px;
+    line-height: 200px;
+    background: var(--portfolio-text-color);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    &.on-it {
+      margin-bottom: toRem(120);
+    }
+    &.trust-us {
+      margin-top: toRem(110);
+    }
+    &.bottom-text,
+    &.trust-us {
+      font-size: toRem(130);
+      line-height: toRem(130);
+    }
+    @media screen and (min-width: 320px) and (max-width: 1024px) {
+      font-size: toRem(80);
+      line-height: toRem(80);
+      &.on-it {
+        margin-bottom: toRem(60);
+      }
+      &.bottom-text,
+      &.trust-us {
+        font-size: toRem(40);
+        line-height: toRem(46);
+      }
+      &.trust-us {
+        margin-bottom: toRem(30);
+      }
+    }
+  }
+  .img {
+    &.sleeping {
+      margin-bottom: toRem(106);
+    }
+    &.king {
+      margin-bottom: toRem(58);
+    }
+    @media screen and (min-width: 320px) and (max-width: 1024px) {
+      display: none;
+      &.sleeping {
+        display: block;
+        width: auto;
+        height: toRem(170);
+        margin: 0 auto 6.625rem
+      }
+      &.work-out {
+        display: block;
+        width: toRem(232);
+        height: toRem(248);
+      }
+    }
+  }
+  .row-img-container {
+    @include flex(row, center, center, '');
+  }
+  .col-img-container {
+    @include flex(column, center, center, '');
+  }
+  @media screen and (min-width: 320px) and (max-width: 1024px) {
+    height: auto;
+    width: auto;
+    padding: toRem(90) toRem(24);
+  }
+}

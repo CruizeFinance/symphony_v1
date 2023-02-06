@@ -3,11 +3,10 @@
 .wrapper {
   width: 100%;
   height: 100%;
+  max-width: 2560px;
+  margin: auto;
   .fake-div {
     width: 100%;
     height: toRem(90);
-  }
-  .content {
-    padding: toRem(60);
   }
 }
