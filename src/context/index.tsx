@@ -16,7 +16,7 @@ import CRUIZECONTRACTABI from '../abi/cruizecontract.json'
 import MINTTOKENABI from '../abi/minttoken.json'
 import { useOnceCall } from '../hooks'
 import { BigNumber, Contract, ethers, Signer } from 'ethers'
-
+import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client'
 import { arbitrumGoerli } from '@wagmi/chains'
 
 interface ContextProps {
@@ -31,6 +31,14 @@ export const AppContext = createContext<[State, React.Dispatch<Action>]>([
 export const AppContextProvider = ({ children }: ContextProps) => {
   // context hook
   const [state, dispatch] = useReducer(reducer, initialState)
+
+  const graphClient = new ApolloClient({
+    uri:
+      state.connectedNetwork && state.connectedNetwork.chainId === arbitrumGoerli.id
+        ? 'https://api.thegraph.com/subgraphs/name/salmanbao/cruize-testing-module'
+        : 'https://api.studio.thegraph.com/query/41560/cruize-testing-vaults/v0.0.10',
+    cache: new InMemoryCache(),
+  })
 
   const { chain } = useNetwork()
   const { data: signer } = useSigner()
@@ -115,8 +123,7 @@ export const AppContextProvider = ({ children }: ContextProps) => {
   }, [chain])
 
   useEffect(() => {
-    if (state.connectedNetwork)
-      setCurrentDeposit()
+    if (state.connectedNetwork) setCurrentDeposit()
   }, [state.connectedNetwork])
 
   useEffect(() => {
@@ -159,7 +166,7 @@ export const AppContextProvider = ({ children }: ContextProps) => {
 
   return (
     <AppContext.Provider value={[state, dispatch]}>
-      {children}
+      <ApolloProvider client={graphClient}>{children}</ApolloProvider>
     </AppContext.Provider>
   )
 }

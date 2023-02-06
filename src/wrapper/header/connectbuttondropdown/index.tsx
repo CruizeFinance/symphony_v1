@@ -97,7 +97,7 @@ const ConnectButtonDropdown = () => {
           >
             <Jazzicon
               diameter={24}
-              seed={Math.round(Math.random() * 10000000)}
+              seed={40}
             />
             <label className="label">
               {ensName ||
@@ -119,7 +119,7 @@ const ConnectButtonDropdown = () => {
           <div className="wallet-info">
             <Jazzicon
               diameter={74}
-              seed={Math.round(Math.random() * 10000000)}
+              seed={40}
             />
             <div className="wallet-name-balance">
               <label className="wallet-name">
@@ -198,7 +198,11 @@ const ConnectButtonDropdown = () => {
                       className="details"
                       onClick={() => {
                         window.open(
-                          `https://goerli.etherscan.io/tx/${transaction.txHash}`,
+                          `${
+                            state.connectedNetwork.chainId === goerli.id
+                              ? 'https://goerli.etherscan.io'
+                              : 'https://testnet.arbiscan.io'
+                          }/tx/${transaction.txHash}`,
                           '_blank',
                           'noreferrer noopener',
                         )
@@ -260,7 +264,10 @@ const ConnectButtonDropdown = () => {
                     >
                       <div className="details-label" style={{ width: '90%' }}>
                         <label className="transaction-info">
-                          View more on Etherscan
+                          View more on{' '}
+                          {state.connectedNetwork.chainId === goerli.id
+                            ? 'Etherscan'
+                            : 'Arbiscan'}
                         </label>
                       </div>
                       <div className="icon">

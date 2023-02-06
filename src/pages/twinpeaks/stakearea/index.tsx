@@ -354,7 +354,7 @@ const StakeCard = () => {
     address,
     state.transactionDetails,
     state.withdrawType,
-    state.connectedNetwork.chainId,
+    state.connectedNetwork,
   ])
 
   useEffect(() => {

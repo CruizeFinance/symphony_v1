@@ -48,7 +48,7 @@ const YieldInfoCard = () => {
   return (
     <Card className="yield-info-card">
       <div className="card-header">
-        <label className="yield-info-label">How does yield work?</label>
+        <label className="yield-info-label">How does it work?</label>
       </div>
       <div className="card-content">
         <p className="yield-info-text">
@@ -62,7 +62,9 @@ const YieldInfoCard = () => {
           <ul>
             <li>
               <p className="yield-info-text">
-                If $1,100.00 &#60; ETH price &#60; $1,300.00
+                If ${state.priceRange.lower_bound} &#60;{' '}
+                {state.selectedAsset.toUpperCase()} price &#60; $
+                {state.priceRange.upper_bound}
               </p>
             </li>
           </ul>
@@ -74,7 +76,9 @@ const YieldInfoCard = () => {
           <ul>
             <li>
               <p className="yield-info-text">
-                If ETH price &#8804; $1,100.00 &#62; $1,300.00
+                If {state.selectedAsset.toUpperCase()} price &#8804; $
+                {state.priceRange.lower_bound} or &#62; $
+                {state.priceRange.upper_bound}
               </p>
             </li>
           </ul>
@@ -102,7 +106,7 @@ const YieldInfoCard = () => {
                 interval="preserveStartEnd"
                 allowDataOverflow={false}
                 tick={false}
-                label={'APY'}
+                label={'APY %'}
               />
               <Tooltip
                 contentStyle={{ textTransform: 'capitalize' }}
