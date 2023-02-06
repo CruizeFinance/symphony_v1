@@ -1,6 +1,6 @@
 import { Assets } from '../enums/assets'
 import { fetchWrapper } from '../utils'
-import { AssetPrice, CurrentDeposit, CurrentPriceRange, TVL } from '../interfaces'
+import { AssetPrice, CurrentDeposit, CurrentPriceRange, TVL, YieldInfoGraph } from '../interfaces'
 
 /*
  * Used to fetch the asset's current price
@@ -86,6 +86,26 @@ export const getCurrentDeposits = async (asset: string, network: number) => {
     return {
       message: null,
       error: e,
+    }
+  }
+}
+
+export const loadYieldInfoGraph = async (vault: string) => {
+  try {
+    const data: YieldInfoGraph = await fetchWrapper.get(`https://www.beta.trident.v2.cruize.finance/vaults/strategy_plot_data?vault=${vault}`)
+    if (data.error)
+      return {
+        message: null,
+        error: data.error
+      }
+    return {
+      message: data.message,
+      error: null
+    }
+  } catch (e) {
+    return {
+      message: null,
+      error: e
     }
   }
 }

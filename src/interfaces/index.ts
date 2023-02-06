@@ -99,3 +99,15 @@ export interface CurrentDeposit {
   } | null,
   error: null | unknown
 }
+
+export interface YieldInfoGraph {
+  message: {
+    pcg_moved: {
+      [x: number]: number
+    },
+    results: {
+      [x: number]: number
+    }
+  } | null,
+  error: null | unknown
+}

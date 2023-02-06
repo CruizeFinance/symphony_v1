@@ -14,7 +14,7 @@ const StrategyCard = () => {
   const storePriceRange = async () => {
     const response = await getCurrentPriceRange(
       state.selectedAsset.toUpperCase(),
-      'principal_protection',
+      'protected_twin_peaks',
     )
     if (!response || response.error)
       dispatch({
@@ -185,6 +185,8 @@ const StrategyCard = () => {
                       state.currentDeposit.vault_cap,
                     ) > 100
                       ? '100'
+                      : state.currentDeposit.vault_cap === 0
+                      ? 0
                       : percentge(
                           state.currentDeposit.tvl,
                           state.currentDeposit.vault_cap,

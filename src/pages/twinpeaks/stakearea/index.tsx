@@ -325,11 +325,7 @@ const StakeCard = () => {
           type: 'mint',
         },
       })
-      const tx = await state.mintTokenContract![
-        state.connectedNetwork.chainId === arbitrumGoerli.id
-          ? 'freeMint'
-          : 'mint'
-      ](
+      const tx = await state.mintTokenContract!['mint'](
         ethers.utils.parseUnits(
           state.selectedAsset === 'usdc' ? '100' : '1',
           CONTRACT_CONFIG[state.connectedNetwork.chainId][
@@ -358,6 +354,7 @@ const StakeCard = () => {
     address,
     state.transactionDetails,
     state.withdrawType,
+    state.connectedNetwork.chainId,
   ])
 
   useEffect(() => {

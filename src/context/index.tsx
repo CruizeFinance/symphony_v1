@@ -14,7 +14,6 @@ import {
 import { getAssetPrice, getCurrentDeposits, getTVL } from '../apis'
 import CRUIZECONTRACTABI from '../abi/cruizecontract.json'
 import MINTTOKENABI from '../abi/minttoken.json'
-import MINTTOKENABI_ARB from '../abi/minttoken_arb.json'
 import { useOnceCall } from '../hooks'
 import { BigNumber, Contract, ethers, Signer } from 'ethers'
 
@@ -150,9 +149,7 @@ export const AppContextProvider = ({ children }: ContextProps) => {
         CONTRACT_CONFIG[state.connectedNetwork.chainId][
           state.selectedAsset.toUpperCase()
         ].address,
-        state.connectedNetwork.chainId === arbitrumGoerli.id
-          ? MINTTOKENABI_ARB
-          : MINTTOKENABI,
+        MINTTOKENABI,
         signer as Signer,
       )
       dispatch({ type: Actions.SET_MINT_TOKEN_CONTRACT, payload: mintContract })

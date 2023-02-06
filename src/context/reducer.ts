@@ -99,6 +99,11 @@ const reducer = (state: State, action: Action): State => {
         ...state,
         withdrawType: action.payload
       }
+    case Actions.SET_YIELD_INFO_DATA:
+      return {
+        ...state,
+        yieldInfoData: action.payload
+      }
     default:
       return state
   }

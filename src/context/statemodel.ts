@@ -75,4 +75,12 @@ export default interface State {
     vault_cap: number
   }
   withdrawType: 'standard' | 'instant'
+  yieldInfoData: {
+    pcg_moved: {
+      [x: number | string]: number,
+    },
+    results: {
+    [x: number | string]: number
+    }
+  }
 }

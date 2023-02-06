@@ -55,7 +55,15 @@ const initialState: State = {
     tvl: 0,
     vault_cap: 0
   },
-  withdrawType: 'standard'
+  withdrawType: 'standard',
+  yieldInfoData: {
+    pcg_moved: {
+      0: 0
+    },
+    results: {
+      0: 0
+    }
+  }
 }
 
 export default initialState

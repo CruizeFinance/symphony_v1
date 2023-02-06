@@ -66,16 +66,16 @@ export const CONTRACT_CONFIG = {
       decimals: 0,
     },
     [Assets.WETH.toUpperCase()]: {
-      address: "0xd428690148436dA9c7422698eEe15F51C8cec871",
+      address: "0xB1BdbaA3A41df99701c5de37Ca6e42E87227fd54",
       decimals: 18,
     },
     [Assets.USDC.toUpperCase()]: {
-      address: "0xf75d5E70028a8bAc82d82D4E53689860bfcb04c5",
+      address: "0x58e12a048D2bF84678807F337a8E9f6f9D87d50c",
       decimals: 6,
     },
     [Assets.WBTC.toUpperCase()]: {
-      address: "0x5cc7c91690b2cbaee19a513473d73403e13fb431",
-      decimals: 18,
+      address: "0xDFB63E640d10b9Da4C9e8f8312e952f77F5c20B8",
+      decimals: 8,
     }
   }
 }
