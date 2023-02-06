@@ -39,7 +39,7 @@ const YieldInfoCard = () => {
       ? Object.entries(state.yieldInfoData.pcg_moved).map(
           ([key, pcg_moved]) => ({
             pcg_moved,
-            result: state.yieldInfoData.results[key],
+            apy: state.yieldInfoData.results[key],
           }),
         )
       : []
@@ -83,7 +83,7 @@ const YieldInfoCard = () => {
           <ResponsiveContainer width={'100%'} height={250}>
             <AreaChart data={graphData}>
               <defs>
-                <linearGradient id="results" x1="0" y1="0" x2="0" y2="1">
+                <linearGradient id="apys" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="5%" stopColor="#396AF4" stopOpacity={0.3} />
                   <stop offset="95%" stopColor="#396AF4" stopOpacity={0} />
                 </linearGradient>
@@ -93,12 +93,16 @@ const YieldInfoCard = () => {
                 domain={['dataMin', 'dataMax']}
                 interval="preserveStartEnd"
                 allowDataOverflow={false}
+                tick={false}
+                label={'Price Change Percentage'}
               />
               <YAxis
-                dataKey="result"
+                dataKey="apy"
                 domain={['dataMin', 'dataMax']}
                 interval="preserveStartEnd"
                 allowDataOverflow={false}
+                tick={false}
+                label={'APY'}
               />
               <Tooltip
                 contentStyle={{ textTransform: 'capitalize' }}
@@ -106,15 +110,15 @@ const YieldInfoCard = () => {
                   return `${value}`
                 }}
                 labelFormatter={function (value) {
-                  return `% moved: ${value}`
+                  return `Price change %: ${value}`
                 }}
               />
               <Area
-                dataKey={'result'}
+                dataKey={'apy'}
                 type="monotone"
                 stroke="#396AF4"
                 fillOpacity={1}
-                fill="url(#results)"
+                fill="url(#apys)"
               />
             </AreaChart>
           </ResponsiveContainer>
