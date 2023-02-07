@@ -1,5 +1,5 @@
-import { useContext, useEffect, useMemo } from 'react'
-import {
+import { useContext, /* useEffect, useMemo */ } from 'react'
+/* import {
   Area,
   AreaChart,
   ResponsiveContainer,
@@ -7,16 +7,16 @@ import {
   XAxis,
   YAxis,
 } from 'recharts'
-import { loadYieldInfoGraph } from '../../../apis'
+import { loadYieldInfoGraph } from '../../../apis' */
 import { Card } from '../../../components'
 import { AppContext } from '../../../context'
-import { Actions } from '../../../enums/actions'
+/* import { Actions } from '../../../enums/actions' */
 import './yieldinfocard.scss'
 
 const YieldInfoCard = () => {
-  const [state, dispatch] = useContext(AppContext)
+  const [state, /* dispatch */] = useContext(AppContext)
 
-  const getYieldInfoData = async () => {
+  /* const getYieldInfoData = async () => {
     const data = await loadYieldInfoGraph('protected_twin_peaks')
     dispatch({
       type: Actions.SET_YIELD_INFO_DATA,
@@ -44,7 +44,7 @@ const YieldInfoCard = () => {
         )
       : []
   }, [state.yieldInfoData])
-
+ */
   return (
     <Card className="yield-info-card">
       <div className="card-header">
@@ -83,7 +83,7 @@ const YieldInfoCard = () => {
             </li>
           </ul>
         </div>
-        {graphData.length ? (
+        {/* {graphData.length ? (
           <ResponsiveContainer width={'100%'} height={250}>
             <AreaChart data={graphData}>
               <defs>
@@ -126,14 +126,14 @@ const YieldInfoCard = () => {
               />
             </AreaChart>
           </ResponsiveContainer>
-        ) : (
+        ) : ( */}
           <img
             src="/assets/icons/yield-info-icon.png"
             alt="yeild-info-icon"
             width={'100%'}
             height={'auto'}
           />
-        )}
+        {/* )} */}
       </div>
     </Card>
   )
