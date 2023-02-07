@@ -44,9 +44,9 @@ const WithdrawDetail = ({
 }
 
 const StakeCard = () => {
-  const { address, isConnected } = useAccount()
-
   const [state, dispatch] = useContext(AppContext)
+
+  const { address, isConnected, connector } = useAccount()
 
   const [openConfirm, setOpenConfirm] = useState(false)
   const [disableStandard, setDisableStandard] = useState(false)
@@ -343,6 +343,33 @@ const StakeCard = () => {
     }
   }
 
+  const addToken = async () => {
+    try {
+      await (window.ethereum as any).request({
+        method: 'wallet_watchAsset',
+        params: {
+          type: 'ERC20',
+          options: {
+            address:
+              CONTRACT_CONFIG[state.connectedNetwork.chainId][
+                state.selectedAsset.toUpperCase()
+              ].address, // The address that the token is at.
+            symbol: state.selectedAsset.toUpperCase(), // A ticker symbol or shorthand, up to 5 chars.
+            decimals:
+              CONTRACT_CONFIG[state.connectedNetwork.chainId][
+                state.selectedAsset.toUpperCase()
+              ].decimals, // The number of decimals in the token
+          },
+        },
+      })
+    } catch (e) {
+      dispatch({
+        type: Actions.SET_APP_ERROR,
+        payload: (e as { message: string }).message,
+      })
+    }
+  }
+
   useEffect(() => {
     if (state.selectedAssetContract) {
       getBalance()
@@ -523,7 +550,9 @@ const StakeCard = () => {
       </Card>
       {isConnected ? (
         <Card className="mint-tokens-card">
-          <label className="mint-tokens-label">Add tokens to wallet</label>
+          {connector?.id.toLowerCase() === 'metamask' ? <div className="mint-tokens-label" onClick={addToken}>
+            Add {state.selectedAsset.toUpperCase()} to wallet
+          </div> : null}
           <Button
             className="mint-tokens-button"
             style={{

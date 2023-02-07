@@ -84,6 +84,7 @@
   margin-top: toRem(30);
   @include flex(column, center, center, toRem(12));
   .mint-tokens-label {
+    cursor: pointer;
     @include typography(GroteskMedium, toRem(14), toRem(20), var(--black));
   }
   .mint-tokens-button {

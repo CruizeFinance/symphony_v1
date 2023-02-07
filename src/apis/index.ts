@@ -1,25 +1,46 @@
 import { Assets } from '../enums/assets'
 import { fetchWrapper } from '../utils'
-import { AssetPrice, CurrentDeposit, CurrentPriceRange, TVL, YieldInfoGraph } from '../interfaces'
+import {
+  AssetPrice,
+  CurrentDeposit,
+  CurrentPriceRange,
+  TVL,
+  YieldInfoGraph,
+} from '../interfaces'
 
 /*
  * Used to fetch the asset's current price
  */
-export const getAssetPrice = async (asset: string) => {
+export const getAssetPrice = async () => {
   try {
-    if (asset === Assets.USDC) return { price: 1, error: null }
-    const data: AssetPrice = await fetchWrapper.get(
-      `https://api.coingecko.com/api/v3/simple/price?ids=${asset}&vs_currencies=usd`,
+    const data = await fetchWrapper.get(
+      `https://api.coinbase.com/v2/prices/usd/spot`,
     )
     return {
-      price: Object.keys(data).length
-        ? data[asset]['usd']
-        : 0,
+      weth:
+        data && data.data && data.data.length
+          ? Number(
+              data.data.filter(
+                (a: { base: string; amount: string }) => a.base === 'ETH',
+              )[0].amount,
+            )
+          : 0,
+      wbtc:
+        data && data.data && data.data.length
+          ? Number(
+              data.data.filter(
+                (a: { base: string; amount: string }) => a.base === 'WBTC',
+              )[0].amount,
+            )
+          : 0,
+      usdc: 1,
       error: null,
     }
   } catch (e) {
     return {
-      price: 0,
+      weth: 0,
+      wbtc: 0,
+      usdc: 0,
       error: e,
     }
   }
@@ -73,14 +94,14 @@ export const getTVL = async () => {
 export const getCurrentDeposits = async (asset: string, network: number) => {
   try {
     const data: CurrentDeposit = await fetchWrapper.get(
-      `https://www.beta.trident.v2.cruize.finance/vaults/asset_tvl?asset_symbol=${asset}&network_id=${network}`
+      `https://www.beta.trident.v2.cruize.finance/vaults/asset_tvl?asset_symbol=${asset}&network_id=${network}`,
     )
     return {
       message: {
         tvl: data.message?.tvl || 0,
-        vault_cap: data.message?.vault_cap || 0
+        vault_cap: data.message?.vault_cap || 0,
       },
-      error: data.error
+      error: data.error,
     }
   } catch (e) {
     return {
@@ -92,20 +113,22 @@ export const getCurrentDeposits = async (asset: string, network: number) => {
 
 export const loadYieldInfoGraph = async (vault: string) => {
   try {
-    const data: YieldInfoGraph = await fetchWrapper.get(`https://www.beta.trident.v2.cruize.finance/vaults/strategy_plot_data?vault=${vault}`)
+    const data: YieldInfoGraph = await fetchWrapper.get(
+      `https://www.beta.trident.v2.cruize.finance/vaults/strategy_plot_data?vault=${vault}`,
+    )
     if (data.error)
       return {
         message: null,
-        error: data.error
+        error: data.error,
       }
     return {
       message: data.message,
-      error: null
+      error: null,
     }
   } catch (e) {
     return {
       message: null,
-      error: e
+      error: e,
     }
   }
 }
