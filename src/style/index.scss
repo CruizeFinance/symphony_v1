@@ -27,6 +27,10 @@
   src: url('./fonts/ClashGrotesk-Variable.ttf') format('truetype');
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 html,
 body,
 #root {
