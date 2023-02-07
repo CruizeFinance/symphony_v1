@@ -132,23 +132,7 @@ const Header = () => {
       />
       <div className={`mobile-header ${openMobileHeader ? 'open' : ''}`}>
         <div className="mobile-header-content">
-          {!isConnected ? (
-            <div className="mobile-header-section-container">
-              <ConnectKitButton.Custom>
-                {({ show }) => {
-                  return (
-                    <Button
-                      className="mobile-connect-wallet-button"
-                      onClick={show}
-                    >
-                      Connect Wallet
-                    </Button>
-                  )
-                }}
-              </ConnectKitButton.Custom>
-            </div>
-          ) : (
-            <div className="mobile-header-content">
+          <div className="mobile-header-content">
             <div className="mobile-header-section-container">
               <Link
                 to={`/vaults`}
@@ -160,49 +144,66 @@ const Header = () => {
                 {'Home'}
               </Link>
             </div>
-              <div className="mobile-header-section-container">
-                <div
-                  className="vault-link"
-                  onClick={() => setOpenMobileVaultLinks(!openMobileVaultLinks)}
-                >
-                  <span
-                    className={`link ${
-                      location.pathname.includes('vaults/twinpeaks') ? ' active' : ''
-                    }`}
-                  >
-                    Vaults
-                  </span>
-                  <Sprite
-                    id="dropdown-expand-icon"
-                    width={20}
-                    height={20}
-                    style={{
-                      cursor: 'pointer',
-                      transform: `rotate(${
-                        openMobileVaultLinks ? '180deg' : '0deg'
-                      })`,
-                    }}
-                  />
-                </div>
-                {openMobileVaultLinks ? (
-                  <div className={`vault-dropdown`}>
-                    <VaultLinks type="mobile" />
-                  </div>
-                ) : null}
-              </div>
-              <div className="mobile-header-section-container">
-                <Link
-                  to={`/portfolio`}
+            <div className="mobile-header-section-container">
+              <div
+                className="vault-link"
+                onClick={() => setOpenMobileVaultLinks(!openMobileVaultLinks)}
+              >
+                <span
                   className={`link ${
-                    location.pathname.includes('portfolio') ? ' active' : ''
+                    location.pathname.includes('vaults/twinpeaks')
+                      ? ' active'
+                      : ''
                   }`}
-                  onClick={() => setOpenMobileHeader(false)}
                 >
-                  {'Portfolio'}
-                </Link>
+                  Vaults
+                </span>
+                <Sprite
+                  id="dropdown-expand-icon"
+                  width={20}
+                  height={20}
+                  style={{
+                    cursor: 'pointer',
+                    transform: `rotate(${
+                      openMobileVaultLinks ? '180deg' : '0deg'
+                    })`,
+                  }}
+                />
               </div>
+              {openMobileVaultLinks ? (
+                <div className={`vault-dropdown`}>
+                  <VaultLinks type="mobile" />
+                </div>
+              ) : null}
             </div>
-          )}
+            <div className="mobile-header-section-container">
+              <Link
+                to={`/portfolio`}
+                className={`link ${
+                  location.pathname.includes('portfolio') ? ' active' : ''
+                }`}
+                onClick={() => setOpenMobileHeader(false)}
+              >
+                {'Portfolio'}
+              </Link>
+            </div>
+            {isConnected ? null : (
+              <div className="mobile-header-section-container">
+                <ConnectKitButton.Custom>
+                  {({ show }) => {
+                    return (
+                      <Button
+                        className="mobile-connect-wallet-button"
+                        onClick={show}
+                      >
+                        Connect Wallet
+                      </Button>
+                    )
+                  }}
+                </ConnectKitButton.Custom>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>

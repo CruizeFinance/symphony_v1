@@ -108,7 +108,33 @@ const FaqCard = () => {
               </p>
               <Collapsible
                 isOpen={data.isOpen}
-                content={<p className="faq-answer">{data.answer.replaceAll('WETH', state.selectedAsset.toUpperCase())}</p>}
+                content={
+                  <p className="faq-answer">
+                    {data.id === 7 ? (
+                      <>
+                        {data.answer.replace('Learn More', '')}&nbsp;
+                        <a
+                          style={{
+                            color: 'inherit',
+                            fontFamily: 'inherit',
+                            fontSize: 'inherit',
+                            cursor: 'pointer'
+                          }}
+                          href={`https://docs.cruize.finance/implementation/risks`}
+                          target={`_blank`}
+                          rel={'noreferrer noopener'}
+                        >
+                          Learn More
+                        </a>
+                      </>
+                    ) : (
+                      data.answer.replaceAll(
+                        'WETH',
+                        state.selectedAsset.toUpperCase(),
+                      )
+                    )}
+                  </p>
+                }
               />
             </div>
           </div>
