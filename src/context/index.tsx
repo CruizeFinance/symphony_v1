@@ -48,17 +48,13 @@ export const AppContextProvider = ({ children }: ContextProps) => {
     try {
       const totalTVL = await getTVL()
       dispatch({ type: Actions.SET_LOCKED_ASSET, payload: totalTVL.message })
-      const [wbtc, weth, usdc] = await Promise.all([
-        getAssetPrice(API_PARAMS['wbtc']),
-        getAssetPrice(API_PARAMS['weth']),
-        getAssetPrice(API_PARAMS['usdc']),
-      ])
+      const {wbtc, weth, usdc} = await getAssetPrice()
       dispatch({
         type: Actions.SET_ASSET_PRICE,
         payload: {
-          wbtc: wbtc.price,
-          weth: weth.price,
-          usdc: usdc.price,
+          wbtc: wbtc,
+          weth: weth,
+          usdc: usdc,
         },
       })
     } catch (e) {

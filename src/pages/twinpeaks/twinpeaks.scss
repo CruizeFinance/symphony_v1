@@ -63,3 +63,24 @@
     }
   }
 }
+.approve-modal-content {
+  max-width: toRem(600);
+  padding: toRem(24);
+  border-radius: toRem(12);
+  background: var(--white);
+  @include flex(column, flex-start, center, toRem(16));
+  .approve-desc {
+    @include flex(column, flex-start, center, toRem(4));
+    .approve-desc-title {
+      @include typography(GroteskMedium, toRem(24), 150%, var(--black));
+    }
+    .approve-desc-text {
+      @include typography(GroteskRegular, toRem(14), toRem(20), var(--small-dropdown-color));
+    }
+  }
+  .approve-modal-button {
+    width: 100%;
+    margin-top: toRem(16);
+    @include typography(GroteskSemiBold, toRem(16), toRem(24), var(--white))
+  }
+}

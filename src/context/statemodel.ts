@@ -83,4 +83,5 @@ export default interface State {
     [x: number | string]: number
     }
   }
+  approveTokenModal: boolean
 }

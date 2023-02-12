@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Sprite, Tooltip } from '..'
 import './tabs.scss'
 
@@ -10,12 +10,15 @@ interface TabsProps {
     tooltip?: string
   }[]
   disabledTab?: string[]
+  defaultTab: string
 }
 
-const Tabs = ({ onChange, type, tabs, disabledTab }: TabsProps) => {
-  const [defaultSelected, setDefaultSelected] = useState(
-    tabs[0]
-  )
+const Tabs = ({ onChange, type, tabs, disabledTab, defaultTab }: TabsProps) => {
+  const [defaultSelected, setDefaultSelected] = useState(tabs[0])
+
+  useEffect(() => {
+    setDefaultSelected(tabs.filter((t) => t.label === defaultTab)[0])
+  }, [defaultTab])
 
   return (
     <div className={`tabs-container ${type || 'default'}`}>
@@ -23,13 +26,22 @@ const Tabs = ({ onChange, type, tabs, disabledTab }: TabsProps) => {
         <div
           key={tab.label}
           className={`tab outlined ${
-            defaultSelected.label === tab.label && !disabledTab?.includes(tab.label) ? 'selected' : ''
+            defaultSelected.label === tab.label &&
+            !disabledTab?.includes(tab.label)
+              ? 'selected'
+              : ''
           }`}
-          onClick={!disabledTab?.includes(tab.label) ? () =>  {
-            onChange && onChange(tab.label)
-            setDefaultSelected(tab)
-          } : undefined}
-          {...disabledTab?.includes(tab.label) ? { style: { cursor: 'not-allowed' } } : undefined}
+          onClick={
+            !disabledTab?.includes(tab.label)
+              ? () => {
+                  onChange && onChange(tab.label)
+                  setDefaultSelected(tab)
+                }
+              : undefined
+          }
+          {...(disabledTab?.includes(tab.label)
+            ? { style: { cursor: 'not-allowed' } }
+            : undefined)}
         >
           <label className="label">{tab.label}</label>
           {tab.tooltip ? (

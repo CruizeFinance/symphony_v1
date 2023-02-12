@@ -3,7 +3,7 @@ import './modal.scss'
 
 interface ModalProps {
   open: boolean
-  hide: () => void
+  hide?: () => void
   children: ReactNode
   modalStyle?: CSSProperties
   modalContentStyle?: CSSProperties

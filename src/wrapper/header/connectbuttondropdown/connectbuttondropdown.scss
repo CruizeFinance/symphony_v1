@@ -121,16 +121,6 @@
             .icon {
               width: 10%;
             }
-            .loader {
-              width: toRem(28);
-              height: toRem(28);
-              border-radius: 50%;
-              display: inline-block;
-              border-top: toRem(4) solid var(--pending-status-loader-color);
-              border-right: toRem(4) solid transparent;
-              box-sizing: border-box;
-              animation: rotation 1s linear infinite;
-            }
             .details-label {
               width: 80%;
               @include flex(column, flex-start, center, toRem(2));
@@ -179,14 +169,5 @@
       left: -50%;
       top: auto;
     }
-  }
-}
-
-@keyframes rotation {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
   }
 }
