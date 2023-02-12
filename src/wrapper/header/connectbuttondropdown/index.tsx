@@ -8,7 +8,7 @@ import {
   useDisconnect,
   useEnsName,
 } from 'wagmi'
-import { Button, Sprite } from '../../../components'
+import { Button, Loader, Sprite } from '../../../components'
 import { AppContext } from '../../../context'
 import { useOutsideAlerter } from '../../../hooks'
 import './connectbuttondropdown.scss'
@@ -172,7 +172,7 @@ const ConnectButtonDropdown = () => {
                     }
                   >
                     <div className="icon">
-                      <div className="loader"></div>
+                      <Loader />
                     </div>
                     <div className="details-label">
                       <label className="transaction-info">

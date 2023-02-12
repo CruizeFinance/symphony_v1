@@ -63,7 +63,8 @@ const initialState: State = {
     results: {
       0: 0
     }
-  }
+  },
+  approveTokenModal: false
 }
 
 export default initialState

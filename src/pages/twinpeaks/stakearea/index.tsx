@@ -10,6 +10,8 @@ import { Actions } from '../../../enums/actions'
 import { CONTRACT_CONFIG } from '../../../utils'
 import { TransactionReceipt, TransactionResponse } from '../../../interfaces'
 import { arbitrumGoerli } from '@wagmi/chains'
+import TransactionDetail from './transactiondetail'
+import ConfettiExplosion from 'react-confetti-explosion'
 
 interface WithdrawDetail {
   label: string
@@ -50,6 +52,7 @@ const StakeCard = () => {
 
   const [openConfirm, setOpenConfirm] = useState(false)
   const [disableStandard, setDisableStandard] = useState(false)
+  const [openTransactionDetail, setOpenTransactionDetail] = useState(false)
 
   /*
    * a function to get user balance of the asset
@@ -176,6 +179,8 @@ const StakeCard = () => {
     tx: TransactionResponse,
     type: string,
   ) => {
+    setOpenConfirm(false)
+    setOpenTransactionDetail(true)
     dispatch({
       type: Actions.SET_TRANSACTION_DETAILS,
       payload: {
@@ -186,6 +191,16 @@ const StakeCard = () => {
       },
     })
     const data: TransactionReceipt = await tx.wait()
+    dispatch({
+      type: Actions.SET_TRANSACTION_DETAILS,
+      payload: {
+        ...state.transactionDetails,
+        loading: false,
+        hash: data.transactionHash,
+        status: data.status || 0,
+        type: type,
+      },
+    })
     if (type === 'transaction')
       dispatch({
         type: Actions.SET_TRANSACTION_DATA,
@@ -220,16 +235,6 @@ const StakeCard = () => {
           ...state.transactionData,
         ],
       })
-    dispatch({
-      type: Actions.SET_TRANSACTION_DETAILS,
-      payload: {
-        ...state.transactionDetails,
-        loading: false,
-        hash: '',
-        status: 0,
-      },
-    })
-    setOpenConfirm(false)
     dispatch({
       type: Actions.SET_USER_INPUT_VALUE,
       payload: '',
@@ -393,8 +398,20 @@ const StakeCard = () => {
     }
   }, [state.appError])
 
+  useEffect(() => {
+    if (disableStandard)
+      dispatch({ type: Actions.SET_WITHDRAW_TYPE, payload: 'instant' })
+  }, [disableStandard])
+
   return (
     <>
+      {state.transactionDetails.status === 1 ? (
+        <ConfettiExplosion
+          width={window.innerWidth}
+          height={window.innerHeight}
+          duration={3000}
+        />
+      ) : null}
       <Card className="stake-card">
         <Tabs
           tabs={[
@@ -415,6 +432,7 @@ const StakeCard = () => {
               payload: val,
             })
           }}
+          defaultTab={state.selectedTab}
         />
         {state.selectedTab === 'withdraw' ? (
           <Tabs
@@ -449,6 +467,7 @@ const StakeCard = () => {
                   : '',
               ],
             ]}
+            defaultTab={state.withdrawType}
           />
         ) : null}
         <Input
@@ -525,7 +544,8 @@ const StakeCard = () => {
                 : () => approveToken()
             }
             disabled={
-              Number(state.userInputValue) <= 0 ||
+              (Number(state.userInputValue) <= 0 &&
+                state.selectedAssetApproved) ||
               state.transactionDetails.loading
             }
           >
@@ -547,12 +567,18 @@ const StakeCard = () => {
           amount={state.userInputValue}
           onConfirm={() => onConfirm()}
         />
+        <TransactionDetail
+          open={openTransactionDetail}
+          hide={() => setOpenTransactionDetail(false)}
+        />
       </Card>
       {isConnected ? (
         <Card className="mint-tokens-card">
-          {connector?.id.toLowerCase() === 'metamask' ? <div className="mint-tokens-label" onClick={addToken}>
-            Add {state.selectedAsset.toUpperCase()} to wallet
-          </div> : null}
+          {connector?.id.toLowerCase() === 'metamask' ? (
+            <div className="mint-tokens-label" onClick={addToken}>
+              Add {state.selectedAsset.toUpperCase()} to wallet
+            </div>
+          ) : null}
           <Button
             className="mint-tokens-button"
             style={{

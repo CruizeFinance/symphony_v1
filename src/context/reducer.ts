@@ -104,6 +104,11 @@ const reducer = (state: State, action: Action): State => {
         ...state,
         yieldInfoData: action.payload
       }
+    case Actions.SET_APPROVE_TOKEN_MODAL:
+      return {
+        ...state,
+        approveTokenModal: action.payload
+      }
     default:
       return state
   }
