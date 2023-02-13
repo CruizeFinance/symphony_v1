@@ -162,15 +162,15 @@ const StakeCard = () => {
           .address,
         ethers.constants.MaxUint256,
       )
-      const data: TransactionReceipt = await transactionExecution(tx, 'approve')
+      const data = await transactionExecution(tx, 'approve')
       dispatch({
         type: Actions.SET_SELCTED_ASSET_APPROVED,
-        payload: data.status === 1,
+        payload: (data as TransactionReceipt).status === 1,
       })
     } catch (e) {
       dispatch({
         type: Actions.SET_APP_ERROR,
-        payload: (e as { message: string }).message,
+        payload: 'The transaction was cancelled and could not be completed',
       })
       resetTransactionDetails()
     }
@@ -180,6 +180,7 @@ const StakeCard = () => {
     tx: TransactionResponse,
     type: string,
   ) => {
+    try {
     setOpenConfirm(false)
     setOpenTransactionDetail(true)
     dispatch({
@@ -241,6 +242,12 @@ const StakeCard = () => {
       payload: '',
     })
     return data
+  } catch (e) {
+    dispatch({
+      type: Actions.SET_APP_ERROR,
+      payload: (e as { message: string }).message,
+    })
+  }
   }
 
   const resetTransactionDetails = () => {
@@ -299,7 +306,7 @@ const StakeCard = () => {
     } catch (e) {
       dispatch({
         type: Actions.SET_APP_ERROR,
-        payload: (e as { message: string }).message,
+        payload: 'The transaction was cancelled and could not be completed',
       })
       resetTransactionDetails()
     }
@@ -356,7 +363,7 @@ const StakeCard = () => {
     } catch (e) {
       dispatch({
         type: Actions.SET_APP_ERROR,
-        payload: (e as { message: string }).message,
+        payload: 'The transaction was cancelled and could not be completed',
       })
       resetTransactionDetails()
     }

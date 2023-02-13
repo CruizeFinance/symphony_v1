@@ -167,7 +167,7 @@ export const AppContextProvider = ({ children }: ContextProps) => {
     <AppContext.Provider value={[state, dispatch]}>
       <ApolloProvider
         client={
-          state.connectedNetwork.chainId === arbitrumGoerli.id
+          state.connectedNetwork && state.connectedNetwork.chainId === arbitrumGoerli.id
             ? arbitrumClient
             : goerliClient
         }
