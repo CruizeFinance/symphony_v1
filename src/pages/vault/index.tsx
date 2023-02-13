@@ -49,15 +49,18 @@ const Vault = () => {
               <>
                 This vault generates interest while providing capital protection
                 against market downturns. Any drawdowns below the protection
-                level (price floor) result in profits.
-                <br />
+                level (price floor) result in profits.&nbsp;
                 <a
                   href="https://docs.cruize.finance"
                   rel="noreferrer noopener"
                   target={'_blank'}
-                  style={{ color: 'inherit', textDecoration: 'undeline' }}
+                  style={{
+                    fontFamily: 'GroteskMedium',
+                    color: 'inherit',
+                    textDecoration: 'none',
+                  }}
                 >
-                  Learn More &#62;
+                  Learn More
                 </a>
               </>
             }
@@ -74,15 +77,27 @@ const Vault = () => {
               <>
                 This vault generates interest by capitalising on weekly price
                 movements in either direction for both moderately bullish as
-                well as bearish markets. Capital remains protected.
-                <br />
+                well as bearish markets. Capital remains{' '}
+                <span
+                  style={{
+                    fontFamily: 'GroteskMedium',
+                    color: 'inherit',
+                  }}
+                >
+                  100%
+                </span>{' '}
+                protected.&nbsp;
                 <a
                   href="https://docs.cruize.finance"
                   rel="noreferrer noopener"
                   target={'_blank'}
-                  style={{ color: 'inherit', textDecoration: 'undeline' }}
+                  style={{
+                    fontFamily: 'GroteskMedium',
+                    color: 'inherit',
+                    textDecoration: 'none',
+                  }}
                 >
-                  Learn More &#62;
+                  Learn More
                 </a>
               </>
             }

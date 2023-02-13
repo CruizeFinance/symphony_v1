@@ -154,6 +154,7 @@ const StakeCard = () => {
           hash: '',
           status: 0,
           type: 'approve',
+          message: `Approving ${state.selectedAsset.toUpperCase()} for contract interaction`,
         },
       })
       const tx = await state.selectedAssetContract!.approve(
@@ -161,15 +162,15 @@ const StakeCard = () => {
           .address,
         ethers.constants.MaxUint256,
       )
-      const data: TransactionReceipt = await transactionExecution(tx, 'approve')
+      const data = await transactionExecution(tx, 'approve')
       dispatch({
         type: Actions.SET_SELCTED_ASSET_APPROVED,
-        payload: data.status === 1,
+        payload: (data as TransactionReceipt).status === 1,
       })
     } catch (e) {
       dispatch({
         type: Actions.SET_APP_ERROR,
-        payload: (e as { message: string }).message,
+        payload: 'The transaction was cancelled and could not be completed',
       })
       resetTransactionDetails()
     }
@@ -179,6 +180,7 @@ const StakeCard = () => {
     tx: TransactionResponse,
     type: string,
   ) => {
+    try {
     setOpenConfirm(false)
     setOpenTransactionDetail(true)
     dispatch({
@@ -240,6 +242,12 @@ const StakeCard = () => {
       payload: '',
     })
     return data
+  } catch (e) {
+    dispatch({
+      type: Actions.SET_APP_ERROR,
+      payload: (e as { message: string }).message,
+    })
+  }
   }
 
   const resetTransactionDetails = () => {
@@ -250,6 +258,7 @@ const StakeCard = () => {
         hash: '',
         status: 0,
         type: '',
+        message: '',
       },
     })
     dispatch({
@@ -308,12 +317,21 @@ const StakeCard = () => {
     args: Array<BigNumber | string>,
   ) => {
     try {
+      dispatch({
+        type: Actions.SET_TRANSACTION_DETAILS,
+        payload: {
+          ...state.transactionDetails,
+          message: `${state.selectedTab.toUpperCase()} ${
+            state.userInputValue
+          } ${state.selectedAsset.toUpperCase()}`,
+        },
+      })
       const tx = await state.cruizeContract![functionName](...args)
       await transactionExecution(tx, 'transaction')
     } catch (e) {
       dispatch({
         type: Actions.SET_APP_ERROR,
-        payload: (e as { message: string }).message,
+        payload: 'The transaction was cancelled and could not be completed',
       })
       resetTransactionDetails()
     }
@@ -328,6 +346,9 @@ const StakeCard = () => {
           hash: '',
           status: 0,
           type: 'mint',
+          message: `Minting ${
+            state.selectedAsset === 'usdc' ? 100 : 1
+          } ${state.selectedAsset.toUpperCase()}`,
         },
       })
       const tx = await state.mintTokenContract!['mint'](
@@ -342,7 +363,7 @@ const StakeCard = () => {
     } catch (e) {
       dispatch({
         type: Actions.SET_APP_ERROR,
-        payload: (e as { message: string }).message,
+        payload: 'The transaction was cancelled and could not be completed',
       })
       resetTransactionDetails()
     }

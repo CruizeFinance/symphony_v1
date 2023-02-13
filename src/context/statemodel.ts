@@ -48,6 +48,7 @@ export default interface State {
     hash: string
     status: number
     type: 'mint' | 'approve' | 'transaction'
+    message: string
   }
   transactionData: {
     account: string

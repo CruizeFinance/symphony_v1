@@ -28,17 +28,20 @@ export const AppContext = createContext<[State, React.Dispatch<Action>]>([
   () => {},
 ])
 
+const goerliClient = new ApolloClient({
+  uri:
+    'https://api.studio.thegraph.com/query/41560/cruize-testing-vaults/v0.0.10',
+  cache: new InMemoryCache(),
+})
+
+const arbitrumClient = new ApolloClient({
+  uri:
+    'https://api.thegraph.com/subgraphs/name/salmanbao/cruize-testing-module',
+  cache: new InMemoryCache(),
+})
 export const AppContextProvider = ({ children }: ContextProps) => {
   // context hook
   const [state, dispatch] = useReducer(reducer, initialState)
-
-  const graphClient = new ApolloClient({
-    uri:
-      state.connectedNetwork && state.connectedNetwork.chainId === arbitrumGoerli.id
-        ? 'https://api.thegraph.com/subgraphs/name/salmanbao/cruize-testing-module'
-        : 'https://api.studio.thegraph.com/query/41560/cruize-testing-vaults/v0.0.10',
-    cache: new InMemoryCache(),
-  })
 
   const { chain } = useNetwork()
   const { data: signer } = useSigner()
@@ -48,7 +51,7 @@ export const AppContextProvider = ({ children }: ContextProps) => {
     try {
       const totalTVL = await getTVL()
       dispatch({ type: Actions.SET_LOCKED_ASSET, payload: totalTVL.message })
-      const {wbtc, weth, usdc} = await getAssetPrice()
+      const { wbtc, weth, usdc } = await getAssetPrice()
       dispatch({
         type: Actions.SET_ASSET_PRICE,
         payload: {
@@ -162,7 +165,15 @@ export const AppContextProvider = ({ children }: ContextProps) => {
 
   return (
     <AppContext.Provider value={[state, dispatch]}>
-      <ApolloProvider client={graphClient}>{children}</ApolloProvider>
+      <ApolloProvider
+        client={
+          state.connectedNetwork && state.connectedNetwork.chainId === arbitrumGoerli.id
+            ? arbitrumClient
+            : goerliClient
+        }
+      >
+        {children}
+      </ApolloProvider>
     </AppContext.Provider>
   )
 }
