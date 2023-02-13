@@ -306,7 +306,7 @@ const StakeCard = () => {
     } catch (e) {
       dispatch({
         type: Actions.SET_APP_ERROR,
-        payload: 'The transaction was cancelled and could not be completed',
+        payload: (e as { message: string }).message,
       })
       resetTransactionDetails()
     }
@@ -331,7 +331,7 @@ const StakeCard = () => {
     } catch (e) {
       dispatch({
         type: Actions.SET_APP_ERROR,
-        payload: (e as { message: string }).message,
+        payload: 'The transaction was cancelled and could not be completed',
       })
       resetTransactionDetails()
     }
