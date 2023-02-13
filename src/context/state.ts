@@ -40,7 +40,8 @@ const initialState: State = {
     loading: false,
     hash: '',
     status: 0,
-    type: 'transaction'
+    type: 'transaction',
+    message: ''
   },
   mintTokenContract: null,
   transactionData: [],

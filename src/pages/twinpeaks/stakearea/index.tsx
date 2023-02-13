@@ -154,6 +154,7 @@ const StakeCard = () => {
           hash: '',
           status: 0,
           type: 'approve',
+          message: `Approving ${state.selectedAsset.toUpperCase()} for contract interaction`,
         },
       })
       const tx = await state.selectedAssetContract!.approve(
@@ -250,6 +251,7 @@ const StakeCard = () => {
         hash: '',
         status: 0,
         type: '',
+        message: '',
       },
     })
     dispatch({
@@ -308,6 +310,15 @@ const StakeCard = () => {
     args: Array<BigNumber | string>,
   ) => {
     try {
+      dispatch({
+        type: Actions.SET_TRANSACTION_DETAILS,
+        payload: {
+          ...state.transactionDetails,
+          message: `${state.selectedTab.toUpperCase()} ${
+            state.userInputValue
+          } ${state.selectedAsset.toUpperCase()}`,
+        },
+      })
       const tx = await state.cruizeContract![functionName](...args)
       await transactionExecution(tx, 'transaction')
     } catch (e) {
@@ -328,6 +339,9 @@ const StakeCard = () => {
           hash: '',
           status: 0,
           type: 'mint',
+          message: `Minting ${
+            state.selectedAsset === 'usdc' ? 100 : 1
+          } ${state.selectedAsset.toUpperCase()}`,
         },
       })
       const tx = await state.mintTokenContract!['mint'](

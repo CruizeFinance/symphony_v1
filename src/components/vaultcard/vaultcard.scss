@@ -35,4 +35,7 @@
       }
     }
   }
+  @media screen and (min-width: 320px) and (max-width: 1024px) {
+    padding: toRem(20) toRem(12);
+  }
 }
