@@ -33,14 +33,14 @@ const StrategyCard = () => {
   const calculateTimeLeft = () => {
     const currentDate = new Date()
     const currentDay = currentDate.getDay()
-    const nextFriday = new Date()
-    let daysUntilFriday = 5 - currentDay
-    if (daysUntilFriday <= 0) {
-      daysUntilFriday += 7
+    const nextEpochDay = new Date()
+    let daysUntilNextEpoch = 1 - currentDay // daysUntilNextEpoch i.e days until nextEpochDay which is monday.
+    if (daysUntilNextEpoch <= 0) {
+      daysUntilNextEpoch += 7
     }
-    nextFriday.setUTCDate(currentDate.getUTCDate() + daysUntilFriday)
-    nextFriday.setUTCHours(5, 30, 0, 0)
-    const diff = nextFriday.getTime() - currentDate.getTime()
+    nextEpochDay.setUTCDate(currentDate.getUTCDate() + daysUntilNextEpoch)
+    nextEpochDay.setUTCHours(9, 0, 0, 0)
+    const diff = nextEpochDay.getTime() - currentDate.getTime()
     const days = Math.floor(diff / (1000 * 60 * 60 * 24))
     const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
     const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
