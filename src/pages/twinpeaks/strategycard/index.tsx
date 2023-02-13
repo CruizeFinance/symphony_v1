@@ -39,7 +39,7 @@ const StrategyCard = () => {
       daysUntilNextEpoch += 7
     }
     nextEpochDay.setUTCDate(currentDate.getUTCDate() + daysUntilNextEpoch)
-    nextEpochDay.setUTCHours(9, 00, 0, 0)
+    nextEpochDay.setUTCHours(9, 0, 0, 0)
     const diff = nextEpochDay.getTime() - currentDate.getTime()
     const days = Math.floor(diff / (1000 * 60 * 60 * 24))
     const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
