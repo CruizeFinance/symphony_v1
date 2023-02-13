@@ -77,7 +77,16 @@ const Vault = () => {
               <>
                 This vault generates interest by capitalising on weekly price
                 movements in either direction for both moderately bullish as
-                well as bearish markets. Capital remains 100% protected.&nbsp;
+                well as bearish markets. Capital remains{' '}
+                <span
+                  style={{
+                    fontFamily: 'GroteskMedium',
+                    color: 'inherit',
+                  }}
+                >
+                  100%
+                </span>{' '}
+                protected.&nbsp;
                 <a
                   href="https://docs.cruize.finance"
                   rel="noreferrer noopener"
