@@ -29,7 +29,7 @@ const initialState: State = {
   balances: {
     depositBalance: '0',
     withdraw: {
-      standardBalance: {
+      requestBalance: {
         fundsInActiveUse: '',
         fundsInQueue: ''
       },
@@ -56,7 +56,7 @@ const initialState: State = {
     tvl: 0,
     vault_cap: 0
   },
-  withdrawType: 'standard',
+  withdrawType: 'request',
   yieldInfoData: {
     pcg_moved: {
       0: 0
@@ -68,16 +68,16 @@ const initialState: State = {
   approveTokenModal: false,
   assetAPYs: {
     usdc: {
-      max_apy: '0',
-      base_apy: '0'
+      max_apy: '??',
+      base_apy: '??'
     },
     wbtc: {
-      max_apy: '0',
-      base_apy: '0'
+      max_apy: '??',
+      base_apy: '??'
     },
     weth: {
-      max_apy: '0',
-      base_apy: '0'
+      max_apy: '??',
+      base_apy: '??'
     }
   }
 }

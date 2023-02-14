@@ -24,7 +24,7 @@ const data = [
     isOpen: false,
     question: 'How do I withdraw funds from the vault?',
     answer:
-      'There are two options for withdrawing funds from the vault: Instant and Standard. Instant withdrawals are for funds that have not yet been invested in a strategy and can be done at any time before deployment. Standard withdrawals are for funds that have been invested and earning returns and can be initiated at any time, but will only be available at the end of the current cycle.',
+      'There are two options for withdrawing funds from the vault: Instant and Request. Instant withdrawals are for funds that have not yet been invested in a strategy and can be done at any time before deployment. Request withdrawals are for funds that have been invested and earning returns and can be initiated at any time, but will only be available at the end of the current cycle.',
   },
   {
     id: 4,

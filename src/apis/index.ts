@@ -156,31 +156,31 @@ export const getAssetAPYs = async () => {
     }
     return {
       usdc: {
-        max_apy: '0',
-        base_apy: '0',
+        max_apy: '??',
+        base_apy: '??',
       },
       wbtc: {
-        max_apy: '0',
-        base_apy: '0',
+        max_apy: '??',
+        base_apy: '??',
       },
       weth: {
-        max_apy: '0',
-        base_apy: '0',
+        max_apy: '??',
+        base_apy: '??',
       },
     }
   } catch (e) {
     return {
       usdc: {
-        max_apy: '0',
-        base_apy: '0',
+        max_apy: '??',
+        base_apy: '??',
       },
       wbtc: {
-        max_apy: '0',
-        base_apy: '0',
+        max_apy: '??',
+        base_apy: '??',
       },
       weth: {
-        max_apy: '0',
-        base_apy: '0',
+        max_apy: '??',
+        base_apy: '??',
       },
     }
   }

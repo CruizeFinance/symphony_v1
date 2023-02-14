@@ -25,6 +25,16 @@ const Vault = () => {
     [state.lockedAsset, state.assetPrice],
   )
 
+  const maxAPY = useMemo(() => {
+    let maxValue = '0'
+    Object.values(state.assetAPYs).forEach((v) => {
+      if (Number(v.max_apy.slice(0, v.max_apy.length - 1)) > Number(maxValue)) {
+        maxValue = v.max_apy.slice(0, v.max_apy.length - 1)
+      }
+    })
+    return maxValue
+  }, [state.assetAPYs])
+
   return (
     <div className="vault-container">
       <div className="vault">
@@ -102,7 +112,7 @@ const Vault = () => {
               </>
             }
             cardIcons={DROPDOWN_OPTIONS}
-            apy={'14.72'}
+            apy={maxAPY && Number(maxAPY) ? maxAPY : '??'}
             buttonOptions={{
               label: 'Start Earning',
               buttonIcon: (

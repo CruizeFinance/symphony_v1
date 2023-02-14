@@ -37,7 +37,7 @@ export default interface State {
     depositBalance:string
     withdraw: {
       instantBalance: string,
-      standardBalance: {
+      requestBalance: {
         fundsInQueue: string,
         fundsInActiveUse: string
       }
@@ -75,7 +75,7 @@ export default interface State {
     tvl: number,
     vault_cap: number
   }
-  withdrawType: 'standard' | 'instant'
+  withdrawType: 'request' | 'instant'
   yieldInfoData: {
     pcg_moved: {
       [x: number | string]: number,
