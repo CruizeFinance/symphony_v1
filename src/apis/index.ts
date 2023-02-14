@@ -132,3 +132,56 @@ export const loadYieldInfoGraph = async (vault: string) => {
     }
   }
 }
+
+export const getAssetAPYs = async () => {
+  try {
+    const data = await fetchWrapper.get(
+      `https://www.beta.trident.v2.cruize.finance/vaults/asset_apy?vault=protected_twin_peaks`,
+    )
+    if (!data.error) {
+      return {
+        usdc: {
+          max_apy: data.message.USDC.max_apy,
+          base_apy: data.message.USDC.base_apy,
+        },
+        wbtc: {
+          max_apy: data.message.WBTC.max_apy,
+          base_apy: data.message.WBTC.base_apy,
+        },
+        weth: {
+          max_apy: data.message.WETH.max_apy,
+          base_apy: data.message.WETH.base_apy,
+        },
+      }
+    }
+    return {
+      usdc: {
+        max_apy: '0',
+        base_apy: '0',
+      },
+      wbtc: {
+        max_apy: '0',
+        base_apy: '0',
+      },
+      weth: {
+        max_apy: '0',
+        base_apy: '0',
+      },
+    }
+  } catch (e) {
+    return {
+      usdc: {
+        max_apy: '0',
+        base_apy: '0',
+      },
+      wbtc: {
+        max_apy: '0',
+        base_apy: '0',
+      },
+      weth: {
+        max_apy: '0',
+        base_apy: '0',
+      },
+    }
+  }
+}

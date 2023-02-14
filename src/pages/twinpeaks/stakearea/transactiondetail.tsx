@@ -63,17 +63,20 @@ const TransactionDetail = ({ open, hide }: TransactionDetailProps) => {
                   )
               : () => {
                   hide()
-                  dispatch({
-                    type: Actions.SET_TRANSACTION_DETAILS,
-                    payload: {
-                      ...state.transactionDetails,
-                      loading: false,
-                      hash: '',
-                      status: 0,
-                      type: '',
-                      message: '',
-                    },
-                  })
+                  const timeout = setTimeout(() => {
+                    dispatch({
+                      type: Actions.SET_TRANSACTION_DETAILS,
+                      payload: {
+                        ...state.transactionDetails,
+                        loading: false,
+                        hash: '',
+                        status: 0,
+                        type: '',
+                        message: '',
+                      },
+                    })
+                    clearTimeout(timeout)
+                  }, 1000)
                 }
           }
         >

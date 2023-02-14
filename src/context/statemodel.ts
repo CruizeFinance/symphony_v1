@@ -85,4 +85,18 @@ export default interface State {
     }
   }
   approveTokenModal: boolean
+  assetAPYs: {
+    [Assets.USDC]: {
+      max_apy: string,
+      base_apy: string,
+    },
+    [Assets.WBTC]: {
+      max_apy: string,
+      base_apy: string,
+    },
+    [Assets.WETH]: {
+      max_apy: string,
+      base_apy: string
+    }
+  }
 }

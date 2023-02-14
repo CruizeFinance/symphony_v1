@@ -65,7 +65,21 @@ const initialState: State = {
       0: 0
     }
   },
-  approveTokenModal: false
+  approveTokenModal: false,
+  assetAPYs: {
+    usdc: {
+      max_apy: '0',
+      base_apy: '0'
+    },
+    wbtc: {
+      max_apy: '0',
+      base_apy: '0'
+    },
+    weth: {
+      max_apy: '0',
+      base_apy: '0'
+    }
+  }
 }
 
 export default initialState
