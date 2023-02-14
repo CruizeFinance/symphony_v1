@@ -51,7 +51,7 @@ const StakeCard = () => {
   const { address, isConnected, connector } = useAccount()
 
   const [openConfirm, setOpenConfirm] = useState(false)
-  const [disableStandard, setDisableStandard] = useState(false)
+  const [disableRequest, setDisableRequest] = useState(false)
   const [openTransactionDetail, setOpenTransactionDetail] = useState(false)
 
   /*
@@ -96,7 +96,7 @@ const StakeCard = () => {
                 state.selectedAsset.toUpperCase()
               ].decimals,
             ),
-            standardBalance: {
+            requestBalance: {
               fundsInQueue: fundsInQueue,
               fundsInActiveUse: ethers.utils.formatUnits(
                 lockedAmount,
@@ -108,7 +108,7 @@ const StakeCard = () => {
           },
         },
       })
-      setDisableStandard(
+      setDisableRequest(
         depositReceipts.round === vault.round ||
           Number(
             ethers.utils.formatUnits(
@@ -281,11 +281,11 @@ const StakeCard = () => {
       })
       writeContract(
         state.selectedTab === 'withdraw'
-          ? state.withdrawType === 'standard'
-            ? 'standardWithdraw'
+          ? state.withdrawType === 'request'
+            ? 'requestWithdraw'
             : 'instantWithdraw'
           : 'deposit',
-        state.selectedTab === 'withdraw' && state.withdrawType === 'standard'
+        state.selectedTab === 'withdraw' && state.withdrawType === 'request'
           ? [
               CONTRACT_CONFIG[state.connectedNetwork.chainId][
                 state.selectedAsset.toUpperCase()
@@ -420,9 +420,9 @@ const StakeCard = () => {
   }, [state.appError])
 
   useEffect(() => {
-    if (disableStandard)
+    if (disableRequest)
       dispatch({ type: Actions.SET_WITHDRAW_TYPE, payload: 'instant' })
-  }, [disableStandard])
+  }, [disableRequest])
 
   return (
     <>
@@ -459,7 +459,7 @@ const StakeCard = () => {
           <Tabs
             tabs={[
               {
-                label: 'standard',
+                label: 'request',
                 tooltip:
                   'Your deposit is making $$ for you. Submit a request and we’ll keep your deposit aside before the next round begins. You can come back after the current round ends to finish your withdrawal in the Instant Withdrawal section.',
               },
@@ -481,7 +481,7 @@ const StakeCard = () => {
             }}
             type="contained"
             disabledTab={[
-              ...[disableStandard ? 'standard' : ''],
+              ...[disableRequest ? 'request' : ''],
               ...[
                 Number(state.balances.withdraw.instantBalance) <= 0
                   ? 'instant'
@@ -520,7 +520,7 @@ const StakeCard = () => {
                 <WithdrawDetail
                   label="Funds in queue"
                   icon="tooltip-icon"
-                  amount={state.balances.withdraw.standardBalance.fundsInQueue}
+                  amount={state.balances.withdraw.requestBalance.fundsInQueue}
                   unit={state.selectedAsset.toUpperCase()}
                   tooltip={`Your assets that are currently active in a vault and can only be withdrawn at the end of the epoch.`}
                 />
@@ -528,7 +528,7 @@ const StakeCard = () => {
                   label="Funds in active use"
                   icon="tooltip-icon"
                   amount={
-                    state.balances.withdraw.standardBalance.fundsInActiveUse
+                    state.balances.withdraw.requestBalance.fundsInActiveUse
                   }
                   unit={state.selectedAsset.toUpperCase()}
                   tooltip={`Your total assets that are currently active in vaults making you money brrrrrrrr.`}

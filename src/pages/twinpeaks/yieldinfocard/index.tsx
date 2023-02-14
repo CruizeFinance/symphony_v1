@@ -57,7 +57,7 @@ const YieldInfoCard = () => {
         </p>
         <div className="yield-info-section">
           <label className="yield-info-title">
-            Scenario 1: Max yield up to 15.00%
+            Scenario 1: Max yield up to {state.assetAPYs[state.selectedAsset].max_apy}
           </label>
           <ul>
             <li>
@@ -71,7 +71,7 @@ const YieldInfoCard = () => {
         </div>
         <div className="yield-info-section">
           <label className="yield-info-title">
-            Scenario 2: Base yield of 2%
+            Scenario 2: Base yield of {state.assetAPYs[state.selectedAsset].base_apy}
           </label>
           <ul>
             <li>
@@ -111,7 +111,7 @@ const YieldInfoCard = () => {
               <Tooltip
                 contentStyle={{ textTransform: 'uppercase' }}
                 formatter={function (value, name) {
-                  return `${Number(value).toFixed(3)}`
+                  return `${Number(value).toFixed(3)} %`
                 }}
                 labelFormatter={function (value) {
                   return `Price change %: ${Number(value).toFixed(3)}`
