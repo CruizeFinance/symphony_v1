@@ -24,7 +24,8 @@
     .faq-section {
       border-radius: toRem(10);
       padding: toRem(32);
-      @include flex(row, flex-start, center, toRem(24));
+      width: 100%;
+      @include flex(row, flex-start, flex-start, toRem(24));
       .faq-content {
         @include flex(column, flex-start, center, toRem(12));
         .faq-question {
@@ -56,7 +57,6 @@
         padding: toRem(10) toRem(20);
         gap: toRem(10);
         flex-direction: row-reverse;
-        width: 100%;
         justify-content: space-between;
       }
     }

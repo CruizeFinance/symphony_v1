@@ -11,7 +11,7 @@ import {
   NETWORK_CONFIG,
   SUPPORTED_CHAINS,
 } from '../utils'
-import { getAssetPrice, getCurrentDeposits, getTVL } from '../apis'
+import { getAssetAPYs, getAssetPrice, getCurrentDeposits, getTVL } from '../apis'
 import CRUIZECONTRACTABI from '../abi/cruizecontract.json'
 import MINTTOKENABI from '../abi/minttoken.json'
 import { useOnceCall } from '../hooks'
@@ -60,6 +60,8 @@ export const AppContextProvider = ({ children }: ContextProps) => {
           usdc: usdc,
         },
       })
+      const assetAPY = await getAssetAPYs()
+      dispatch({ type: Actions.SET_ASSET_APYS, payload: assetAPY })
     } catch (e) {
       dispatch({
         type: Actions.SET_APP_ERROR,

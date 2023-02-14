@@ -109,6 +109,11 @@ const reducer = (state: State, action: Action): State => {
         ...state,
         approveTokenModal: action.payload
       }
+    case Actions.SET_ASSET_APYS:
+      return {
+        ...state,
+        assetAPYs: action.payload
+      }
     default:
       return state
   }

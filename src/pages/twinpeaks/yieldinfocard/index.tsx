@@ -109,12 +109,12 @@ const YieldInfoCard = () => {
                 label={'APY'}
               />
               <Tooltip
-                contentStyle={{ textTransform: 'capitalize' }}
+                contentStyle={{ textTransform: 'uppercase' }}
                 formatter={function (value, name) {
-                  return `${value}`
+                  return `${Number(value).toFixed(3)}`
                 }}
                 labelFormatter={function (value) {
-                  return `Price change %: ${value}`
+                  return `Price change %: ${Number(value).toFixed(3)}`
                 }}
               />
               <Area
