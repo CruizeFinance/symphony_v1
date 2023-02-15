@@ -44,25 +44,25 @@ export const NETWORK_CONFIG = {
 export const CONTRACT_CONFIG = {
   [goerli.id]: {
     CRUIZE_CONTRACT: {
-      address: '0x63C3F2C4A88f5F98EC544b11b774034d26efD9F2',
+      address: '0x23800A9DB5dE3c8e0d33E858461d33181298f2D0',
       decimals: 0,
     },
     [Assets.WETH.toUpperCase()]: {
-      address: '0xCCa7d1416518D095E729904aAeA087dBA749A4dC',
+      address: '0xB8096bC53c3cE4c11Ebb0069Da0341d75264B104',
       decimals: 18,
     },
     [Assets.USDC.toUpperCase()]: {
-      address: '0x142bBF70Ede8cEDAe4f5479846eB6Bb7D63d73b1',
+      address: '0x1D606C06d710D6b775A7CE78097ffc42e9a47B50',
       decimals: 6,
     },
     [Assets.WBTC.toUpperCase()]: {
-      address: '0xf4423F4152966eBb106261740da907662A3569C5',
+      address: '0x047351C5c6D860a589Cf3D4B4515a611dCD530be',
       decimals: 8,
     },
   },
   [arbitrumGoerli.id]: {
     CRUIZE_CONTRACT: {
-      address: "0xc904C95D0cbf50342FD92C8ab4764819F5641808",
+      address: "0x7554f9068b4169C9B2fC4C4488A5509201045665",
       decimals: 0,
     },
     [Assets.WETH.toUpperCase()]: {
@@ -70,11 +70,11 @@ export const CONTRACT_CONFIG = {
       decimals: 18,
     },
     [Assets.USDC.toUpperCase()]: {
-      address: "0x58e12a048D2bF84678807F337a8E9f6f9D87d50c",
+      address: "0xCE4c04988caf7585152dEd7437aF92d9740f7664",
       decimals: 6,
     },
     [Assets.WBTC.toUpperCase()]: {
-      address: "0xDFB63E640d10b9Da4C9e8f8312e952f77F5c20B8",
+      address: "0x2FFCdD8a057b121e44f9Fe7A1A9C714e987b1c53",
       decimals: 8,
     }
   }

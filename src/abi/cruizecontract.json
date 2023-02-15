@@ -4,7 +4,16 @@
       { "internalType": "address", "name": "_owner", "type": "address" },
       { "internalType": "address", "name": "_vault", "type": "address" },
       { "internalType": "address", "name": "_crContract", "type": "address" },
-      { "internalType": "uint256", "name": "_managementFee", "type": "uint256" }
+      {
+        "internalType": "uint256",
+        "name": "_managementFee",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_performanceFee",
+        "type": "uint256"
+      }
     ],
     "stateMutability": "nonpayable",
     "type": "constructor"
@@ -32,7 +41,7 @@
     "type": "error"
   },
   { "inputs": [], "name": "FailedToTransferETH", "type": "error" },
-  { "inputs": [], "name": "InvalidManagementFee", "type": "error" },
+  { "inputs": [], "name": "InvalidFee", "type": "error" },
   {
     "inputs": [
       {
@@ -47,10 +56,10 @@
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "depositRound", "type": "uint256" },
-      { "internalType": "uint256", "name": "currentRound", "type": "uint256" }
+      { "internalType": "address", "name": "actualAddr", "type": "address" },
+      { "internalType": "address", "name": "ownerAddr", "type": "address" }
     ],
-    "name": "InvalidinitiateStandardWithdrawalRound",
+    "name": "NotAuthorized",
     "type": "error"
   },
   {
@@ -71,6 +80,22 @@
   },
   {
     "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "withdrawalshare",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "withdrawalRequestshare",
+        "type": "uint256"
+      }
+    ],
+    "name": "NotEnoughWithdrawalShare",
+    "type": "error"
+  },
+  {
+    "inputs": [
       { "internalType": "address", "name": "guard_", "type": "address" }
     ],
     "name": "NotIERC165Compliant",
@@ -80,7 +105,7 @@
     "inputs": [
       { "internalType": "uint256", "name": "limit", "type": "uint256" }
     ],
-    "name": "TokenReachedDepositLimit",
+    "name": "VaultReachedDepositLimit",
     "type": "error"
   },
   {
@@ -103,11 +128,12 @@
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "ZeroAmount", "type": "uint256" }
+      { "internalType": "uint256", "name": "ZeroValue", "type": "uint256" }
     ],
-    "name": "ZeroAmount",
+    "name": "ZeroValue",
     "type": "error"
   },
+  { "inputs": [], "name": "ZeroWithdrawalShare", "type": "error" },
   {
     "anonymous": false,
     "inputs": [
@@ -196,6 +222,25 @@
       {
         "indexed": true,
         "internalType": "address",
+        "name": "token",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "round",
+        "type": "uint256"
+      }
+    ],
+    "name": "CollectVaultFee",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
         "name": "tokenAddress",
         "type": "address"
       },
@@ -216,6 +261,12 @@
         "internalType": "uint8",
         "name": "decimal",
         "type": "uint8"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "tokenCap",
+        "type": "uint256"
       }
     ],
     "name": "CreateToken",
@@ -357,19 +408,19 @@
     "anonymous": false,
     "inputs": [
       {
-        "indexed": true,
-        "internalType": "address",
-        "name": "previousTarget",
-        "type": "address"
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "performanceFee",
+        "type": "uint256"
       },
       {
-        "indexed": true,
-        "internalType": "address",
-        "name": "newTarget",
-        "type": "address"
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "newPerformanceFee",
+        "type": "uint256"
       }
     ],
-    "name": "TargetSet",
+    "name": "PerformanceFeeSet",
     "type": "event"
   },
   {
@@ -394,8 +445,34 @@
         "type": "address"
       }
     ],
-    "name": "completeStandardWithdrawal",
+    "name": "StandardWithdrawal",
     "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "previousTarget",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "newTarget",
+        "type": "address"
+      }
+    ],
+    "name": "TargetSet",
+    "type": "event"
+  },
+  {
+    "inputs": [],
+    "name": "ETH",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
   },
   {
     "inputs": [],
@@ -416,11 +493,13 @@
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "_token", "type": "address" },
-      { "internalType": "address", "name": "user", "type": "address" }
+      { "internalType": "address", "name": "token", "type": "address" },
+      { "internalType": "address", "name": "account", "type": "address" }
     ],
     "name": "balanceOfUser",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "outputs": [
+      { "internalType": "uint256", "name": "balance", "type": "uint256" }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
@@ -434,12 +513,19 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "crContract",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       { "internalType": "string", "name": "name", "type": "string" },
       { "internalType": "string", "name": "symbol", "type": "string" },
       { "internalType": "address", "name": "token", "type": "address" },
       { "internalType": "uint8", "name": "decimal", "type": "uint8" },
-      { "internalType": "uint104", "name": "tokencap", "type": "uint104" }
+      { "internalType": "uint104", "name": "tokenCap", "type": "uint104" }
     ],
     "name": "createToken",
     "outputs": [],
@@ -484,8 +570,15 @@
         "name": "unredeemedShares",
         "type": "uint128"
       },
-      { "internalType": "uint104", "name": "lockedAmount", "type": "uint104" }
+      { "internalType": "uint104", "name": "totalDeposit", "type": "uint104" }
     ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "feeRecipient",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
     "stateMutability": "view",
     "type": "function"
   },
@@ -506,7 +599,14 @@
     "type": "function"
   },
   {
-    "inputs": [],
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "totalBalanceLocked",
+        "type": "uint256"
+      },
+      { "internalType": "uint256", "name": "decimal", "type": "uint256" }
+    ],
     "name": "getManagementFee",
     "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
@@ -514,13 +614,30 @@
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "user", "type": "address" },
+      { "internalType": "uint256", "name": "roundAPY", "type": "uint256" },
+      { "internalType": "uint256", "name": "decimal", "type": "uint256" }
+    ],
+    "name": "getPerformanceFee",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "account", "type": "address" },
       { "internalType": "address", "name": "token", "type": "address" }
     ],
     "name": "getUserLockedAmount",
     "outputs": [
       { "internalType": "uint256", "name": "amount", "type": "uint256" }
     ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "gnosisSafe",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
     "stateMutability": "view",
     "type": "function"
   },
@@ -556,9 +673,23 @@
       { "internalType": "address", "name": "token", "type": "address" },
       { "internalType": "uint256", "name": "amount", "type": "uint256" }
     ],
-    "name": "instantWithdraw",
+    "name": "instantWithdrawal",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "isManagementFeeEnable",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "isPerformanceFeeEnabled",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -570,8 +701,29 @@
   },
   {
     "inputs": [],
+    "name": "managementFee",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "module",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "owner",
     "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "performanceFee",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"
   },
@@ -626,6 +778,16 @@
   },
   {
     "inputs": [
+      { "internalType": "bool", "name": "_performanceFee", "type": "bool" },
+      { "internalType": "bool", "name": "_managementFee", "type": "bool" }
+    ],
+    "name": "setFeeStatus",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
       { "internalType": "address", "name": "_guard", "type": "address" }
     ],
     "name": "setGuard",
@@ -642,6 +804,19 @@
       }
     ],
     "name": "setManagementFee",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "newPerformanceFee",
+        "type": "uint256"
+      }
+    ],
+    "name": "setPerformanceFee",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -672,7 +847,8 @@
     "name": "shareBalances",
     "outputs": [
       { "internalType": "uint256", "name": "heldByAccount", "type": "uint256" },
-      { "internalType": "uint256", "name": "heldByVault", "type": "uint256" }
+      { "internalType": "uint256", "name": "heldByVault", "type": "uint256" },
+      { "internalType": "uint256", "name": "totalShares", "type": "uint256" }
     ],
     "stateMutability": "view",
     "type": "function"
@@ -681,7 +857,7 @@
     "inputs": [
       { "internalType": "address", "name": "token", "type": "address" }
     ],
-    "name": "standardWithdraw",
+    "name": "standardWithdrawal",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
