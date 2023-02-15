@@ -48,7 +48,7 @@ export const CONTRACT_CONFIG = {
       decimals: 0,
     },
     [Assets.WETH.toUpperCase()]: {
-      address: '0xB8096bC53c3cE4c11Ebb0069Da0341d75264B104',
+      address: '0xCCa7d1416518D095E729904aAeA087dBA749A4dC',
       decimals: 18,
     },
     [Assets.USDC.toUpperCase()]: {
