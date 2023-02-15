@@ -282,8 +282,8 @@ const StakeCard = () => {
       writeContract(
         state.selectedTab === 'withdraw'
           ? state.withdrawType === 'request'
-            ? 'requestWithdraw'
-            : 'instantWithdraw'
+            ? 'standardWithdrawal'
+            : 'instantWithdrawal'
           : 'deposit',
         state.selectedTab === 'withdraw' && state.withdrawType === 'request'
           ? [
