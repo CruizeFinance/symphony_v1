@@ -75,7 +75,7 @@ const Vault = () => {
               </>
             }
             cardIcons={DROPDOWN_OPTIONS.slice(0, 2)}
-            apy={'6.78'}
+            apy={'6.78%'}
             buttonOptions={{
               label: 'Coming Soon',
               disabled: true,
@@ -112,7 +112,7 @@ const Vault = () => {
               </>
             }
             cardIcons={DROPDOWN_OPTIONS}
-            apy={maxAPY && Number(maxAPY) ? maxAPY : '??'}
+            apy={maxAPY && Number(maxAPY) ? maxAPY+'%' : '??'}
             buttonOptions={{
               label: 'Start Earning',
               buttonIcon: (

@@ -36,7 +36,7 @@ const VaultCard = ({
         </div>
         <div className="vault-apy">
           <div className="apy-label">Earn up to</div>
-          <div className="apy-value">{apy}&nbsp;% APY</div>
+          <div className="apy-value">{apy}&nbsp; APY</div>
         </div>
       </div>
       {buttonOptions ? (
