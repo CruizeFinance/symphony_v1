@@ -114,7 +114,7 @@ const YieldInfoCard = () => {
                   return `${Number(value).toFixed(3)} %`
                 }}
                 labelFormatter={function (value) {
-                  return `Price change %: ${Number(value).toFixed(3)}`
+                  return `Price change %: ${Number(value).toFixed(3)} %`
                 }}
               />
               <Area
