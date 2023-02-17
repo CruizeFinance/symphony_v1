@@ -52,11 +52,11 @@ export const CONTRACT_CONFIG = {
       decimals: 18,
     },
     [Assets.USDC.toUpperCase()]: {
-      address: '0x1D606C06d710D6b775A7CE78097ffc42e9a47B50',
+      address: '0xf029E7204D23A97CCd788e808c0f45ddB6745b25',
       decimals: 6,
     },
     [Assets.WBTC.toUpperCase()]: {
-      address: '0x047351C5c6D860a589Cf3D4B4515a611dCD530be',
+      address: '0x02245d57122896af490174f7421bD5a73CF7b0dc',
       decimals: 8,
     },
   },
@@ -70,11 +70,11 @@ export const CONTRACT_CONFIG = {
       decimals: 18,
     },
     [Assets.USDC.toUpperCase()]: {
-      address: "0xCE4c04988caf7585152dEd7437aF92d9740f7664",
+      address: "0x9c4994967C29E807b75dbf85fF69261F47362817",
       decimals: 6,
     },
     [Assets.WBTC.toUpperCase()]: {
-      address: "0x2FFCdD8a057b121e44f9Fe7A1A9C714e987b1c53",
+      address: "0x295476C268e13f14967518D58E384d46b190b196",
       decimals: 8,
     }
   }
