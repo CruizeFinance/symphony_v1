@@ -17,7 +17,7 @@ const YieldInfoCard = () => {
   const [state, dispatch] = useContext(AppContext)
 
   const getYieldInfoData = async () => {
-    const data = await loadYieldInfoGraph('protected_twin_peaks')
+    const data = await loadYieldInfoGraph('protected_twin_peaks', state.selectedAsset.toUpperCase())
     dispatch({
       type: Actions.SET_YIELD_INFO_DATA,
       payload: {
@@ -28,8 +28,8 @@ const YieldInfoCard = () => {
   }
 
   useEffect(() => {
-    getYieldInfoData()
-  }, [])
+    if (state.selectedAsset) getYieldInfoData()
+  }, [state.selectedAsset])
 
   const graphData = useMemo(() => {
     return state.yieldInfoData.pcg_moved &&
@@ -57,28 +57,40 @@ const YieldInfoCard = () => {
         </p>
         <div className="yield-info-section">
           <label className="yield-info-title">
-            Scenario 1: Max yield up to {state.assetAPYs[state.selectedAsset].max_apy}
+            Scenario 1: Max yield up to{' '}
+            {state.assetAPYs[state.selectedAsset].max_apy}
           </label>
           <ul>
             <li>
               <p className="yield-info-text">
-                If ${state.priceRange.lower_bound} &#60;{' '}
-                {state.selectedAsset.toUpperCase()} price &#60; $
-                {state.priceRange.upper_bound}
+                Generated if{' '}
+                {(state.selectedAsset === 'wbtc'
+                  ? state.selectedAsset
+                  : 'weth'
+                ).toUpperCase()}{' '}
+                price remains within the range of $
+                {state.priceRange.lower_bound.toLocaleString()} and $
+                {state.priceRange.upper_bound.toLocaleString()} during the vault's 7 day epoch.
               </p>
             </li>
           </ul>
         </div>
         <div className="yield-info-section">
           <label className="yield-info-title">
-            Scenario 2: Base yield of {state.assetAPYs[state.selectedAsset].base_apy}
+            Scenario 2: Base yield of{' '}
+            {state.assetAPYs[state.selectedAsset].base_apy}
           </label>
           <ul>
             <li>
               <p className="yield-info-text">
-                If {state.selectedAsset.toUpperCase()} price &#8804; $
-                {state.priceRange.lower_bound} or &#62; $
-                {state.priceRange.upper_bound}
+                Generated if{' '}
+                {(state.selectedAsset === 'wbtc'
+                  ? state.selectedAsset
+                  : 'weth'
+                ).toUpperCase()}{' '}
+                price goes outside the range of ${state.priceRange.lower_bound.toLocaleString()}{' '}
+                and ${state.priceRange.upper_bound.toLocaleString()} during the vault's 7 day
+                epoch.
               </p>
             </li>
           </ul>

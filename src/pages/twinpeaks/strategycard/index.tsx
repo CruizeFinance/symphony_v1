@@ -13,7 +13,7 @@ const StrategyCard = () => {
 
   const storePriceRange = async () => {
     const response = await getCurrentPriceRange(
-      state.selectedAsset.toUpperCase(),
+      (state.selectedAsset === 'wbtc' ? state.selectedAsset : 'weth').toUpperCase(),
       'protected_twin_peaks',
     )
     if (!response || response.error)
@@ -161,18 +161,24 @@ const StrategyCard = () => {
             </div>
             <div className="specification-info">
               <label className="specification-info-value">
-                ${state.priceRange.lower_bound} - $
-                {state.priceRange.upper_bound}
+                {state.selectedAsset === 'usdc' ? 'WETH' : state.selectedAsset.toUpperCase()}
               </label>
-              <label className="specification-info-label">Current range</label>
+              <label className="specification-info-label">Asset Tracked</label>
             </div>
             <div className="specification-info">
               <label className="specification-info-value">
                 {state.assetPrice
-                  ? `$${state.assetPrice[state.selectedAsset]}`
+                  ? `$${state.assetPrice[state.selectedAsset === 'wbtc' ? state.selectedAsset : 'weth'].toLocaleString()}`
                   : null}
               </label>
               <label className="specification-info-label">Current Price</label>
+            </div>
+            <div className="specification-info">
+              <label className="specification-info-value">
+                ${state.priceRange.lower_bound.toLocaleString()} - $
+                {state.priceRange.upper_bound.toLocaleString()}
+              </label>
+              <label className="specification-info-label">Current range</label>
             </div>
           </div>
         </div>
