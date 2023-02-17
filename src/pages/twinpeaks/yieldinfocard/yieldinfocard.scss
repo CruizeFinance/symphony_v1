@@ -23,7 +23,7 @@
     @include flex(column, flex-start, center, toRem(24));
     padding: toRem(20) toRem(36);
     .yield-info-text {
-      @include typography(GroteskRegular, toRem(20), toRem(32), var(--black));
+      @include typography(GroteskRegular, toRem(18), toRem(28), var(--black));
       @media screen and (min-width: 320px) and (max-width: 720px) {
         font-size: toRem(16);
       }

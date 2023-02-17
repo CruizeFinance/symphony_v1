@@ -111,10 +111,10 @@ export const getCurrentDeposits = async (asset: string, network: number) => {
   }
 }
 
-export const loadYieldInfoGraph = async (vault: string) => {
+export const loadYieldInfoGraph = async (vault: string, asset: string) => {
   try {
     const data: YieldInfoGraph = await fetchWrapper.get(
-      `https://www.beta.trident.v2.cruize.finance/vaults/strategy_plot_data?vault=${vault}`,
+      `https://www.beta.trident.v2.cruize.finance/vaults/strategy_plot_data?vault=${vault}&asset_symbol=${asset}`,
     )
     if (data.error)
       return {

@@ -43,7 +43,7 @@
         .faq-answer {
           @include typography(
             GroteskRegular,
-            toRem(20),
+            toRem(18),
             toRem(24),
             var(--small-dropdown-color)
           );
