@@ -56,7 +56,7 @@ const Footer = () => {
             </a>
             <a
               className="link"
-              href="https://discord.gg/cruize"
+              href="https://discord.com/invite/tACTMsMYbd"
               target={'_blank'}
               rel={'noreferrer noopener'}
             >
@@ -111,7 +111,7 @@ const Footer = () => {
             <label className="link-title">Social</label>
             <a
               className="link"
-              href="https://discord.gg/cruize"
+              href="https://discord.com/invite/tACTMsMYbd"
               target={'_blank'}
               rel={'noreferrer noopener'}
             >
@@ -147,7 +147,7 @@ const Footer = () => {
           <label className="label">© 2023 Cruize Inc.</label>
           <div className="socials">
             <a
-              href="https://discord.gg/cruize"
+              href="https://discord.com/invite/tACTMsMYbd"
               target={'_blank'}
               rel={'noreferrer noopener'}
             >

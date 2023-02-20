@@ -59,19 +59,7 @@ const Vault = () => {
               <>
                 This vault generates interest while providing capital protection
                 against market downturns. Any drawdowns below the protection
-                level (price floor) result in profits.&nbsp;
-                <a
-                  href="https://docs.cruize.finance"
-                  rel="noreferrer noopener"
-                  target={'_blank'}
-                  style={{
-                    fontFamily: 'GroteskMedium',
-                    color: 'inherit',
-                    textDecoration: 'none',
-                  }}
-                >
-                  Learn More
-                </a>
+                level (price floor) result in additional profits.
               </>
             }
             cardIcons={DROPDOWN_OPTIONS.slice(0, 2)}
@@ -85,9 +73,9 @@ const Vault = () => {
             cardTitle="Protected Twin Peaks"
             cardInfo={
               <>
-                This vault generates interest by capitalising on weekly price
-                movements in either direction for both moderately bullish as
-                well as bearish markets. Capital remains{' '}
+                This vault generates income by taking advantage of weekly price
+                changes, no matter if the market is going up or down. Capital
+                remains{' '}
                 <span
                   style={{
                     fontFamily: 'GroteskMedium',
@@ -98,7 +86,7 @@ const Vault = () => {
                 </span>{' '}
                 protected.&nbsp;
                 <a
-                  href="https://docs.cruize.finance"
+                  href="https://docs.cruize.finance/vaults/protected-twin-peaks"
                   rel="noreferrer noopener"
                   target={'_blank'}
                   style={{
@@ -112,7 +100,7 @@ const Vault = () => {
               </>
             }
             cardIcons={DROPDOWN_OPTIONS}
-            apy={maxAPY && Number(maxAPY) ? maxAPY+'%' : '??'}
+            apy={maxAPY && Number(maxAPY) ? maxAPY + '%' : '??'}
             buttonOptions={{
               label: 'Start Earning',
               buttonIcon: (

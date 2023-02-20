@@ -5,7 +5,7 @@
   padding: toRem(30);
   border-radius: toRem(16);
   @include flex(column, center, center, toRem(30));
-  max-width: toRem(425);
+  max-width: toRem(450);
   background: var(--vault-card-background);
   border: toRem(1) solid var(--vault-card-border);
   .card-section {

@@ -133,7 +133,7 @@ const StrategyCard = () => {
             movements in both directions up to the upper and lower barriers
             respectively.&nbsp;
             <a
-              href="https://docs.cruize.finance"
+              href="https://docs.cruize.finance/vaults/protected-twin-peaks"
               rel="noreferrer noopener"
               target={'_blank'}
               style={{
