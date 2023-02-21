@@ -1,4 +1,4 @@
-import { arbitrumGoerli } from '@wagmi/chains'
+import { arbitrumGoerli, polygonMumbai } from '@wagmi/chains'
 import { goerli } from 'wagmi'
 import { Assets } from '../enums/assets'
 import { NetworkIDs, Networks } from '../enums/networks'
@@ -23,12 +23,12 @@ export const NETWORK_CONFIG = {
       label: Networks.ETHEREUM_GOERLI,
       icon: Networks.ETHEREUM,
     },
-    /* [Networks.POLYGON]: {
+    [Networks.POLYGON]: {
       chainId: NetworkIDs.POLYGON_MUMBAI,
       label: Networks.POLYGON_MUMBAI,
       icon: Networks.POLYGON,
     },
-    [Networks.OPTIMISM]: {
+    /* [Networks.OPTIMISM]: {
       chainId: NetworkIDs.OPTIMISM_GOERLI,
       label: Networks.OPTIMISM_GOERLI,
       icon: Networks.OPTIMISM,
@@ -60,6 +60,24 @@ export const CONTRACT_CONFIG = {
       decimals: 8,
     },
   },
+  [polygonMumbai.id]: {
+    CRUIZE_CONTRACT: {
+      address: '0x08d3B3dF4512F7C437Bb149fA7b10FF7cA9A6c5E',
+      decimals: 0,
+    },
+    [Assets.WETH.toUpperCase()]: {
+      address: '0xafAa83252d90B6a209000eC389E943b03FdCB0F8',
+      decimals: 18,
+    },
+    [Assets.USDC.toUpperCase()]: {
+      address: '0xE7AFdD06DfD32a3175687D77Fd9a4eD270d7E814',
+      decimals: 6,
+    },
+    [Assets.WBTC.toUpperCase()]: {
+      address: '0xedC7632768B7239BBA9F66cB807e14Cb7aF7a04E',
+      decimals: 8,
+    },
+  },
   [arbitrumGoerli.id]: {
     CRUIZE_CONTRACT: {
       address: "0x7554f9068b4169C9B2fC4C4488A5509201045665",
@@ -80,7 +98,7 @@ export const CONTRACT_CONFIG = {
   }
 }
 
-export const SUPPORTED_CHAINS = [goerli, arbitrumGoerli]
+export const SUPPORTED_CHAINS = [goerli, arbitrumGoerli, polygonMumbai]
 
 export const API_PARAMS = {
   [Assets.WETH]: 'ethereum',

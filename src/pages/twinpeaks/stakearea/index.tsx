@@ -9,7 +9,7 @@ import { BigNumber, ethers } from 'ethers'
 import { Actions } from '../../../enums/actions'
 import { CONTRACT_CONFIG } from '../../../utils'
 import { TransactionReceipt, TransactionResponse } from '../../../interfaces'
-import { arbitrumGoerli } from '@wagmi/chains'
+import { arbitrumGoerli, polygonMumbai } from '@wagmi/chains'
 import TransactionDetail from './transactiondetail'
 import ConfettiExplosion from 'react-confetti-explosion'
 
@@ -70,12 +70,22 @@ const StakeCard = () => {
           state.selectedAsset.toUpperCase()
         ].address,
       )
-      const lockedAmount = await state.cruizeContract!.getUserLockedAmount(
-        address,
-        CONTRACT_CONFIG[state.connectedNetwork.chainId][
-          state.selectedAsset.toUpperCase()
-        ].address,
-      )
+      let lockedAmount: BigNumber = BigNumber.from(0)
+      if (state.connectedNetwork.chainId === polygonMumbai.id) {
+        lockedAmount = await state.cruizeContract!.balanceOf(
+          CONTRACT_CONFIG[state.connectedNetwork.chainId][
+            state.selectedAsset.toUpperCase()
+          ].address,
+          address,
+        )
+      } else {
+        lockedAmount = await state.cruizeContract!.getUserLockedAmount(
+          address,
+          CONTRACT_CONFIG[state.connectedNetwork.chainId][
+            state.selectedAsset.toUpperCase()
+          ].address,
+        )
+      }
       const fundsInQueue =
         depositReceipts.round === vault.round
           ? ethers.utils.formatUnits(
@@ -181,73 +191,73 @@ const StakeCard = () => {
     type: string,
   ) => {
     try {
-    setOpenConfirm(false)
-    setOpenTransactionDetail(true)
-    dispatch({
-      type: Actions.SET_TRANSACTION_DETAILS,
-      payload: {
-        ...state.transactionDetails,
-        loading: true,
-        hash: tx.hash,
-        type,
-      },
-    })
-    const data: TransactionReceipt = await tx.wait()
-    dispatch({
-      type: Actions.SET_TRANSACTION_DETAILS,
-      payload: {
-        ...state.transactionDetails,
-        loading: false,
-        hash: data.transactionHash,
-        status: data.status || 0,
-        type: type,
-      },
-    })
-    if (type === 'transaction')
+      setOpenConfirm(false)
+      setOpenTransactionDetail(true)
       dispatch({
-        type: Actions.SET_TRANSACTION_DATA,
-        payload: [
-          {
-            account: address,
-            asset: {
-              reserve: {
-                symbol: state.selectedAsset.toUpperCase(),
+        type: Actions.SET_TRANSACTION_DETAILS,
+        payload: {
+          ...state.transactionDetails,
+          loading: true,
+          hash: tx.hash,
+          type,
+        },
+      })
+      const data: TransactionReceipt = await tx.wait()
+      dispatch({
+        type: Actions.SET_TRANSACTION_DETAILS,
+        payload: {
+          ...state.transactionDetails,
+          loading: false,
+          hash: data.transactionHash,
+          status: data.status || 0,
+          type: type,
+        },
+      })
+      if (type === 'transaction')
+        dispatch({
+          type: Actions.SET_TRANSACTION_DATA,
+          payload: [
+            {
+              account: address,
+              asset: {
+                reserve: {
+                  symbol: state.selectedAsset.toUpperCase(),
+                },
+                id:
+                  CONTRACT_CONFIG[state.connectedNetwork.chainId][
+                    state.selectedAsset.toUpperCase()
+                  ].address,
               },
-              id:
-                CONTRACT_CONFIG[state.connectedNetwork.chainId][
-                  state.selectedAsset.toUpperCase()
-                ].address,
-            },
-            decimals:
-              CONTRACT_CONFIG[state.connectedNetwork.chainId][
-                state.selectedAsset.toUpperCase()
-              ].decimals,
-            txHash: tx.hash,
-            type: state.selectedTab.toUpperCase(),
-            status: data.status === 1 ? 'SUCCESS' : 'FAILED',
-            amount: ethers.utils
-              .parseUnits(
-                state.userInputValue,
+              decimals:
                 CONTRACT_CONFIG[state.connectedNetwork.chainId][
                   state.selectedAsset.toUpperCase()
                 ].decimals,
-              )
-              .toString(),
-          },
-          ...state.transactionData,
-        ],
+              txHash: tx.hash,
+              type: state.selectedTab.toUpperCase(),
+              status: data.status === 1 ? 'SUCCESS' : 'FAILED',
+              amount: ethers.utils
+                .parseUnits(
+                  state.userInputValue,
+                  CONTRACT_CONFIG[state.connectedNetwork.chainId][
+                    state.selectedAsset.toUpperCase()
+                  ].decimals,
+                )
+                .toString(),
+            },
+            ...state.transactionData,
+          ],
+        })
+      dispatch({
+        type: Actions.SET_USER_INPUT_VALUE,
+        payload: '',
       })
-    dispatch({
-      type: Actions.SET_USER_INPUT_VALUE,
-      payload: '',
-    })
-    return data
-  } catch (e) {
-    dispatch({
-      type: Actions.SET_APP_ERROR,
-      payload: (e as { message: string }).message,
-    })
-  }
+      return data
+    } catch (e) {
+      dispatch({
+        type: Actions.SET_APP_ERROR,
+        payload: (e as { message: string }).message,
+      })
+    }
   }
 
   const resetTransactionDetails = () => {
