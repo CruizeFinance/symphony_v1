@@ -49,19 +49,19 @@ export const NETWORK_CONFIG = {
 export const CONTRACT_CONFIG = {
   [goerli.id]: {
     CRUIZE_CONTRACT: {
-      address: '0x23800A9DB5dE3c8e0d33E858461d33181298f2D0',
+      address: '0xAe82a3863E17D44e2F2E3BE406F63B59Ea27b459',
       decimals: 0,
     },
     [Assets.WETH.toUpperCase()]: {
-      address: '0xCCa7d1416518D095E729904aAeA087dBA749A4dC',
+      address: '0xafAa83252d90B6a209000eC389E943b03FdCB0F8',
       decimals: 18,
     },
     [Assets.USDC.toUpperCase()]: {
-      address: '0xf029E7204D23A97CCd788e808c0f45ddB6745b25',
+      address: '0xE7AFdD06DfD32a3175687D77Fd9a4eD270d7E814',
       decimals: 6,
     },
     [Assets.WBTC.toUpperCase()]: {
-      address: '0x02245d57122896af490174f7421bD5a73CF7b0dc',
+      address: '0xedC7632768B7239BBA9F66cB807e14Cb7aF7a04E',
       decimals: 8,
     },
   },
