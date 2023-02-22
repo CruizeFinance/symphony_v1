@@ -3,6 +3,7 @@ import AssetDropdown from '../assetdropdown'
 import { useContext, useEffect, useMemo, useState } from 'react'
 import { AppContext } from '../../context'
 import { useAccount } from 'wagmi'
+import { Actions } from '../../enums/actions'
 
 interface InputProps {
   prependSymbol?: string
@@ -23,7 +24,7 @@ const Input = ({
   onMaxClick,
   inputValue,
 }: InputProps) => {
-  const [state] = useContext(AppContext)
+  const [state, dispatch] = useContext(AppContext)
 
   const { isConnected } = useAccount()
 
@@ -47,7 +48,9 @@ const Input = ({
         : state.selectedTab === 'withdraw'
         ? state.withdrawType === 'instant'
           ? state.balances.withdraw.instantBalance
-          : Number(state.balances.withdraw.requestBalance.fundsAvailableToWithdraw)
+          : Number(
+              state.balances.withdraw.requestBalance.fundsAvailableToWithdraw,
+            )
           ? state.balances.withdraw.requestBalance.fundsAvailableToWithdraw
           : state.balances.withdraw.requestBalance.fundsInActiveUse
         : '0' || '0',
@@ -57,6 +60,16 @@ const Input = ({
   useEffect(() => {
     setInputValue(inputValue)
   }, [inputValue])
+
+  useEffect(() => {
+    dispatch({type: Actions.SET_USER_INPUT_VALUE, payload: state.selectedTab === 'withdraw' &&
+    state.withdrawType === 'request' &&
+    Number(
+      state.balances.withdraw.requestBalance.fundsAvailableToWithdraw,
+    ) > 0
+      ? state.balances.withdraw.requestBalance
+          .fundsAvailableToWithdraw : ''})
+  }, [state.selectedTab, state.withdrawType, state.balances])
 
   return (
     <div className="input-area">
@@ -71,7 +84,18 @@ const Input = ({
             maxLength={15}
             size={15}
             type={'text'}
-            value={prependSymbol && input ? prependSymbol + input : input || ''}
+            value={
+              state.selectedTab === 'withdraw' &&
+              state.withdrawType === 'request' &&
+              Number(
+                state.balances.withdraw.requestBalance.fundsAvailableToWithdraw,
+              ) > 0
+                ? state.balances.withdraw.requestBalance
+                    .fundsAvailableToWithdraw
+                : prependSymbol && input
+                ? prependSymbol + input
+                : input || ''
+            }
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
               if (prependSymbol) {
                 const value = e.target.value
@@ -89,6 +113,11 @@ const Input = ({
             }}
             placeholder="0"
             className="input-field"
+            disabled={state.selectedTab === 'withdraw' &&
+            state.withdrawType === 'request' &&
+            Number(
+              state.balances.withdraw.requestBalance.fundsAvailableToWithdraw,
+            ) > 0}
           />
           <p className="usd-value">
             ~
