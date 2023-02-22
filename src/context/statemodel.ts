@@ -39,7 +39,8 @@ export default interface State {
       instantBalance: string,
       requestBalance: {
         fundsInQueue: string,
-        fundsInActiveUse: string
+        fundsInActiveUse: string,
+        fundsAvailableToWithdraw: string
       }
     }
   }

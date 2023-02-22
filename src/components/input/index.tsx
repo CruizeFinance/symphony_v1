@@ -47,11 +47,11 @@ const Input = ({
         : state.selectedTab === 'withdraw'
         ? state.withdrawType === 'instant'
           ? state.balances.withdraw.instantBalance
+          : state.balances.withdraw.requestBalance.fundsAvailableToWithdraw
+          ? state.balances.withdraw.requestBalance.fundsAvailableToWithdraw
           : state.balances.withdraw.requestBalance.fundsInActiveUse
         : '0' || '0',
-    [
-      state.balances,
-    ],
+    [state.balances],
   )
 
   useEffect(() => {

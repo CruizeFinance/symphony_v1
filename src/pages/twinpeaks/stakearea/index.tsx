@@ -9,7 +9,6 @@ import { BigNumber, ethers } from 'ethers'
 import { Actions } from '../../../enums/actions'
 import { CONTRACT_CONFIG } from '../../../utils'
 import { TransactionReceipt, TransactionResponse } from '../../../interfaces'
-import { arbitrumGoerli, polygonMumbai } from '@wagmi/chains'
 import TransactionDetail from './transactiondetail'
 import ConfettiExplosion from 'react-confetti-explosion'
 
@@ -53,12 +52,13 @@ const StakeCard = () => {
   const [openConfirm, setOpenConfirm] = useState(false)
   const [disableRequest, setDisableRequest] = useState(false)
   const [openTransactionDetail, setOpenTransactionDetail] = useState(false)
+  const [roundPrice, setRoundPrice] = useState(0)
 
-  /*
-   * a function to get user balance of the asset
-   */
   const getBalance = async () => {
-    if (state.selectedTab === 'withdraw') {
+    try {
+      const depositBalance = await state.selectedAssetContract!.balanceOf(
+        address,
+      )
       const depositReceipts = await state.cruizeContract!.depositReceipts(
         address,
         CONTRACT_CONFIG[state.connectedNetwork.chainId][
@@ -70,85 +70,134 @@ const StakeCard = () => {
           state.selectedAsset.toUpperCase()
         ].address,
       )
-      let lockedAmount: BigNumber = BigNumber.from(0)
-      if (state.connectedNetwork.chainId === polygonMumbai.id) {
-        lockedAmount = await state.cruizeContract!.balanceOf(
-          CONTRACT_CONFIG[state.connectedNetwork.chainId][
-            state.selectedAsset.toUpperCase()
-          ].address,
-          address,
-        )
-      } else {
-        lockedAmount = await state.cruizeContract!.getUserLockedAmount(
-          address,
-          CONTRACT_CONFIG[state.connectedNetwork.chainId][
-            state.selectedAsset.toUpperCase()
-          ].address,
-        )
-      }
-      const fundsInQueue =
-        depositReceipts.round === vault.round
-          ? ethers.utils.formatUnits(
-              depositReceipts.amount,
-              CONTRACT_CONFIG[state.connectedNetwork.chainId][
-                state.selectedAsset.toUpperCase()
-              ].decimals,
-            )
-          : 0
+      const withdrawals = await state.cruizeContract!.withdrawals(
+        address,
+        CONTRACT_CONFIG[state.connectedNetwork.chainId][
+          state.selectedAsset.toUpperCase()
+        ].address,
+      )
+      const lockedAmount = await state.cruizeContract!.balanceOfUser(
+        CONTRACT_CONFIG[state.connectedNetwork.chainId][
+          state.selectedAsset.toUpperCase()
+        ].address,
+        address,
+      )
+      const roundPricePerShare = await state.cruizeContract!.roundPricePerShare(
+        CONTRACT_CONFIG[state.connectedNetwork.chainId][
+          state.selectedAsset.toUpperCase()
+        ].address,
+        withdrawals.round - 1,
+      )
+      const initiateWithdrawRoundPrice = await state.cruizeContract!.roundPricePerShare(
+        CONTRACT_CONFIG[state.connectedNetwork.chainId][
+          state.selectedAsset.toUpperCase()
+        ].address,
+        vault.round - 1,
+      )
+      /* const shareBalances = await state.cruizeContract!.shareBalances(
+        CONTRACT_CONFIG[state.connectedNetwork.chainId][
+          state.selectedAsset.toUpperCase()
+        ].address,
+        address,
+      ) */
+      setRoundPrice(
+        Number(
+          ethers.utils.formatUnits(
+            initiateWithdrawRoundPrice,
+            CONTRACT_CONFIG[state.connectedNetwork.chainId][
+              state.selectedAsset.toUpperCase()
+            ].decimals,
+          ),
+        ),
+      )
       dispatch({
         type: Actions.SET_BALANCES,
         payload: {
-          ...state.balances,
+          depositBalance: ethers.utils.formatUnits(
+            depositBalance as BigNumber,
+            CONTRACT_CONFIG[state.connectedNetwork.chainId][
+              state.selectedAsset.toUpperCase()
+            ].decimals,
+          ),
           withdraw: {
-            instantBalance: ethers.utils.formatUnits(
-              depositReceipts.amount,
-              CONTRACT_CONFIG[state.connectedNetwork.chainId][
-                state.selectedAsset.toUpperCase()
-              ].decimals,
-            ),
+            instantBalance:
+              vault.round === depositReceipts.round
+                ? ethers.utils.formatUnits(
+                    depositReceipts.amount,
+                    CONTRACT_CONFIG[state.connectedNetwork.chainId][
+                      state.selectedAsset.toUpperCase()
+                    ].decimals,
+                  )
+                : '0',
             requestBalance: {
-              fundsInQueue: fundsInQueue,
               fundsInActiveUse: ethers.utils.formatUnits(
                 lockedAmount,
                 CONTRACT_CONFIG[state.connectedNetwork.chainId][
                   state.selectedAsset.toUpperCase()
                 ].decimals,
               ),
+              fundsInQueue:
+                vault.round === withdrawals.round
+                  ? (Number(
+                      ethers.utils.formatUnits(
+                        withdrawals.shares,
+                        CONTRACT_CONFIG[state.connectedNetwork.chainId][
+                          state.selectedAsset.toUpperCase()
+                        ].decimals,
+                      ),
+                    ) *
+                    Number(
+                      ethers.utils.formatUnits(
+                        roundPricePerShare,
+                        CONTRACT_CONFIG[state.connectedNetwork.chainId][
+                          state.selectedAsset.toUpperCase()
+                        ].decimals,
+                      ),
+                    )).toString()
+                  : '0',
+              fundsAvailableToWithdraw:
+                vault.round > withdrawals.round
+                  ? (Number(
+                      ethers.utils.formatUnits(
+                        withdrawals.shares,
+                        CONTRACT_CONFIG[state.connectedNetwork.chainId][
+                          state.selectedAsset.toUpperCase()
+                        ].decimals,
+                      ),
+                    ) *
+                    Number(
+                      ethers.utils.formatUnits(
+                        roundPricePerShare,
+                        CONTRACT_CONFIG[state.connectedNetwork.chainId][
+                          state.selectedAsset.toUpperCase()
+                        ].decimals,
+                      ),
+                    )).toString()
+                  : '0',
             },
           },
         },
       })
       setDisableRequest(
-        depositReceipts.round === vault.round ||
+        Number(
+          ethers.utils.formatUnits(
+            lockedAmount,
+            CONTRACT_CONFIG[state.connectedNetwork.chainId][
+              state.selectedAsset.toUpperCase()
+            ].decimals,
+          ),
+        ) <= 0 &&
           Number(
             ethers.utils.formatUnits(
-              lockedAmount,
+              withdrawals.shares,
               CONTRACT_CONFIG[state.connectedNetwork.chainId][
                 state.selectedAsset.toUpperCase()
               ].decimals,
             ),
           ) <= 0,
       )
-      /* 
-        if depositReceipt.round === currentRound -> vaults(assetAddress) -> will provide current round
-        then depositReceipt.amount will be the funds in queue else 0
-
-        depositReceipt.lockedAmount will be the funds in active use
-      */
-    } else {
-      const balance = await state.selectedAssetContract!.balanceOf(address)
-      dispatch({
-        type: Actions.SET_BALANCES,
-        payload: {
-          ...state.balances,
-          depositBalance: ethers.utils.formatUnits(
-            balance as BigNumber,
-            CONTRACT_CONFIG[state.connectedNetwork.chainId][
-              state.selectedAsset.toUpperCase()
-            ].decimals,
-          ),
-        },
-      })
+    } catch (e) {
+      console.log(e)
     }
   }
 
@@ -291,16 +340,58 @@ const StakeCard = () => {
       })
       writeContract(
         state.selectedTab === 'withdraw'
-          ? state.withdrawType === 'request'
+          ? state.withdrawType === 'instant'
+            ? Number(state.balances.withdraw.instantBalance) > 0
+              ? 'instantWithdrawal'
+              : ''
+            : Number(
+                state.balances.withdraw.requestBalance.fundsAvailableToWithdraw,
+              ) > 0
             ? 'standardWithdrawal'
-            : 'instantWithdrawal'
+            : Number(state.balances.withdraw.requestBalance.fundsInActiveUse) >
+              0
+            ? 'initiateWithdrawal'
+            : ''
           : 'deposit',
-        state.selectedTab === 'withdraw' && state.withdrawType === 'request'
-          ? [
-              CONTRACT_CONFIG[state.connectedNetwork.chainId][
-                state.selectedAsset.toUpperCase()
-              ].address,
-            ]
+        state.selectedTab === 'withdraw'
+          ? state.withdrawType === 'instant'
+            ? Number(state.balances.withdraw.instantBalance) > 0
+              ? [
+                  CONTRACT_CONFIG[state.connectedNetwork.chainId][
+                    state.selectedAsset.toUpperCase()
+                  ].address,
+                  ethers.utils.parseUnits(
+                    state.userInputValue || '0',
+                    CONTRACT_CONFIG[state.connectedNetwork.chainId][
+                      state.selectedAsset.toUpperCase()
+                    ].decimals,
+                  ),
+                ]
+              : [
+                  CONTRACT_CONFIG[state.connectedNetwork.chainId][
+                    state.selectedAsset.toUpperCase()
+                  ].address,
+                ]
+            : Number(
+                state.balances.withdraw.requestBalance.fundsAvailableToWithdraw,
+              ) > 0
+            ? [CONTRACT_CONFIG[state.connectedNetwork.chainId][
+              state.selectedAsset.toUpperCase()
+            ].address]
+            : Number(state.balances.withdraw.requestBalance.fundsInActiveUse) >
+              0
+            ? [
+                CONTRACT_CONFIG[state.connectedNetwork.chainId][
+                  state.selectedAsset.toUpperCase()
+                ].address,
+                ethers.utils.parseUnits(
+                  (Number(state.userInputValue) / roundPrice).toString() || '0',
+                  CONTRACT_CONFIG[state.connectedNetwork.chainId][
+                    state.selectedAsset.toUpperCase()
+                  ].decimals,
+                ),
+              ]
+            : []
           : [
               CONTRACT_CONFIG[state.connectedNetwork.chainId][
                 state.selectedAsset.toUpperCase()
@@ -530,7 +621,7 @@ const StakeCard = () => {
                 <WithdrawDetail
                   label="Funds in queue"
                   icon="tooltip-icon"
-                  amount={state.balances.withdraw.requestBalance.fundsInQueue}
+                  amount={Number(state.balances.withdraw.requestBalance.fundsInQueue).toFixed(2)}
                   unit={state.selectedAsset.toUpperCase()}
                   tooltip={`Your assets that are currently active in a vault and can only be withdrawn at the end of the epoch.`}
                 />
@@ -538,7 +629,7 @@ const StakeCard = () => {
                   label="Funds in active use"
                   icon="tooltip-icon"
                   amount={
-                    state.balances.withdraw.requestBalance.fundsInActiveUse
+                    Number(state.balances.withdraw.requestBalance.fundsInActiveUse).toFixed(2)
                   }
                   unit={state.selectedAsset.toUpperCase()}
                   tooltip={`Your total assets that are currently active in vaults making you money brrrrrrrr.`}

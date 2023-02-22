@@ -80,7 +80,7 @@ export const CONTRACT_CONFIG = {
   },
   [arbitrumGoerli.id]: {
     CRUIZE_CONTRACT: {
-      address: "0x7554f9068b4169C9B2fC4C4488A5509201045665",
+      address: "0x87B027DDeA9F17a354AE7E0003607b8CAe69AD9d",
       decimals: 0,
     },
     [Assets.WETH.toUpperCase()]: {
@@ -88,11 +88,11 @@ export const CONTRACT_CONFIG = {
       decimals: 18,
     },
     [Assets.USDC.toUpperCase()]: {
-      address: "0x9c4994967C29E807b75dbf85fF69261F47362817",
+      address: "0x58e12a048D2bF84678807F337a8E9f6f9D87d50c",
       decimals: 6,
     },
     [Assets.WBTC.toUpperCase()]: {
-      address: "0x295476C268e13f14967518D58E384d46b190b196",
+      address: "0xDFB63E640d10b9Da4C9e8f8312e952f77F5c20B8",
       decimals: 8,
     }
   }

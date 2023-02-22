@@ -30,8 +30,9 @@ const initialState: State = {
     depositBalance: '0',
     withdraw: {
       requestBalance: {
-        fundsInActiveUse: '',
-        fundsInQueue: ''
+        fundsInActiveUse: '0',
+        fundsInQueue: '0',
+        fundsAvailableToWithdraw: '0'
       },
       instantBalance: '0'
     }
