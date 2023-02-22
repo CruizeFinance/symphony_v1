@@ -7,6 +7,8 @@ import {
   optimismGoerli,
   polygon,
   polygonMumbai,
+  avalanche,
+  avalancheFuji,
 } from '@wagmi/chains'
 
 export enum Networks {
@@ -18,6 +20,8 @@ export enum Networks {
   POLYGON_MUMBAI = 'polygon mumbai',
   OPTIMISM_GOERLI = 'optimism goerli',
   ARBITRUM_GOERLI = 'arbitrum goerli',
+  AVALANCHE = 'avalanche',
+  AVALANCHE_FUJI = 'avalanche fuji'
 }
 
 export enum NetworkIDs {
@@ -25,8 +29,10 @@ export enum NetworkIDs {
   POLYGON = polygon.id,
   OPTIMISM = optimism.id,
   ARBITRUM = arbitrum.id,
+  AVALANCE = avalanche.id,
   ETHEREUM_GOERLI = goerli.id,
   POLYGON_MUMBAI = polygonMumbai.id,
   OPTIMISM_GOERLI = optimismGoerli.id,
   ARBITRUM_GOERLI = arbitrumGoerli.id,
+  AVALANCHE_FUJI = avalancheFuji.id
 }

@@ -86,20 +86,14 @@ const StakeCard = () => {
         CONTRACT_CONFIG[state.connectedNetwork.chainId][
           state.selectedAsset.toUpperCase()
         ].address,
-        withdrawals.round - 1,
+        withdrawals.round === 0 ? withdrawals.round : withdrawals.round - 1 ,
       )
       const initiateWithdrawRoundPrice = await state.cruizeContract!.roundPricePerShare(
         CONTRACT_CONFIG[state.connectedNetwork.chainId][
           state.selectedAsset.toUpperCase()
         ].address,
-        vault.round - 1,
+        vault.round === 1 ? vault.round : vault.round - 1,
       )
-      /* const shareBalances = await state.cruizeContract!.shareBalances(
-        CONTRACT_CONFIG[state.connectedNetwork.chainId][
-          state.selectedAsset.toUpperCase()
-        ].address,
-        address,
-      ) */
       setRoundPrice(
         Number(
           ethers.utils.formatUnits(
@@ -138,41 +132,45 @@ const StakeCard = () => {
               ),
               fundsInQueue:
                 vault.round === withdrawals.round
-                  ? (Number(
-                      ethers.utils.formatUnits(
-                        withdrawals.shares,
-                        CONTRACT_CONFIG[state.connectedNetwork.chainId][
-                          state.selectedAsset.toUpperCase()
-                        ].decimals,
-                      ),
-                    ) *
-                    Number(
-                      ethers.utils.formatUnits(
-                        roundPricePerShare,
-                        CONTRACT_CONFIG[state.connectedNetwork.chainId][
-                          state.selectedAsset.toUpperCase()
-                        ].decimals,
-                      ),
-                    )).toString()
+                  ? (
+                      Number(
+                        ethers.utils.formatUnits(
+                          withdrawals.shares,
+                          CONTRACT_CONFIG[state.connectedNetwork.chainId][
+                            state.selectedAsset.toUpperCase()
+                          ].decimals,
+                        ),
+                      ) *
+                      Number(
+                        ethers.utils.formatUnits(
+                          roundPricePerShare,
+                          CONTRACT_CONFIG[state.connectedNetwork.chainId][
+                            state.selectedAsset.toUpperCase()
+                          ].decimals,
+                        ),
+                      )
+                    ).toString()
                   : '0',
               fundsAvailableToWithdraw:
                 vault.round > withdrawals.round
-                  ? (Number(
-                      ethers.utils.formatUnits(
-                        withdrawals.shares,
-                        CONTRACT_CONFIG[state.connectedNetwork.chainId][
-                          state.selectedAsset.toUpperCase()
-                        ].decimals,
-                      ),
-                    ) *
-                    Number(
-                      ethers.utils.formatUnits(
-                        roundPricePerShare,
-                        CONTRACT_CONFIG[state.connectedNetwork.chainId][
-                          state.selectedAsset.toUpperCase()
-                        ].decimals,
-                      ),
-                    )).toString()
+                  ? (
+                      Number(
+                        ethers.utils.formatUnits(
+                          withdrawals.shares,
+                          CONTRACT_CONFIG[state.connectedNetwork.chainId][
+                            state.selectedAsset.toUpperCase()
+                          ].decimals,
+                        ),
+                      ) *
+                      Number(
+                        ethers.utils.formatUnits(
+                          roundPricePerShare,
+                          CONTRACT_CONFIG[state.connectedNetwork.chainId][
+                            state.selectedAsset.toUpperCase()
+                          ].decimals,
+                        ),
+                      )
+                    ).toString()
                   : '0',
             },
           },
@@ -375,9 +373,11 @@ const StakeCard = () => {
             : Number(
                 state.balances.withdraw.requestBalance.fundsAvailableToWithdraw,
               ) > 0
-            ? [CONTRACT_CONFIG[state.connectedNetwork.chainId][
-              state.selectedAsset.toUpperCase()
-            ].address]
+            ? [
+                CONTRACT_CONFIG[state.connectedNetwork.chainId][
+                  state.selectedAsset.toUpperCase()
+                ].address,
+              ]
             : Number(state.balances.withdraw.requestBalance.fundsInActiveUse) >
               0
             ? [
@@ -498,7 +498,7 @@ const StakeCard = () => {
   }
 
   useEffect(() => {
-    if (state.selectedAssetContract) {
+    if (address && state.selectedAssetContract) {
       getBalance()
     }
   }, [
@@ -621,16 +621,18 @@ const StakeCard = () => {
                 <WithdrawDetail
                   label="Funds in queue"
                   icon="tooltip-icon"
-                  amount={Number(state.balances.withdraw.requestBalance.fundsInQueue).toFixed(2)}
+                  amount={Number(
+                    state.balances.withdraw.requestBalance.fundsInQueue,
+                  ).toFixed(2)}
                   unit={state.selectedAsset.toUpperCase()}
                   tooltip={`Your assets that are currently active in a vault and can only be withdrawn at the end of the epoch.`}
                 />
                 <WithdrawDetail
                   label="Funds in active use"
                   icon="tooltip-icon"
-                  amount={
-                    Number(state.balances.withdraw.requestBalance.fundsInActiveUse).toFixed(2)
-                  }
+                  amount={Number(
+                    state.balances.withdraw.requestBalance.fundsInActiveUse,
+                  ).toFixed(2)}
                   unit={state.selectedAsset.toUpperCase()}
                   tooltip={`Your total assets that are currently active in vaults making you money brrrrrrrr.`}
                 />
