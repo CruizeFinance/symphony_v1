@@ -82,22 +82,15 @@ const StakeCard = () => {
         ].address,
         address,
       )
-      const roundPricePerShare = await state.cruizeContract!.roundPricePerShare(
+      const roundPricePerShare = await state.cruizeContract!.pricePerShare(
         CONTRACT_CONFIG[state.connectedNetwork.chainId][
           state.selectedAsset.toUpperCase()
-        ].address,
-        withdrawals.round === 0 ? withdrawals.round : withdrawals.round - 1 ,
-      )
-      const initiateWithdrawRoundPrice = await state.cruizeContract!.roundPricePerShare(
-        CONTRACT_CONFIG[state.connectedNetwork.chainId][
-          state.selectedAsset.toUpperCase()
-        ].address,
-        vault.round === 1 ? vault.round : vault.round - 1,
+        ].address
       )
       setRoundPrice(
         Number(
           ethers.utils.formatUnits(
-            initiateWithdrawRoundPrice,
+            roundPricePerShare,
             CONTRACT_CONFIG[state.connectedNetwork.chainId][
               state.selectedAsset.toUpperCase()
             ].decimals,
@@ -385,10 +378,10 @@ const StakeCard = () => {
                   state.selectedAsset.toUpperCase()
                 ].address,
                 ethers.utils.parseUnits(
-                  (Number(state.userInputValue) / roundPrice).toString() || '0',
+                  (Number(state.userInputValue) / roundPrice).toFixed(18) || '0',
                   CONTRACT_CONFIG[state.connectedNetwork.chainId][
-                    state.selectedAsset.toUpperCase()
-                  ].decimals,
+                      state.selectedAsset.toUpperCase()
+                    ].decimals,
                 ),
               ]
             : []
