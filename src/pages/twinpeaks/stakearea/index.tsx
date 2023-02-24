@@ -604,19 +604,19 @@ const StakeCard = () => {
           <div className="withdraw-details-area">
             {state.withdrawType === 'instant' ? (
               <WithdrawDetail
-                label="Instantly withdraw"
+                label="Available to withdraw"
                 icon="tooltip-icon"
-                amount={state.balances.withdraw.instantBalance}
+                amount={Number(state.balances.withdraw.instantBalance).toFixed(4)}
                 unit={state.selectedAsset.toUpperCase()}
               />
             ) : (
               <>
                 <WithdrawDetail
-                  label="Funds available to withdraw"
+                  label="Complete withdrawal"
                   icon="tooltip-icon"
                   amount={Number(
                     state.balances.withdraw.requestBalance.fundsAvailableToWithdraw,
-                  ).toFixed(2)}
+                  ).toFixed(4)}
                   unit={state.selectedAsset.toUpperCase()}
                   tooltip={`The assets that you requested to withdraw are available.`}
                 />
@@ -625,7 +625,7 @@ const StakeCard = () => {
                   icon="tooltip-icon"
                   amount={Number(
                     state.balances.withdraw.requestBalance.fundsInQueue,
-                  ).toFixed(2)}
+                  ).toFixed(4)}
                   unit={state.selectedAsset.toUpperCase()}
                   tooltip={`Your assets that are currently active in a vault and can only be withdrawn at the end of the epoch.`}
                 />
@@ -634,7 +634,7 @@ const StakeCard = () => {
                   icon="tooltip-icon"
                   amount={Number(
                     state.balances.withdraw.requestBalance.fundsInActiveUse,
-                  ).toFixed(2)}
+                  ).toFixed(4)}
                   unit={state.selectedAsset.toUpperCase()}
                   tooltip={`Your total assets that are currently active in vaults making you money brrrrrrrr.`}
                 />
