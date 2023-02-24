@@ -555,7 +555,7 @@ const StakeCard = () => {
               {
                 label: 'request',
                 tooltip:
-                  'Your deposit is making $$ for you. Submit a request and we’ll keep your deposit aside before the next round begins. You can come back after the current round ends to finish your withdrawal in the Instant Withdrawal section.',
+                  'Your deposit is making $$ for you. Submit a request and we’ll keep your deposit aside before the next round begins. You can come back to this tab after the current round ends to finish your withdrawal.',
               },
               {
                 label: 'instant',
@@ -575,7 +575,7 @@ const StakeCard = () => {
             }}
             type="contained"
             disabledTab={[
-              ...[disableRequest ? 'request' : ''],
+              ...[true ? 'request' : ''],
               ...[
                 Number(state.balances.withdraw.instantBalance) <= 0
                   ? 'instant'
@@ -604,13 +604,22 @@ const StakeCard = () => {
           <div className="withdraw-details-area">
             {state.withdrawType === 'instant' ? (
               <WithdrawDetail
-                label="Available to withdraw"
+                label="Instantly withdraw"
                 icon="tooltip-icon"
                 amount={state.balances.withdraw.instantBalance}
                 unit={state.selectedAsset.toUpperCase()}
               />
             ) : (
               <>
+                <WithdrawDetail
+                  label="Funds available to withdraw"
+                  icon="tooltip-icon"
+                  amount={Number(
+                    state.balances.withdraw.requestBalance.fundsAvailableToWithdraw,
+                  ).toFixed(2)}
+                  unit={state.selectedAsset.toUpperCase()}
+                  tooltip={`The assets that you requested to withdraw are available.`}
+                />
                 <WithdrawDetail
                   label="Funds in queue"
                   icon="tooltip-icon"

@@ -114,6 +114,11 @@ const reducer = (state: State, action: Action): State => {
         ...state,
         assetAPYs: action.payload
       }
+    case Actions.SET_NETWORK_ENV:
+      return {
+        ...state,
+        assetAPYs: action.payload
+      }
     default:
       return state
   }

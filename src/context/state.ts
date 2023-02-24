@@ -80,7 +80,8 @@ const initialState: State = {
       max_apy: '??',
       base_apy: '??'
     }
-  }
+  },
+  networkEnv: 'testnet'
 }
 
 export default initialState

@@ -100,4 +100,5 @@ export default interface State {
       base_apy: string
     }
   }
+  networkEnv: 'mainnet' | 'testnet'
 }
