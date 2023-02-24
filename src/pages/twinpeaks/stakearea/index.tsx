@@ -575,7 +575,7 @@ const StakeCard = () => {
             }}
             type="contained"
             disabledTab={[
-              ...[true ? 'request' : ''],
+              ...[disableRequest ? 'request' : ''],
               ...[
                 Number(state.balances.withdraw.instantBalance) <= 0
                   ? 'instant'
