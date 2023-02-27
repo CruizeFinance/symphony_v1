@@ -194,10 +194,7 @@ const StakeCard = () => {
           ) <= 0,
       )
     } catch (e) {
-      dispatch({ 
-        type: Actions.SET_APP_ERROR,
-        payload: 'Error loading balance.'
-       })
+      console.log(e)
        resetTransactionDetails()
     }
   }

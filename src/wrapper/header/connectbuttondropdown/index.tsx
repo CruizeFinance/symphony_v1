@@ -16,6 +16,7 @@ import { gql, useQuery } from '@apollo/client'
 import { Actions } from '../../../enums/actions'
 import { ethers } from 'ethers'
 import { CONTRACT_CONFIG } from '../../../utils'
+import { arbitrum } from '@wagmi/chains'
 
 const GET_TRANSACTIONS = gql`
   query Transactions($account: String!) {
@@ -95,10 +96,7 @@ const ConnectButtonDropdown = () => {
             className="wallet-details"
             onClick={() => setShowDropdown(!showDropdown)}
           >
-            <Jazzicon
-              diameter={24}
-              seed={40}
-            />
+            <Jazzicon diameter={24} seed={40} />
             <label className="label">
               {ensName ||
                 `${accountAddress?.slice(0, 4)}...${accountAddress?.slice(-4)}`}
@@ -117,10 +115,7 @@ const ConnectButtonDropdown = () => {
       {showDropdown ? (
         <div className="wallet-dropdown">
           <div className="wallet-info">
-            <Jazzicon
-              diameter={74}
-              seed={40}
-            />
+            <Jazzicon diameter={74} seed={40} />
             <div className="wallet-name-balance">
               <label className="wallet-name">
                 {ensName ||
@@ -165,7 +160,13 @@ const ConnectButtonDropdown = () => {
                     className="details"
                     onClick={() =>
                       window.open(
-                        `https://goerli.etherscan.io/tx/${state.transactionDetails.hash}`,
+                        `https://${
+                          state.connectedNetwork.chainId === arbitrum.id
+                            ? 'arbiscan'
+                            : state.connectedNetwork.chainId === goerli.id
+                            ? 'goerli.etherscan'
+                            : 'testnet.arbiscan'
+                        }.io/tx/${state.transactionDetails.hash}`,
                         '_blank',
                         'noreferrer noopener',
                       )
@@ -198,10 +199,12 @@ const ConnectButtonDropdown = () => {
                       className="details"
                       onClick={() => {
                         window.open(
-                          `${
-                            state.connectedNetwork.chainId === goerli.id
-                              ? 'https://goerli.etherscan.io'
-                              : 'https://testnet.arbiscan.io'
+                          `https://${
+                            state.connectedNetwork.chainId === arbitrum.id
+                              ? 'arbiscan'
+                              : state.connectedNetwork.chainId === goerli.id
+                              ? 'goerli.etherscan'
+                              : 'testnet.arbiscan'
                           }/tx/${transaction.txHash}`,
                           '_blank',
                           'noreferrer noopener',
@@ -249,7 +252,9 @@ const ConnectButtonDropdown = () => {
                       onClick={() =>
                         window.open(
                           `https://${
-                            state.connectedNetwork.chainId === goerli.id
+                            state.connectedNetwork.chainId === arbitrum.id
+                              ? 'arbiscan'
+                              : state.connectedNetwork.chainId === goerli.id
                               ? 'goerli.etherscan'
                               : 'testnet.arbiscan'
                           }.io/address/${
