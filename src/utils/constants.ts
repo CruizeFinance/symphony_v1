@@ -110,7 +110,7 @@ export const CONTRACT_CONFIG = {
   }, */,
   [arbitrumGoerli.id]: {
     CRUIZE_CONTRACT: {
-      address: '0xB7Db50a7EAFBD3cAb0B68925BEcE69120BB611E3',
+      address: '0xBd20b3c614Dc27Cb7cDf17e00359D00194cD585E',
       decimals: 0,
     },
     [Assets.WETH.toUpperCase()]: {
