@@ -80,15 +80,18 @@
   }
 }
 .mint-tokens-card {
-  padding: toRem(16);
   margin-top: toRem(30);
   @include flex(column, center, center, toRem(12));
   .mint-tokens-label {
+    padding: toRem(16) toRem(16) 0;
+    width: 100%;
+    text-align: center;
     cursor: pointer;
     @include typography(GroteskMedium, toRem(14), toRem(20), var(--black));
   }
   .mint-tokens-button {
-    width: 100%;
+    margin: 0 auto toRem(16);
+    width: 92%;
     padding: toRem(8) auto;
     @include typography(GroteskMedium, toRem(12), toRem(24), var(--white));
   }

@@ -113,17 +113,6 @@ export const AppContextProvider = ({ children }: ContextProps) => {
   }
 
   useEffect(() => {
-    if (chain) {
-      dispatch({
-        type: Actions.SET_CONNECTED_NETWORK,
-        payload: Object.values(NETWORK_CONFIG.TESTNET).filter(
-          (net) => net.chainId === chain.id,
-        )[0],
-      })
-    }
-  }, [chain])
-
-  useEffect(() => {
     if (state.connectedNetwork) setCurrentDeposit()
   }, [state.connectedNetwork])
 

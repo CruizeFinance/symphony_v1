@@ -5,7 +5,7 @@ import State from './statemodel'
 const initialState: State = {
   bgColor: 'default',
   selectedAsset: Assets.WETH,
-  connectedNetwork: NETWORK_CONFIG.TESTNET.ethereum,
+  connectedNetwork: NETWORK_CONFIG.MAINNET.arbitrum,
   selectedTab: 'deposit',
   assetPrice: {
     [Assets.WETH]: 0,
@@ -81,7 +81,6 @@ const initialState: State = {
       base_apy: '??'
     }
   },
-  networkEnv: 'testnet'
 }
 
 export default initialState

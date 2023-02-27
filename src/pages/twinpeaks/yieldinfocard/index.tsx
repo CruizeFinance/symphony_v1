@@ -58,7 +58,7 @@ const YieldInfoCard = () => {
         <div className="yield-info-section">
           <label className="yield-info-title">
             Scenario 1: Max yield up to{' '}
-            {state.assetAPYs[state.selectedAsset].max_apy}
+            {state.assetAPYs[state.selectedAsset]?.max_apy || '??'}
           </label>
           <ul>
             <li>
@@ -78,7 +78,7 @@ const YieldInfoCard = () => {
         <div className="yield-info-section">
           <label className="yield-info-title">
             Scenario 2: Base yield of{' '}
-            {state.assetAPYs[state.selectedAsset].base_apy}
+            {state.assetAPYs[state.selectedAsset]?.base_apy || '??'}
           </label>
           <ul>
             <li>

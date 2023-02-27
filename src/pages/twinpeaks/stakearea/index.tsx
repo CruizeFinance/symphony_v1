@@ -7,7 +7,7 @@ import { useAccount } from 'wagmi'
 import { AppContext } from '../../../context'
 import { BigNumber, ethers } from 'ethers'
 import { Actions } from '../../../enums/actions'
-import { CONTRACT_CONFIG } from '../../../utils'
+import { CONTRACT_CONFIG, rem } from '../../../utils'
 import { TransactionReceipt, TransactionResponse } from '../../../interfaces'
 import TransactionDetail from './transactiondetail'
 import ConfettiExplosion from 'react-confetti-explosion'
@@ -85,7 +85,13 @@ const StakeCard = () => {
       const roundPricePerShare = await state.cruizeContract!.pricePerShare(
         CONTRACT_CONFIG[state.connectedNetwork.chainId][
           state.selectedAsset.toUpperCase()
-        ].address
+        ].address,
+      )
+      const withdrawalPricePerShare = await state.cruizeContract!.roundPricePerShare(
+        CONTRACT_CONFIG[state.connectedNetwork.chainId][
+          state.selectedAsset.toUpperCase()
+        ].address,
+        withdrawals.round < vault.round ? withdrawals.round : vault.round,
       )
       setRoundPrice(
         Number(
@@ -157,7 +163,7 @@ const StakeCard = () => {
                       ) *
                       Number(
                         ethers.utils.formatUnits(
-                          roundPricePerShare,
+                          withdrawalPricePerShare,
                           CONTRACT_CONFIG[state.connectedNetwork.chainId][
                             state.selectedAsset.toUpperCase()
                           ].decimals,
@@ -188,7 +194,11 @@ const StakeCard = () => {
           ) <= 0,
       )
     } catch (e) {
-      console.log(e)
+      dispatch({ 
+        type: Actions.SET_APP_ERROR,
+        payload: 'Error loading balance.'
+       })
+       resetTransactionDetails()
     }
   }
 
@@ -378,10 +388,11 @@ const StakeCard = () => {
                   state.selectedAsset.toUpperCase()
                 ].address,
                 ethers.utils.parseUnits(
-                  (Number(state.userInputValue) / roundPrice).toFixed(18) || '0',
+                  (Number(state.userInputValue) / roundPrice).toFixed(18) ||
+                    '0',
                   CONTRACT_CONFIG[state.connectedNetwork.chainId][
-                      state.selectedAsset.toUpperCase()
-                    ].decimals,
+                    state.selectedAsset.toUpperCase()
+                  ].decimals,
                 ),
               ]
             : []
@@ -606,7 +617,9 @@ const StakeCard = () => {
               <WithdrawDetail
                 label="Available to withdraw"
                 icon="tooltip-icon"
-                amount={Number(state.balances.withdraw.instantBalance).toFixed(4)}
+                amount={Number(state.balances.withdraw.instantBalance).toFixed(
+                  4,
+                )}
                 unit={state.selectedAsset.toUpperCase()}
               />
             ) : (
@@ -615,7 +628,8 @@ const StakeCard = () => {
                   label="Complete withdrawal"
                   icon="tooltip-icon"
                   amount={Number(
-                    state.balances.withdraw.requestBalance.fundsAvailableToWithdraw,
+                    state.balances.withdraw.requestBalance
+                      .fundsAvailableToWithdraw,
                   ).toFixed(4)}
                   unit={state.selectedAsset.toUpperCase()}
                   tooltip={`The assets that you requested to withdraw are available.`}
@@ -699,32 +713,50 @@ const StakeCard = () => {
         />
       </Card>
       {isConnected ? (
-        <Card className="mint-tokens-card">
+        <Card
+          className="mint-tokens-card"
+          style={{
+            border:
+              connector?.id.toLowerCase() === 'metamask' ||
+              state.connectedNetwork.networkEnv === 'testnet'
+                ? ''
+                : 'none',
+          }}
+        >
           {connector?.id.toLowerCase() === 'metamask' ? (
-            <div className="mint-tokens-label" onClick={addToken}>
+            <div
+              className="mint-tokens-label"
+              onClick={addToken}
+              style={{
+                paddingBottom:
+                  state.connectedNetwork.networkEnv === 'mainnet' ? rem(16) : 0,
+              }}
+            >
               Add {state.selectedAsset.toUpperCase()} to wallet
             </div>
           ) : null}
-          <Button
-            className="mint-tokens-button"
-            style={{
-              background:
+          {state.connectedNetwork.networkEnv === 'testnet' ? (
+            <Button
+              className="mint-tokens-button"
+              style={{
+                background:
+                  openConfirm ||
+                  state.transactionDetails.loading ||
+                  state.appError !== ''
+                    ? `var(--vault-card-border)`
+                    : `var(--${state.selectedAsset}-mint-button-background)`,
+              }}
+              disabled={
                 openConfirm ||
                 state.transactionDetails.loading ||
                 state.appError !== ''
-                  ? `var(--vault-card-border)`
-                  : `var(--${state.selectedAsset}-mint-button-background)`,
-            }}
-            disabled={
-              openConfirm ||
-              state.transactionDetails.loading ||
-              state.appError !== ''
-            }
-            onClick={mintToken}
-          >
-            Mint {state.selectedAsset.toUpperCase()} on Testnet
-            <Sprite id="mint-tokens-icon" width={20} height={21} />
-          </Button>
+              }
+              onClick={mintToken}
+            >
+              Mint {state.selectedAsset.toUpperCase()} on Testnet
+              <Sprite id="mint-tokens-icon" width={20} height={21} />
+            </Button>
+          ) : null}
         </Card>
       ) : null}
     </>

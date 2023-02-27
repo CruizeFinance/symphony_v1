@@ -85,18 +85,18 @@ export interface CurrentPriceRange {
 
 export interface TVL {
   message: {
-    USDC: number,
-    WBTC: number,
+    USDC: number
+    WBTC: number
     WETH: number
-  } | null,
+  } | null
   error: null | unknown
 }
 
 export interface CurrentDeposit {
   message: {
-    tvl: number,
+    tvl: number
     vault_cap: number
-  } | null,
+  } | null
   error: null | unknown
 }
 
@@ -104,10 +104,23 @@ export interface YieldInfoGraph {
   message: {
     pcg_moved: {
       [x: number]: number
-    },
+    }
     results: {
       [x: number]: number
     }
-  } | null,
+  } | null
   error: null | unknown
+}
+
+export interface NetworkConfig {
+  [key: string]: {
+    [key: string]: NetworkConfigDetail
+  }
+}
+
+export interface NetworkConfigDetail {
+  chainId: number
+  label: string
+  icon: string
+  networkEnv: 'mainnet' | 'testnet'
 }

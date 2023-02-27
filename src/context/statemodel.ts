@@ -1,6 +1,6 @@
 import { Contract } from 'ethers'
 import { Assets } from '../enums/assets'
-import { NETWORK_CONFIG } from '../utils'
+import { NetworkConfigDetail } from '../interfaces'
 
 export default interface State {
   bgColor:
@@ -11,7 +11,7 @@ export default interface State {
     | 'portfolio'
     | 'default'
   selectedAsset: Assets.USDC | Assets.WBTC | Assets.WETH
-  connectedNetwork: typeof NETWORK_CONFIG['TESTNET']['ethereum']
+  connectedNetwork: NetworkConfigDetail
   selectedTab: 'deposit' | 'withdraw'
   assetPrice: {
     [Assets.WETH]: number,
@@ -100,5 +100,4 @@ export default interface State {
       base_apy: string
     }
   }
-  networkEnv: 'mainnet' | 'testnet'
 }

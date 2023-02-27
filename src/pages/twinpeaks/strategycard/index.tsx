@@ -110,13 +110,13 @@ const StrategyCard = () => {
           ) : null}
           <div className="tvl-info">
             <label className="tvl-info-value">
-              {state.assetAPYs[state.selectedAsset].base_apy}
+              {state.assetAPYs[state.selectedAsset]?.base_apy || '??'}
             </label>
             <label className="tvl-info-label">Base APY</label>
           </div>
           <div className="tvl-info">
             <label className="tvl-info-value">
-              {state.assetAPYs[state.selectedAsset].max_apy}
+              {state.assetAPYs[state.selectedAsset]?.max_apy || '??'}
             </label>
             <label className="tvl-info-label">Max APY</label>
           </div>
