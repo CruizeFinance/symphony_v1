@@ -4,10 +4,11 @@ import State from './statemodel'
 
 const initialState: State = {
   bgColor: 'default',
-  selectedAsset: Assets.WETH,
+  selectedAsset: Assets.ETH,
   connectedNetwork: NETWORK_CONFIG.MAINNET.arbitrum,
   selectedTab: 'deposit',
   assetPrice: {
+    [Assets.ETH]: 0,
     [Assets.WETH]: 0,
     [Assets.WBTC]: 0,
     [Assets.USDC]: 0
@@ -68,6 +69,10 @@ const initialState: State = {
   },
   approveTokenModal: false,
   assetAPYs: {
+    eth: {
+      max_apy: '??',
+      base_apy: '??',
+    },
     usdc: {
       max_apy: '??',
       base_apy: '??'

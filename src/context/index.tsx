@@ -3,10 +3,9 @@ import initialState from './state'
 import State from './statemodel'
 import { Action } from './action'
 import reducer from './reducer'
-import { erc20ABI, useAccount, useNetwork, useSigner } from 'wagmi'
+import { erc20ABI, useAccount, useSigner, useNetwork } from 'wagmi'
 import { Actions } from '../enums/actions'
 import {
-  API_PARAMS,
   CONTRACT_CONFIG,
   NETWORK_CONFIG,
   SUPPORTED_CHAINS,
@@ -18,6 +17,7 @@ import { useOnceCall } from '../hooks'
 import { BigNumber, Contract, ethers, Signer } from 'ethers'
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client'
 import { arbitrumGoerli } from '@wagmi/chains'
+import { Assets } from '../enums/assets'
 
 interface ContextProps {
   children: ReactNode
@@ -42,19 +42,19 @@ const arbitrumClient = new ApolloClient({
 export const AppContextProvider = ({ children }: ContextProps) => {
   // context hook
   const [state, dispatch] = useReducer(reducer, initialState)
-
   const { chain } = useNetwork()
   const { data: signer } = useSigner()
   const { address } = useAccount()
 
   const initialAPICall = async () => {
     try {
-      const totalTVL = await getTVL()
+      const totalTVL = await getTVL('mainnet')
       dispatch({ type: Actions.SET_LOCKED_ASSET, payload: totalTVL.message })
-      const { wbtc, weth, usdc } = await getAssetPrice()
+      const { eth, wbtc, weth, usdc } = await getAssetPrice()
       dispatch({
         type: Actions.SET_ASSET_PRICE,
         payload: {
+          eth: eth,
           wbtc: wbtc,
           weth: weth,
           usdc: usdc,
@@ -113,6 +113,17 @@ export const AppContextProvider = ({ children }: ContextProps) => {
   }
 
   useEffect(() => {
+    if (chain) {
+      dispatch({
+        type: Actions.SET_CONNECTED_NETWORK,
+        payload: Object.values(NETWORK_CONFIG)
+        .flatMap((innerObj) => Object.values(innerObj))
+        .filter((net) => net.chainId === chain.id)[0],
+      })
+    }
+  }, [chain])
+
+  useEffect(() => {
     if (state.connectedNetwork) setCurrentDeposit()
   }, [state.connectedNetwork])
 
@@ -150,7 +161,13 @@ export const AppContextProvider = ({ children }: ContextProps) => {
         signer as Signer,
       )
       dispatch({ type: Actions.SET_MINT_TOKEN_CONTRACT, payload: mintContract })
-      checkAllowance(selectedAssetContract)
+      if (state.selectedAsset !== Assets.ETH) checkAllowance(selectedAssetContract)
+      else {
+        dispatch({
+          type: Actions.SET_SELCTED_ASSET_APPROVED,
+          payload: true
+        })
+      }
     }
   }, [state.connectedNetwork, address, signer, state.selectedAsset])
 

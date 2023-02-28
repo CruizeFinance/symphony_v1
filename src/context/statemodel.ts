@@ -8,12 +8,14 @@ export default interface State {
     | Assets.USDC
     | Assets.WBTC
     | Assets.WETH
+    | Assets.ETH
     | 'portfolio'
     | 'default'
-  selectedAsset: Assets.USDC | Assets.WBTC | Assets.WETH
+  selectedAsset: Assets.ETH | Assets.USDC | Assets.WBTC | Assets.WETH
   connectedNetwork: NetworkConfigDetail
   selectedTab: 'deposit' | 'withdraw'
   assetPrice: {
+    [Assets.ETH]: number,
     [Assets.WETH]: number,
     [Assets.WBTC]: number,
     [Assets.USDC]: number
@@ -87,6 +89,10 @@ export default interface State {
   }
   approveTokenModal: boolean
   assetAPYs: {
+    [Assets.ETH]: {
+      max_apy: string,
+      base_apy: string,
+    },
     [Assets.USDC]: {
       max_apy: string,
       base_apy: string,

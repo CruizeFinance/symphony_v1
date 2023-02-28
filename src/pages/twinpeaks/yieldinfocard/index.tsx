@@ -64,9 +64,9 @@ const YieldInfoCard = () => {
             <li>
               <p className="yield-info-text">
                 Generated if{' '}
-                {(state.selectedAsset === 'wbtc'
-                  ? state.selectedAsset
-                  : 'weth'
+                {(state.selectedAsset === 'usdc'
+                  ? 'weth'
+                  : state.selectedAsset
                 ).toUpperCase()}{' '}
                 price remains within the range of $
                 {state.priceRange.lower_bound.toLocaleString()} and $
@@ -84,9 +84,9 @@ const YieldInfoCard = () => {
             <li>
               <p className="yield-info-text">
                 Generated if{' '}
-                {(state.selectedAsset === 'wbtc'
-                  ? state.selectedAsset
-                  : 'weth'
+                {(state.selectedAsset === 'usdc'
+                  ? 'weth'
+                  : state.selectedAsset
                 ).toUpperCase()}{' '}
                 price goes outside the range of ${state.priceRange.lower_bound.toLocaleString()}{' '}
                 and ${state.priceRange.upper_bound.toLocaleString()} during the vault's 7 day

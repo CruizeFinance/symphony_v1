@@ -75,6 +75,10 @@ const TransactionDetail = ({ open, hide }: TransactionDetailProps) => {
                         message: '',
                       },
                     })
+                    dispatch({
+                      type: Actions.SET_USER_INPUT_VALUE,
+                      payload: '',
+                    })
                     clearTimeout(timeout)
                   }, 1000)
                 }

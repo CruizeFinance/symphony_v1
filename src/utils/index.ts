@@ -71,7 +71,7 @@ async function handleResponse(response: Response) {
 
 export function formatNumberSuffix(amount: number) {
   if (amount <= 0) return 0
-  if (amount < 1) return amount
+  if (amount < 1) return amount.toFixed(4)
   const abbreviations = ['', 'K', 'M', 'B', 'T']
   const abbreviationIndex = Math.floor(Math.log10(amount) / 3)
   return (

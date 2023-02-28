@@ -15,7 +15,7 @@ export const VAULT_NAV_LINKS = [
   },
 ]
 
-export const DROPDOWN_OPTIONS = [Assets.WETH, Assets.WBTC, Assets.USDC]
+export const DROPDOWN_OPTIONS = [Assets.ETH, Assets.WETH, Assets.WBTC, Assets.USDC]
 
 export const NETWORK_CONFIG: NetworkConfig = {
   MAINNET: {
@@ -63,6 +63,10 @@ export const CONTRACT_CONFIG = {
       address: '0xaA553dEdd3Cd9f6E2cd36A1E9B102Eb4e70322c0',
       decimals: 0,
     },
+    [Assets.ETH.toUpperCase()]: {
+      address: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
+      decimals: 18
+    },
     [Assets.WETH.toUpperCase()]: {
       address: '0x82aF49447D8a07e3bd95BD0d56f35241523fBab1',
       decimals: 18,
@@ -78,8 +82,12 @@ export const CONTRACT_CONFIG = {
   },
   [goerli.id]: {
     CRUIZE_CONTRACT: {
-      address: '0x358c06943f64767cf267245d4896aa49beb5cc6e',
+      address: '0x8b8163a3c2C77f3DF29a2BA3150d4061aD4Ca126',
       decimals: 0,
+    },
+    [Assets.ETH.toUpperCase()]: {
+      address: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
+      decimals: 18
     },
     [Assets.WETH.toUpperCase()]: {
       address: '0x2f87d4CF0D02248EB38CD06A3F3266C7Bc6e5bd2',
@@ -90,14 +98,18 @@ export const CONTRACT_CONFIG = {
       decimals: 6,
     },
     [Assets.WBTC.toUpperCase()]: {
-      address: '0x02245d57122896af490174f7421bD5a73CF7b0dc',
+      address: '0x69CC084f5F336AC46f191721f55751cfBF2A0Ef3',
       decimals: 8,
     },
   },
   [arbitrumGoerli.id]: {
     CRUIZE_CONTRACT: {
-      address: '0xBd20b3c614Dc27Cb7cDf17e00359D00194cD585E',
+      address: '0x632C4cbB61802083363662b9CC3889C7bC2C4648',
       decimals: 0,
+    },
+    [Assets.ETH.toUpperCase()]: {
+      address: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
+      decimals: 18
     },
     [Assets.WETH.toUpperCase()]: {
       address: '0x0BA9C96583F0F1b192872A05e3c4Bc759afD36B2',
@@ -123,6 +135,7 @@ export const SUPPORTED_CHAINS = [
 ]
 
 export const API_PARAMS = {
+  [Assets.ETH]: 'ethereum',
   [Assets.WETH]: 'ethereum',
   [Assets.WBTC]: 'bitcoin',
   [Assets.USDC]: 'usdc',

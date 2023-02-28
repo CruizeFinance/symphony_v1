@@ -85,6 +85,7 @@ export interface CurrentPriceRange {
 
 export interface TVL {
   message: {
+    ETH: number
     USDC: number
     WBTC: number
     WETH: number

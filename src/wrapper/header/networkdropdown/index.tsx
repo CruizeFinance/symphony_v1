@@ -1,5 +1,6 @@
 import { useContext, useEffect, useRef, useState } from 'react'
 import { useSwitchNetwork } from 'wagmi'
+import { getTVL } from '../../../apis'
 import { Sprite } from '../../../components'
 import { AppContext } from '../../../context'
 import { Actions } from '../../../enums/actions'
@@ -11,9 +12,7 @@ import './networkdropdown.scss'
 const NetworkDropdown = () => {
   const [state, dispatch] = useContext(AppContext)
 
-  const {
-    switchNetworkAsync,
-  } = useSwitchNetwork()
+  const { switchNetworkAsync } = useSwitchNetwork()
 
   const networkRef = useRef(null)
   useOutsideAlerter(networkRef, () => setShowNetworks(false))
@@ -30,9 +29,15 @@ const NetworkDropdown = () => {
           .filter((net) => net.chainId === val.chainId)[0],
       })
       setShowNetworks(false)
+      await loadTotalTVL(val.networkEnv)
     } catch (e) {
       console.log(e)
     }
+  }
+
+  const loadTotalTVL = async (network: 'mainnet' | 'testnet') => {
+    const totalTVL = await getTVL(network)
+    dispatch({ type: Actions.SET_LOCKED_ASSET, payload: totalTVL.message })
   }
 
   return (

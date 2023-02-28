@@ -3,7 +3,7 @@ import { Button, Card, Input, Sprite, Tabs, Tooltip } from '../../../components'
 import ConfirmStake from './confirmstake'
 import { useContext, useEffect, useState } from 'react'
 import { ConnectKitButton } from 'connectkit'
-import { useAccount } from 'wagmi'
+import { useAccount, useProvider } from 'wagmi'
 import { AppContext } from '../../../context'
 import { BigNumber, ethers } from 'ethers'
 import { Actions } from '../../../enums/actions'
@@ -11,6 +11,7 @@ import { CONTRACT_CONFIG, rem } from '../../../utils'
 import { TransactionReceipt, TransactionResponse } from '../../../interfaces'
 import TransactionDetail from './transactiondetail'
 import ConfettiExplosion from 'react-confetti-explosion'
+import { Assets } from '../../../enums/assets'
 
 interface WithdrawDetail {
   label: string
@@ -48,6 +49,7 @@ const StakeCard = () => {
   const [state, dispatch] = useContext(AppContext)
 
   const { address, isConnected, connector } = useAccount()
+  const provider = useProvider()
 
   const [openConfirm, setOpenConfirm] = useState(false)
   const [disableRequest, setDisableRequest] = useState(false)
@@ -56,9 +58,12 @@ const StakeCard = () => {
 
   const getBalance = async () => {
     try {
-      const depositBalance = await state.selectedAssetContract!.balanceOf(
-        address,
-      )
+      let depositBalance = BigNumber.from(0)
+      if (state.selectedAsset === Assets.ETH) {
+        depositBalance = await provider.getBalance(address || '')
+      } else {
+        depositBalance = await state.selectedAssetContract!.balanceOf(address)
+      }
       const depositReceipts = await state.cruizeContract!.depositReceipts(
         address,
         CONTRACT_CONFIG[state.connectedNetwork.chainId][
@@ -194,8 +199,7 @@ const StakeCard = () => {
           ) <= 0,
       )
     } catch (e) {
-      console.log(e)
-       resetTransactionDetails()
+      resetTransactionDetails()
     }
   }
 
@@ -294,10 +298,6 @@ const StakeCard = () => {
             ...state.transactionData,
           ],
         })
-      dispatch({
-        type: Actions.SET_USER_INPUT_VALUE,
-        payload: '',
-      })
       return data
     } catch (e) {
       dispatch({
@@ -365,11 +365,7 @@ const StakeCard = () => {
                     ].decimals,
                   ),
                 ]
-              : [
-                  CONTRACT_CONFIG[state.connectedNetwork.chainId][
-                    state.selectedAsset.toUpperCase()
-                  ].address,
-                ]
+              : []
             : Number(
                 state.balances.withdraw.requestBalance.fundsAvailableToWithdraw,
               ) > 0
@@ -403,6 +399,15 @@ const StakeCard = () => {
                   state.selectedAsset.toUpperCase()
                 ].decimals,
               ),
+              ...[
+                state.selectedAsset === Assets.ETH
+                  ? {
+                      value: ethers.utils.parseEther(
+                        state.userInputValue || '0',
+                      ),
+                    }
+                  : undefined,
+              ],
             ],
       )
     } catch (e) {
@@ -416,7 +421,7 @@ const StakeCard = () => {
 
   const writeContract = async (
     functionName: string,
-    args: Array<BigNumber | string>,
+    args: Array<BigNumber | string | undefined | { value: BigNumber }>,
   ) => {
     try {
       dispatch({
@@ -715,7 +720,8 @@ const StakeCard = () => {
           style={{
             border:
               connector?.id.toLowerCase() === 'metamask' ||
-              state.connectedNetwork.networkEnv === 'testnet'
+              (state.connectedNetwork.networkEnv === 'testnet' &&
+                state.selectedAsset !== Assets.ETH)
                 ? ''
                 : 'none',
           }}
@@ -725,14 +731,14 @@ const StakeCard = () => {
               className="mint-tokens-label"
               onClick={addToken}
               style={{
-                paddingBottom:
-                  state.connectedNetwork.networkEnv === 'mainnet' ? rem(16) : 0,
+                paddingBottom: rem(16),
               }}
             >
               Add {state.selectedAsset.toUpperCase()} to wallet
             </div>
           ) : null}
-          {state.connectedNetwork.networkEnv === 'testnet' ? (
+          {state.connectedNetwork.networkEnv === 'testnet' &&
+          state.selectedAsset !== Assets.ETH ? (
             <Button
               className="mint-tokens-button"
               style={{
