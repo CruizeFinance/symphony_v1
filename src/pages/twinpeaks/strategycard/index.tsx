@@ -13,7 +13,7 @@ const StrategyCard = () => {
 
   const storePriceRange = async () => {
     const response = await getCurrentPriceRange(
-      (state.selectedAsset === 'wbtc' ? state.selectedAsset : 'weth').toUpperCase(),
+      (state.selectedAsset === 'usdc' ? 'weth' : state.selectedAsset).toUpperCase(),
       'protected_twin_peaks',
     )
     if (!response || response.error)
