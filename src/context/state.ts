@@ -5,7 +5,7 @@ import State from './statemodel'
 const initialState: State = {
   bgColor: 'default',
   selectedAsset: Assets.ETH,
-  connectedNetwork: NETWORK_CONFIG.MAINNET.arbitrum,
+  connectedNetwork: NETWORK_CONFIG.TESTNET.goerli,
   selectedTab: 'deposit',
   assetPrice: {
     [Assets.ETH]: 0,

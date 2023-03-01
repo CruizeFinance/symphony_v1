@@ -18,14 +18,14 @@ export const VAULT_NAV_LINKS = [
 export const DROPDOWN_OPTIONS = [Assets.ETH, Assets.WETH, Assets.WBTC, Assets.USDC]
 
 export const NETWORK_CONFIG: NetworkConfig = {
-  MAINNET: {
+  /* MAINNET: {
     [Networks.ARBITRUM]: {
       chainId: NetworkIDs.ARBITRUM,
       label: Networks.ARBITRUM,
       icon: Networks.ARBITRUM,
       networkEnv: 'mainnet'
     }
-  },
+  }, */
   TESTNET: {
     [Networks.ETHEREUM]: {
       chainId: NetworkIDs.ETHEREUM_GOERLI,
@@ -127,7 +127,7 @@ export const CONTRACT_CONFIG = {
 }
 
 export const SUPPORTED_CHAINS = [
-  arbitrum,
+  /* arbitrum, */
   goerli,
   arbitrumGoerli,
   /* polygonMumbai,
