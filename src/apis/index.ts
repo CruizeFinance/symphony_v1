@@ -1,7 +1,5 @@
-import { Assets } from '../enums/assets'
 import { fetchWrapper } from '../utils'
 import {
-  AssetPrice,
   CurrentDeposit,
   CurrentPriceRange,
   TVL,
@@ -17,6 +15,14 @@ export const getAssetPrice = async () => {
       `https://api.coinbase.com/v2/prices/usd/spot`,
     )
     return {
+      eth:
+      data && data.data && data.data.length
+      ? Number(
+          data.data.filter(
+            (a: { base: string; amount: string }) => a.base === 'ETH',
+          )[0].amount,
+        )
+      : 0,
       weth:
         data && data.data && data.data.length
           ? Number(
@@ -70,13 +76,14 @@ export const getCurrentPriceRange = async (asset: string, vault: string) => {
   }
 }
 
-export const getTVL = async () => {
+export const getTVL = async (networkEnv: 'mainnet' | 'testnet') => {
   try {
     const data: TVL = await fetchWrapper.get(
-      `https://www.beta.trident.v2.cruize.finance/vaults/total_tvl`,
+      `https://www.beta.trident.v2.cruize.finance/vaults/total_tvl?network_env=${networkEnv}`,
     )
     return {
       message: {
+        eth: data.message?.ETH || 0,
         wbtc: data.message?.WBTC || 0,
         weth: data.message?.WETH || 0,
         usdc: data.message?.USDC || 0,
@@ -140,6 +147,10 @@ export const getAssetAPYs = async () => {
     )
     if (!data.error) {
       return {
+        eth: {
+          max_apy: data.message.USDC.max_apy,
+          base_apy: data.message.USDC.base_apy,
+        },
         usdc: {
           max_apy: data.message.USDC.max_apy,
           base_apy: data.message.USDC.base_apy,
@@ -155,6 +166,10 @@ export const getAssetAPYs = async () => {
       }
     }
     return {
+      eth: {
+        max_apy: '??',
+        base_apy: '??',
+      },
       usdc: {
         max_apy: '??',
         base_apy: '??',
@@ -170,6 +185,10 @@ export const getAssetAPYs = async () => {
     }
   } catch (e) {
     return {
+      eth: {
+        max_apy: '??',
+        base_apy: '??',
+      },
       usdc: {
         max_apy: '??',
         base_apy: '??',

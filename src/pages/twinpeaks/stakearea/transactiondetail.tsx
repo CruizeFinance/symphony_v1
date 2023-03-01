@@ -43,11 +43,6 @@ const TransactionDetail = ({ open, hide }: TransactionDetailProps) => {
               ? 'Completed Successfully'
               : 'Failed'}
           </label>
-          {state.transactionDetails.message ? (
-            <p className="detail-desc-text">
-              {state.transactionDetails.message}
-            </p>
-          ) : null}
         </div>
         <Button
           className="detail-etherscan-button"
@@ -74,6 +69,10 @@ const TransactionDetail = ({ open, hide }: TransactionDetailProps) => {
                         type: '',
                         message: '',
                       },
+                    })
+                    dispatch({
+                      type: Actions.SET_USER_INPUT_VALUE,
+                      payload: '',
                     })
                     clearTimeout(timeout)
                   }, 1000)

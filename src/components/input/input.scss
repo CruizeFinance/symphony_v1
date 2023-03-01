@@ -30,6 +30,9 @@
         &:focus-visible {
           outline: none;
         }
+        &:disabled {
+          cursor: not-allowed;
+        }
       }
       .usd-value {
         @include typography(

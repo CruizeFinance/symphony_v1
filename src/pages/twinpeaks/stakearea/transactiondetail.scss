@@ -21,6 +21,8 @@
     .detail-desc {
       @include flex(column, center, center, toRem(4));
       .detail-desc-title {
+        text-align: center;
+        width: 100%;
         @include typography(GroteskMedium, toRem(24), 150%, var(--black));
       }
       .detail-desc-text {

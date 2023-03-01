@@ -1,6 +1,6 @@
 import { Contract } from 'ethers'
 import { Assets } from '../enums/assets'
-import { NETWORK_CONFIG } from '../utils'
+import { NetworkConfigDetail } from '../interfaces'
 
 export default interface State {
   bgColor:
@@ -8,12 +8,14 @@ export default interface State {
     | Assets.USDC
     | Assets.WBTC
     | Assets.WETH
+    | Assets.ETH
     | 'portfolio'
     | 'default'
-  selectedAsset: Assets.USDC | Assets.WBTC | Assets.WETH
-  connectedNetwork: typeof NETWORK_CONFIG['TESTNET']['ethereum']
+  selectedAsset: Assets.ETH | Assets.USDC | Assets.WBTC | Assets.WETH
+  connectedNetwork: NetworkConfigDetail
   selectedTab: 'deposit' | 'withdraw'
   assetPrice: {
+    [Assets.ETH]: number,
     [Assets.WETH]: number,
     [Assets.WBTC]: number,
     [Assets.USDC]: number
@@ -39,7 +41,8 @@ export default interface State {
       instantBalance: string,
       requestBalance: {
         fundsInQueue: string,
-        fundsInActiveUse: string
+        fundsInActiveUse: string,
+        fundsAvailableToWithdraw: string
       }
     }
   }
@@ -86,6 +89,10 @@ export default interface State {
   }
   approveTokenModal: boolean
   assetAPYs: {
+    [Assets.ETH]: {
+      max_apy: string,
+      base_apy: string,
+    },
     [Assets.USDC]: {
       max_apy: string,
       base_apy: string,

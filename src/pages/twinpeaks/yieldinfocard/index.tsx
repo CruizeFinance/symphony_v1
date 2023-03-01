@@ -58,15 +58,15 @@ const YieldInfoCard = () => {
         <div className="yield-info-section">
           <label className="yield-info-title">
             Scenario 1: Max yield up to{' '}
-            {state.assetAPYs[state.selectedAsset].max_apy}
+            {state.assetAPYs[state.selectedAsset]?.max_apy || '??'}
           </label>
           <ul>
             <li>
               <p className="yield-info-text">
                 Generated if{' '}
-                {(state.selectedAsset === 'wbtc'
-                  ? state.selectedAsset
-                  : 'weth'
+                {(state.selectedAsset === 'usdc'
+                  ? 'weth'
+                  : state.selectedAsset
                 ).toUpperCase()}{' '}
                 price remains within the range of $
                 {state.priceRange.lower_bound.toLocaleString()} and $
@@ -78,15 +78,15 @@ const YieldInfoCard = () => {
         <div className="yield-info-section">
           <label className="yield-info-title">
             Scenario 2: Base yield of{' '}
-            {state.assetAPYs[state.selectedAsset].base_apy}
+            {state.assetAPYs[state.selectedAsset]?.base_apy || '??'}
           </label>
           <ul>
             <li>
               <p className="yield-info-text">
                 Generated if{' '}
-                {(state.selectedAsset === 'wbtc'
-                  ? state.selectedAsset
-                  : 'weth'
+                {(state.selectedAsset === 'usdc'
+                  ? 'weth'
+                  : state.selectedAsset
                 ).toUpperCase()}{' '}
                 price goes outside the range of ${state.priceRange.lower_bound.toLocaleString()}{' '}
                 and ${state.priceRange.upper_bound.toLocaleString()} during the vault's 7 day

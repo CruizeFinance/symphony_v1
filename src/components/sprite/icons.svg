@@ -56,6 +56,54 @@
     />
   </symbol>
 
+  <symbol viewBox="0 0 24 24" fill="none" id="eth-icon">
+    <path
+      fill-rule="evenodd"
+      clip-rule="evenodd"
+      d="M12 24C18.6274 24 24 18.6274 24 12C24 5.37259 18.6274 0 12 0C5.37259 0 0 5.37259 0 12C0 18.6274 5.37259 24 12 24Z"
+      fill="#6D7DE5"
+    />
+    <path
+      fill-rule="evenodd"
+      clip-rule="evenodd"
+      d="M12 24C18.6274 24 24 18.6274 24 12C24 5.37259 18.6274 0 12 0C5.37259 0 0 5.37259 0 12C0 18.6274 5.37259 24 12 24Z"
+      fill="url(#paint0_linear_5526_8911)"
+      fill-opacity="0.3"
+    />
+    <path
+      d="M7.01953 12.6602L11.9995 15.6064L16.9786 12.6602L11.9995 19.6788L7.01953 12.6602Z"
+      fill="white"
+    />
+    <path
+      d="M11.9995 14.5083L7.01953 11.562L11.9995 3.71875L16.9795 11.562L11.9995 14.5083Z"
+      fill="white"
+    />
+    <defs>
+    <linearGradient
+        id="paint0_linear_5526_8911"
+        x1="0"
+        y1="0"
+        x2="12"
+        y2="24"
+        gradientUnits="userSpaceOnUse"
+      >
+    <stop stop-color="white" />
+    <stop offset="1" stop-color="white" stop-opacity="0" />
+    </linearGradient>
+    <linearGradient
+        id="paint1_linear_5526_8911"
+        x1="11.9991"
+        y1="12.6602"
+        x2="11.9991"
+        y2="19.6788"
+        gradientUnits="userSpaceOnUse"
+      >
+    <stop stop-color="white" />
+    <stop offset="1" stop-color="white" stop-opacity="0.9" />
+    </linearGradient>
+    </defs>
+  </symbol>
+
   <symbol viewBox="0 0 29 29" fill="none" id="weth-icon">
     <path
       d="M14.5 29C22.5081 29 29 22.5081 29 14.5C29 6.49187 22.5081 0 14.5 0C6.49187 0 0 6.49187 0 14.5C0 22.5081 6.49187 29 14.5 29Z"
@@ -174,6 +222,42 @@
       stroke-linecap="round"
       stroke-linejoin="round"
     />
+  </symbol>
+
+  <symbol viewBox="0 0 61 61" fill="none" id="big-eth-icon">
+    <path
+      opacity="0.1"
+      d="M30.5 61C47.3447 61 61 47.3447 61 30.5C61 13.6553 47.3447 0 30.5 0C13.6553 0 0 13.6553 0 30.5C0 47.3447 13.6553 61 30.5 61Z"
+      fill="#6D7DE5"
+    />
+    <mask
+      id="mask0_5526_8916"
+      style="mask-type:luminance"
+      maskUnits="userSpaceOnUse"
+      x="0"
+      y="0"
+      width="61"
+      height="61"
+    >
+    <path
+        d="M30.5 61C47.3447 61 61 47.3447 61 30.5C61 13.6553 47.3447 0 30.5 0C13.6553 0 0 13.6553 0 30.5C0 47.3447 13.6553 61 30.5 61Z"
+        fill="white"
+      />
+    </mask>
+    <g mask="url(#mask0_5526_8916)">
+    <path
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="M23.4629 28.9199L31.7081 23.5602L39.886 28.9532L31.6722 14.0781L23.4629 28.9199ZM23.7793 30.4665L31.719 25.2344L39.5553 30.4276L31.7235 35.6652L23.7793 30.4665ZM23.4629 31.9688C26.3566 33.8663 29.3761 35.8526 31.7081 37.3895L39.886 31.9688C36.9249 37.4006 34.458 41.9225 31.7081 46.9271L30.0219 43.8706C27.7565 39.7643 25.4202 35.5298 23.4629 31.9688Z"
+        fill="#6D7DE5"
+      />
+    <path
+        fill-rule="evenodd"
+        clip-rule="evenodd"
+        d="M31.6738 14.0781L31.7046 23.5602L39.8854 28.9532L31.6738 14.0781ZM31.7109 25.2344L39.599 30.4276L31.7148 35.6652L31.7109 25.2344ZM31.7051 37.3895L39.8858 31.9688C37.3484 37.4006 31.7051 46.9271 31.7051 46.9271V37.3895Z"
+        fill="#5866C4"
+      />
+    </g>
   </symbol>
 
   <symbol viewBox="0 0 61 61" fill="none" id="big-wbtc-icon">

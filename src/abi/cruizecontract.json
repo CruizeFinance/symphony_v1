@@ -1,25 +1,6 @@
 [
   {
     "inputs": [
-      { "internalType": "address", "name": "_owner", "type": "address" },
-      { "internalType": "address", "name": "_vault", "type": "address" },
-      { "internalType": "address", "name": "_crContract", "type": "address" },
-      {
-        "internalType": "uint256",
-        "name": "_managementFee",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_performanceFee",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "constructor"
-  },
-  {
-    "inputs": [
       {
         "internalType": "address",
         "name": "AssetAlreadyExists",
@@ -38,6 +19,13 @@
       }
     ],
     "name": "AssetNotAllowed",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "AssetDisabled", "type": "address" }
+    ],
+    "name": "DisabledAsset",
     "type": "error"
   },
   { "inputs": [], "name": "FailedToTransferETH", "type": "error" },
@@ -157,6 +145,12 @@
     "anonymous": false,
     "inputs": [
       {
+        "indexed": true,
+        "internalType": "address",
+        "name": "token",
+        "type": "address"
+      },
+      {
         "indexed": false,
         "internalType": "uint256",
         "name": "oldCap",
@@ -170,6 +164,25 @@
       }
     ],
     "name": "CapSet",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "token",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "bool",
+        "name": "status",
+        "type": "bool"
+      }
+    ],
+    "name": "ChangeAssetStatus",
     "type": "event"
   },
   {
@@ -241,7 +254,13 @@
       {
         "indexed": true,
         "internalType": "address",
-        "name": "tokenAddress",
+        "name": "token",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "crToken",
         "type": "address"
       },
       {
@@ -505,6 +524,16 @@
   },
   {
     "inputs": [
+      { "internalType": "address", "name": "token", "type": "address" },
+      { "internalType": "bool", "name": "status", "type": "bool" }
+    ],
+    "name": "changeAssetStatus",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
       { "internalType": "address", "name": "token", "type": "address" }
     ],
     "name": "closeRound",
@@ -530,6 +559,13 @@
     "name": "createToken",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "cruizeProxy",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -623,18 +659,6 @@
     "type": "function"
   },
   {
-    "inputs": [
-      { "internalType": "address", "name": "account", "type": "address" },
-      { "internalType": "address", "name": "token", "type": "address" }
-    ],
-    "name": "getUserLockedAmount",
-    "outputs": [
-      { "internalType": "uint256", "name": "amount", "type": "uint256" }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [],
     "name": "gnosisSafe",
     "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
@@ -646,16 +670,6 @@
     "name": "guard",
     "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
     "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      { "internalType": "address", "name": "token", "type": "address" },
-      { "internalType": "uint256", "name": "numRounds", "type": "uint256" }
-    ],
-    "name": "initRounds",
-    "outputs": [],
-    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -676,6 +690,13 @@
     "name": "instantWithdrawal",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "name": "isDisable",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -723,6 +744,15 @@
   {
     "inputs": [],
     "name": "performanceFee",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "token", "type": "address" }
+    ],
+    "name": "pricePerShare",
     "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
     "type": "function"
@@ -870,6 +900,13 @@
     "type": "function"
   },
   {
+    "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "name": "tokens",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       { "internalType": "address", "name": "token", "type": "address" }
     ],
@@ -882,6 +919,7 @@
     "inputs": [
       { "internalType": "address", "name": "_paymentToken", "type": "address" },
       { "internalType": "address", "name": "_receiver", "type": "address" },
+      { "internalType": "address", "name": "cruizeProxy", "type": "address" },
       { "internalType": "uint256", "name": "_amount", "type": "uint256" }
     ],
     "name": "transferFromSafe",

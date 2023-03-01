@@ -3,15 +3,15 @@ import { Button, Card, Input, Sprite, Tabs, Tooltip } from '../../../components'
 import ConfirmStake from './confirmstake'
 import { useContext, useEffect, useState } from 'react'
 import { ConnectKitButton } from 'connectkit'
-import { useAccount } from 'wagmi'
+import { useAccount, useProvider } from 'wagmi'
 import { AppContext } from '../../../context'
 import { BigNumber, ethers } from 'ethers'
 import { Actions } from '../../../enums/actions'
-import { CONTRACT_CONFIG } from '../../../utils'
+import { CONTRACT_CONFIG, rem } from '../../../utils'
 import { TransactionReceipt, TransactionResponse } from '../../../interfaces'
-import { arbitrumGoerli } from '@wagmi/chains'
 import TransactionDetail from './transactiondetail'
 import ConfettiExplosion from 'react-confetti-explosion'
+import { Assets } from '../../../enums/assets'
 
 interface WithdrawDetail {
   label: string
@@ -49,16 +49,21 @@ const StakeCard = () => {
   const [state, dispatch] = useContext(AppContext)
 
   const { address, isConnected, connector } = useAccount()
+  const provider = useProvider()
 
   const [openConfirm, setOpenConfirm] = useState(false)
   const [disableRequest, setDisableRequest] = useState(false)
   const [openTransactionDetail, setOpenTransactionDetail] = useState(false)
+  const [roundPrice, setRoundPrice] = useState(0)
 
-  /*
-   * a function to get user balance of the asset
-   */
   const getBalance = async () => {
-    if (state.selectedTab === 'withdraw') {
+    try {
+      let depositBalance = BigNumber.from(0)
+      if (state.selectedAsset === Assets.ETH) {
+        depositBalance = await provider.getBalance(address || '')
+      } else {
+        depositBalance = await state.selectedAssetContract!.balanceOf(address)
+      }
       const depositReceipts = await state.cruizeContract!.depositReceipts(
         address,
         CONTRACT_CONFIG[state.connectedNetwork.chainId][
@@ -70,75 +75,131 @@ const StakeCard = () => {
           state.selectedAsset.toUpperCase()
         ].address,
       )
-      const lockedAmount = await state.cruizeContract!.getUserLockedAmount(
+      const withdrawals = await state.cruizeContract!.withdrawals(
         address,
         CONTRACT_CONFIG[state.connectedNetwork.chainId][
           state.selectedAsset.toUpperCase()
         ].address,
       )
-      const fundsInQueue =
-        depositReceipts.round === vault.round
-          ? ethers.utils.formatUnits(
-              depositReceipts.amount,
-              CONTRACT_CONFIG[state.connectedNetwork.chainId][
-                state.selectedAsset.toUpperCase()
-              ].decimals,
-            )
-          : 0
+      const lockedAmount = await state.cruizeContract!.balanceOfUser(
+        CONTRACT_CONFIG[state.connectedNetwork.chainId][
+          state.selectedAsset.toUpperCase()
+        ].address,
+        address,
+      )
+      const roundPricePerShare = await state.cruizeContract!.pricePerShare(
+        CONTRACT_CONFIG[state.connectedNetwork.chainId][
+          state.selectedAsset.toUpperCase()
+        ].address,
+      )
+      const withdrawalPricePerShare = await state.cruizeContract!.roundPricePerShare(
+        CONTRACT_CONFIG[state.connectedNetwork.chainId][
+          state.selectedAsset.toUpperCase()
+        ].address,
+        withdrawals.round < vault.round ? withdrawals.round : vault.round,
+      )
+      setRoundPrice(
+        Number(
+          ethers.utils.formatUnits(
+            roundPricePerShare,
+            CONTRACT_CONFIG[state.connectedNetwork.chainId][
+              state.selectedAsset.toUpperCase()
+            ].decimals,
+          ),
+        ),
+      )
       dispatch({
         type: Actions.SET_BALANCES,
         payload: {
-          ...state.balances,
+          depositBalance: ethers.utils.formatUnits(
+            depositBalance as BigNumber,
+            CONTRACT_CONFIG[state.connectedNetwork.chainId][
+              state.selectedAsset.toUpperCase()
+            ].decimals,
+          ),
           withdraw: {
-            instantBalance: ethers.utils.formatUnits(
-              depositReceipts.amount,
-              CONTRACT_CONFIG[state.connectedNetwork.chainId][
-                state.selectedAsset.toUpperCase()
-              ].decimals,
-            ),
+            instantBalance:
+              vault.round === depositReceipts.round
+                ? ethers.utils.formatUnits(
+                    depositReceipts.amount,
+                    CONTRACT_CONFIG[state.connectedNetwork.chainId][
+                      state.selectedAsset.toUpperCase()
+                    ].decimals,
+                  )
+                : '0',
             requestBalance: {
-              fundsInQueue: fundsInQueue,
               fundsInActiveUse: ethers.utils.formatUnits(
                 lockedAmount,
                 CONTRACT_CONFIG[state.connectedNetwork.chainId][
                   state.selectedAsset.toUpperCase()
                 ].decimals,
               ),
+              fundsInQueue:
+                vault.round === withdrawals.round
+                  ? (
+                      Number(
+                        ethers.utils.formatUnits(
+                          withdrawals.shares,
+                          CONTRACT_CONFIG[state.connectedNetwork.chainId][
+                            state.selectedAsset.toUpperCase()
+                          ].decimals,
+                        ),
+                      ) *
+                      Number(
+                        ethers.utils.formatUnits(
+                          roundPricePerShare,
+                          CONTRACT_CONFIG[state.connectedNetwork.chainId][
+                            state.selectedAsset.toUpperCase()
+                          ].decimals,
+                        ),
+                      )
+                    ).toString()
+                  : '0',
+              fundsAvailableToWithdraw:
+                vault.round > withdrawals.round
+                  ? (
+                      Number(
+                        ethers.utils.formatUnits(
+                          withdrawals.shares,
+                          CONTRACT_CONFIG[state.connectedNetwork.chainId][
+                            state.selectedAsset.toUpperCase()
+                          ].decimals,
+                        ),
+                      ) *
+                      Number(
+                        ethers.utils.formatUnits(
+                          withdrawalPricePerShare,
+                          CONTRACT_CONFIG[state.connectedNetwork.chainId][
+                            state.selectedAsset.toUpperCase()
+                          ].decimals,
+                        ),
+                      )
+                    ).toString()
+                  : '0',
             },
           },
         },
       })
       setDisableRequest(
-        depositReceipts.round === vault.round ||
+        Number(
+          ethers.utils.formatUnits(
+            lockedAmount,
+            CONTRACT_CONFIG[state.connectedNetwork.chainId][
+              state.selectedAsset.toUpperCase()
+            ].decimals,
+          ),
+        ) <= 0 &&
           Number(
             ethers.utils.formatUnits(
-              lockedAmount,
+              withdrawals.shares,
               CONTRACT_CONFIG[state.connectedNetwork.chainId][
                 state.selectedAsset.toUpperCase()
               ].decimals,
             ),
           ) <= 0,
       )
-      /* 
-        if depositReceipt.round === currentRound -> vaults(assetAddress) -> will provide current round
-        then depositReceipt.amount will be the funds in queue else 0
-
-        depositReceipt.lockedAmount will be the funds in active use
-      */
-    } else {
-      const balance = await state.selectedAssetContract!.balanceOf(address)
-      dispatch({
-        type: Actions.SET_BALANCES,
-        payload: {
-          ...state.balances,
-          depositBalance: ethers.utils.formatUnits(
-            balance as BigNumber,
-            CONTRACT_CONFIG[state.connectedNetwork.chainId][
-              state.selectedAsset.toUpperCase()
-            ].decimals,
-          ),
-        },
-      })
+    } catch (e) {
+      resetTransactionDetails()
     }
   }
 
@@ -181,73 +242,69 @@ const StakeCard = () => {
     type: string,
   ) => {
     try {
-    setOpenConfirm(false)
-    setOpenTransactionDetail(true)
-    dispatch({
-      type: Actions.SET_TRANSACTION_DETAILS,
-      payload: {
-        ...state.transactionDetails,
-        loading: true,
-        hash: tx.hash,
-        type,
-      },
-    })
-    const data: TransactionReceipt = await tx.wait()
-    dispatch({
-      type: Actions.SET_TRANSACTION_DETAILS,
-      payload: {
-        ...state.transactionDetails,
-        loading: false,
-        hash: data.transactionHash,
-        status: data.status || 0,
-        type: type,
-      },
-    })
-    if (type === 'transaction')
+      setOpenConfirm(false)
+      setOpenTransactionDetail(true)
       dispatch({
-        type: Actions.SET_TRANSACTION_DATA,
-        payload: [
-          {
-            account: address,
-            asset: {
-              reserve: {
-                symbol: state.selectedAsset.toUpperCase(),
+        type: Actions.SET_TRANSACTION_DETAILS,
+        payload: {
+          ...state.transactionDetails,
+          loading: true,
+          hash: tx.hash,
+          type,
+        },
+      })
+      const data: TransactionReceipt = await tx.wait()
+      dispatch({
+        type: Actions.SET_TRANSACTION_DETAILS,
+        payload: {
+          ...state.transactionDetails,
+          loading: false,
+          hash: data.transactionHash,
+          status: data.status || 0,
+          type: type,
+        },
+      })
+      if (type === 'transaction')
+        dispatch({
+          type: Actions.SET_TRANSACTION_DATA,
+          payload: [
+            {
+              account: address,
+              asset: {
+                reserve: {
+                  symbol: state.selectedAsset.toUpperCase(),
+                },
+                id:
+                  CONTRACT_CONFIG[state.connectedNetwork.chainId][
+                    state.selectedAsset.toUpperCase()
+                  ].address,
               },
-              id:
-                CONTRACT_CONFIG[state.connectedNetwork.chainId][
-                  state.selectedAsset.toUpperCase()
-                ].address,
-            },
-            decimals:
-              CONTRACT_CONFIG[state.connectedNetwork.chainId][
-                state.selectedAsset.toUpperCase()
-              ].decimals,
-            txHash: tx.hash,
-            type: state.selectedTab.toUpperCase(),
-            status: data.status === 1 ? 'SUCCESS' : 'FAILED',
-            amount: ethers.utils
-              .parseUnits(
-                state.userInputValue,
+              decimals:
                 CONTRACT_CONFIG[state.connectedNetwork.chainId][
                   state.selectedAsset.toUpperCase()
                 ].decimals,
-              )
-              .toString(),
-          },
-          ...state.transactionData,
-        ],
+              txHash: tx.hash,
+              type: state.selectedTab.toUpperCase(),
+              status: data.status === 1 ? 'SUCCESS' : 'FAILED',
+              amount: ethers.utils
+                .parseUnits(
+                  state.userInputValue,
+                  CONTRACT_CONFIG[state.connectedNetwork.chainId][
+                    state.selectedAsset.toUpperCase()
+                  ].decimals,
+                )
+                .toString(),
+            },
+            ...state.transactionData,
+          ],
+        })
+      return data
+    } catch (e) {
+      dispatch({
+        type: Actions.SET_APP_ERROR,
+        payload: (e as { message: string }).message,
       })
-    dispatch({
-      type: Actions.SET_USER_INPUT_VALUE,
-      payload: '',
-    })
-    return data
-  } catch (e) {
-    dispatch({
-      type: Actions.SET_APP_ERROR,
-      payload: (e as { message: string }).message,
-    })
-  }
+    }
   }
 
   const resetTransactionDetails = () => {
@@ -281,16 +338,57 @@ const StakeCard = () => {
       })
       writeContract(
         state.selectedTab === 'withdraw'
-          ? state.withdrawType === 'request'
+          ? state.withdrawType === 'instant'
+            ? Number(state.balances.withdraw.instantBalance) > 0
+              ? 'instantWithdrawal'
+              : ''
+            : Number(
+                state.balances.withdraw.requestBalance.fundsAvailableToWithdraw,
+              ) > 0
             ? 'standardWithdrawal'
-            : 'instantWithdrawal'
+            : Number(state.balances.withdraw.requestBalance.fundsInActiveUse) >
+              0
+            ? 'initiateWithdrawal'
+            : ''
           : 'deposit',
-        state.selectedTab === 'withdraw' && state.withdrawType === 'request'
-          ? [
-              CONTRACT_CONFIG[state.connectedNetwork.chainId][
-                state.selectedAsset.toUpperCase()
-              ].address,
-            ]
+        state.selectedTab === 'withdraw'
+          ? state.withdrawType === 'instant'
+            ? Number(state.balances.withdraw.instantBalance) > 0
+              ? [
+                  CONTRACT_CONFIG[state.connectedNetwork.chainId][
+                    state.selectedAsset.toUpperCase()
+                  ].address,
+                  ethers.utils.parseUnits(
+                    state.userInputValue || '0',
+                    CONTRACT_CONFIG[state.connectedNetwork.chainId][
+                      state.selectedAsset.toUpperCase()
+                    ].decimals,
+                  ),
+                ]
+              : []
+            : Number(
+                state.balances.withdraw.requestBalance.fundsAvailableToWithdraw,
+              ) > 0
+            ? [
+                CONTRACT_CONFIG[state.connectedNetwork.chainId][
+                  state.selectedAsset.toUpperCase()
+                ].address,
+              ]
+            : Number(state.balances.withdraw.requestBalance.fundsInActiveUse) >
+              0
+            ? [
+                CONTRACT_CONFIG[state.connectedNetwork.chainId][
+                  state.selectedAsset.toUpperCase()
+                ].address,
+                ethers.utils.parseUnits(
+                  (Number(state.userInputValue) / roundPrice).toFixed(18) ||
+                    '0',
+                  CONTRACT_CONFIG[state.connectedNetwork.chainId][
+                    state.selectedAsset.toUpperCase()
+                  ].decimals,
+                ),
+              ]
+            : []
           : [
               CONTRACT_CONFIG[state.connectedNetwork.chainId][
                 state.selectedAsset.toUpperCase()
@@ -301,6 +399,15 @@ const StakeCard = () => {
                   state.selectedAsset.toUpperCase()
                 ].decimals,
               ),
+              ...[
+                state.selectedAsset === Assets.ETH
+                  ? {
+                      value: ethers.utils.parseEther(
+                        state.userInputValue || '0',
+                      ),
+                    }
+                  : undefined,
+              ],
             ],
       )
     } catch (e) {
@@ -314,7 +421,7 @@ const StakeCard = () => {
 
   const writeContract = async (
     functionName: string,
-    args: Array<BigNumber | string>,
+    args: Array<BigNumber | string | undefined | { value: BigNumber }>,
   ) => {
     try {
       dispatch({
@@ -397,7 +504,7 @@ const StakeCard = () => {
   }
 
   useEffect(() => {
-    if (state.selectedAssetContract) {
+    if (address && state.selectedAssetContract) {
       getBalance()
     }
   }, [
@@ -461,7 +568,7 @@ const StakeCard = () => {
               {
                 label: 'request',
                 tooltip:
-                  'Your deposit is making $$ for you. Submit a request and we’ll keep your deposit aside before the next round begins. You can come back after the current round ends to finish your withdrawal in the Instant Withdrawal section.',
+                  'Your deposit is making $$ for you. Submit a request and we’ll keep your deposit aside before the next round begins. You can come back to this tab after the current round ends to finish your withdrawal.',
               },
               {
                 label: 'instant',
@@ -512,24 +619,38 @@ const StakeCard = () => {
               <WithdrawDetail
                 label="Available to withdraw"
                 icon="tooltip-icon"
-                amount={state.balances.withdraw.instantBalance}
+                amount={Number(state.balances.withdraw.instantBalance).toFixed(
+                  4,
+                )}
                 unit={state.selectedAsset.toUpperCase()}
               />
             ) : (
               <>
                 <WithdrawDetail
+                  label="Complete withdrawal"
+                  icon="tooltip-icon"
+                  amount={Number(
+                    state.balances.withdraw.requestBalance
+                      .fundsAvailableToWithdraw,
+                  ).toFixed(4)}
+                  unit={state.selectedAsset.toUpperCase()}
+                  tooltip={`The assets that you requested to withdraw are available.`}
+                />
+                <WithdrawDetail
                   label="Funds in queue"
                   icon="tooltip-icon"
-                  amount={state.balances.withdraw.requestBalance.fundsInQueue}
+                  amount={Number(
+                    state.balances.withdraw.requestBalance.fundsInQueue,
+                  ).toFixed(4)}
                   unit={state.selectedAsset.toUpperCase()}
                   tooltip={`Your assets that are currently active in a vault and can only be withdrawn at the end of the epoch.`}
                 />
                 <WithdrawDetail
                   label="Funds in active use"
                   icon="tooltip-icon"
-                  amount={
-                    state.balances.withdraw.requestBalance.fundsInActiveUse
-                  }
+                  amount={Number(
+                    state.balances.withdraw.requestBalance.fundsInActiveUse,
+                  ).toFixed(4)}
                   unit={state.selectedAsset.toUpperCase()}
                   tooltip={`Your total assets that are currently active in vaults making you money brrrrrrrr.`}
                 />
@@ -593,33 +714,51 @@ const StakeCard = () => {
           hide={() => setOpenTransactionDetail(false)}
         />
       </Card>
-      {isConnected ? (
-        <Card className="mint-tokens-card">
+      {isConnected && state.selectedAsset !== Assets.ETH ? (
+        <Card
+          className="mint-tokens-card"
+          style={{
+            border:
+              connector?.id.toLowerCase() === 'metamask' ||
+              state.connectedNetwork.networkEnv === 'testnet'
+                ? ''
+                : 'none',
+          }}
+        >
           {connector?.id.toLowerCase() === 'metamask' ? (
-            <div className="mint-tokens-label" onClick={addToken}>
+            <div
+              className="mint-tokens-label"
+              onClick={addToken}
+              style={{
+                paddingBottom:
+                  state.connectedNetwork.networkEnv === 'mainnet' ? rem(16) : 0,
+              }}
+            >
               Add {state.selectedAsset.toUpperCase()} to wallet
             </div>
           ) : null}
-          <Button
-            className="mint-tokens-button"
-            style={{
-              background:
+          {state.connectedNetwork.networkEnv === 'testnet' ? (
+            <Button
+              className="mint-tokens-button"
+              style={{
+                background:
+                  openConfirm ||
+                  state.transactionDetails.loading ||
+                  state.appError !== ''
+                    ? `var(--vault-card-border)`
+                    : `var(--${state.selectedAsset}-mint-button-background)`,
+              }}
+              disabled={
                 openConfirm ||
                 state.transactionDetails.loading ||
                 state.appError !== ''
-                  ? `var(--vault-card-border)`
-                  : `var(--${state.selectedAsset}-mint-button-background)`,
-            }}
-            disabled={
-              openConfirm ||
-              state.transactionDetails.loading ||
-              state.appError !== ''
-            }
-            onClick={mintToken}
-          >
-            Mint {state.selectedAsset.toUpperCase()} on Testnet
-            <Sprite id="mint-tokens-icon" width={20} height={21} />
-          </Button>
+              }
+              onClick={mintToken}
+            >
+              Mint {state.selectedAsset.toUpperCase()} on Testnet
+              <Sprite id="mint-tokens-icon" width={20} height={21} />
+            </Button>
+          ) : null}
         </Card>
       ) : null}
     </>

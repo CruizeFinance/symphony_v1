@@ -4,10 +4,11 @@ import State from './statemodel'
 
 const initialState: State = {
   bgColor: 'default',
-  selectedAsset: Assets.WETH,
-  connectedNetwork: NETWORK_CONFIG.TESTNET.ethereum,
+  selectedAsset: Assets.ETH,
+  connectedNetwork: NETWORK_CONFIG.TESTNET.goerli,
   selectedTab: 'deposit',
   assetPrice: {
+    [Assets.ETH]: 0,
     [Assets.WETH]: 0,
     [Assets.WBTC]: 0,
     [Assets.USDC]: 0
@@ -30,8 +31,9 @@ const initialState: State = {
     depositBalance: '0',
     withdraw: {
       requestBalance: {
-        fundsInActiveUse: '',
-        fundsInQueue: ''
+        fundsInActiveUse: '0',
+        fundsInQueue: '0',
+        fundsAvailableToWithdraw: '0'
       },
       instantBalance: '0'
     }
@@ -67,6 +69,10 @@ const initialState: State = {
   },
   approveTokenModal: false,
   assetAPYs: {
+    eth: {
+      max_apy: '??',
+      base_apy: '??',
+    },
     usdc: {
       max_apy: '??',
       base_apy: '??'
@@ -79,7 +85,7 @@ const initialState: State = {
       max_apy: '??',
       base_apy: '??'
     }
-  }
+  },
 }
 
 export default initialState
