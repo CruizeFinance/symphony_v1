@@ -5,12 +5,13 @@ import { Action } from './action'
 import reducer from './reducer'
 import { erc20ABI, useAccount, useSigner, useNetwork } from 'wagmi'
 import { Actions } from '../enums/actions'
+import { CONTRACT_CONFIG, NETWORK_CONFIG, SUPPORTED_CHAINS } from '../utils'
 import {
-  CONTRACT_CONFIG,
-  NETWORK_CONFIG,
-  SUPPORTED_CHAINS,
-} from '../utils'
-import { getAssetAPYs, getAssetPrice, getCurrentDeposits, getTVL } from '../apis'
+  getAssetAPYs,
+  getAssetPrice,
+  getCurrentDeposits,
+  getTVL,
+} from '../apis'
 import CRUIZECONTRACTABI from '../abi/cruizecontract.json'
 import MINTTOKENABI from '../abi/minttoken.json'
 import { useOnceCall } from '../hooks'
@@ -48,8 +49,6 @@ export const AppContextProvider = ({ children }: ContextProps) => {
 
   const initialAPICall = async () => {
     try {
-      const totalTVL = await getTVL('mainnet')
-      dispatch({ type: Actions.SET_LOCKED_ASSET, payload: totalTVL.message })
       const { eth, wbtc, weth, usdc } = await getAssetPrice()
       dispatch({
         type: Actions.SET_ASSET_PRICE,
@@ -112,19 +111,27 @@ export const AppContextProvider = ({ children }: ContextProps) => {
     }
   }
 
+  const loadTVL = async () => {
+    const totalTVL = await getTVL(state.connectedNetwork.networkEnv)
+      dispatch({ type: Actions.SET_LOCKED_ASSET, payload: totalTVL.message })
+  }
+
   useEffect(() => {
     if (chain) {
       dispatch({
         type: Actions.SET_CONNECTED_NETWORK,
         payload: Object.values(NETWORK_CONFIG)
-        .flatMap((innerObj) => Object.values(innerObj))
-        .filter((net) => net.chainId === chain.id)[0],
+          .flatMap((innerObj) => Object.values(innerObj))
+          .filter((net) => net.chainId === chain.id)[0],
       })
     }
   }, [chain])
 
   useEffect(() => {
-    if (state.connectedNetwork) setCurrentDeposit()
+    if (state.connectedNetwork) {
+      loadTVL()
+      setCurrentDeposit()
+    }
   }, [state.connectedNetwork])
 
   useEffect(() => {
@@ -161,11 +168,12 @@ export const AppContextProvider = ({ children }: ContextProps) => {
         signer as Signer,
       )
       dispatch({ type: Actions.SET_MINT_TOKEN_CONTRACT, payload: mintContract })
-      if (state.selectedAsset !== Assets.ETH) checkAllowance(selectedAssetContract)
+      if (state.selectedAsset !== Assets.ETH)
+        checkAllowance(selectedAssetContract)
       else {
         dispatch({
           type: Actions.SET_SELCTED_ASSET_APPROVED,
-          payload: true
+          payload: true,
         })
       }
     }
@@ -175,7 +183,8 @@ export const AppContextProvider = ({ children }: ContextProps) => {
     <AppContext.Provider value={[state, dispatch]}>
       <ApolloProvider
         client={
-          state.connectedNetwork && state.connectedNetwork.chainId === arbitrumGoerli.id
+          state.connectedNetwork &&
+          state.connectedNetwork.chainId === arbitrumGoerli.id
             ? arbitrumClient
             : goerliClient
         }

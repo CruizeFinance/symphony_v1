@@ -29,15 +29,9 @@ const NetworkDropdown = () => {
           .filter((net) => net.chainId === val.chainId)[0],
       })
       setShowNetworks(false)
-      await loadTotalTVL(val.networkEnv)
     } catch (e) {
       console.log(e)
     }
-  }
-
-  const loadTotalTVL = async (network: 'mainnet' | 'testnet') => {
-    const totalTVL = await getTVL(network)
-    dispatch({ type: Actions.SET_LOCKED_ASSET, payload: totalTVL.message })
   }
 
   return (

@@ -714,14 +714,13 @@ const StakeCard = () => {
           hide={() => setOpenTransactionDetail(false)}
         />
       </Card>
-      {isConnected ? (
+      {isConnected && state.selectedAsset !== Assets.ETH ? (
         <Card
           className="mint-tokens-card"
           style={{
             border:
               connector?.id.toLowerCase() === 'metamask' ||
-              (state.connectedNetwork.networkEnv === 'testnet' &&
-                state.selectedAsset !== Assets.ETH)
+              state.connectedNetwork.networkEnv === 'testnet'
                 ? ''
                 : 'none',
           }}
@@ -731,14 +730,14 @@ const StakeCard = () => {
               className="mint-tokens-label"
               onClick={addToken}
               style={{
-                paddingBottom: rem(16),
+                paddingBottom:
+                  state.connectedNetwork.networkEnv === 'mainnet' ? rem(16) : 0,
               }}
             >
               Add {state.selectedAsset.toUpperCase()} to wallet
             </div>
           ) : null}
-          {state.connectedNetwork.networkEnv === 'testnet' &&
-          state.selectedAsset !== Assets.ETH ? (
+          {state.connectedNetwork.networkEnv === 'testnet' ? (
             <Button
               className="mint-tokens-button"
               style={{

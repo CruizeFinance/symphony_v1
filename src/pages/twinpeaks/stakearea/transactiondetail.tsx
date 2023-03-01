@@ -43,11 +43,6 @@ const TransactionDetail = ({ open, hide }: TransactionDetailProps) => {
               ? 'Completed Successfully'
               : 'Failed'}
           </label>
-          {state.transactionDetails.message ? (
-            <p className="detail-desc-text">
-              {state.transactionDetails.message}
-            </p>
-          ) : null}
         </div>
         <Button
           className="detail-etherscan-button"
