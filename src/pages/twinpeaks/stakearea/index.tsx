@@ -389,6 +389,21 @@ const StakeCard = () => {
                 ),
               ]
             : []
+          : state.selectedAsset === Assets.ETH
+          ? [
+              CONTRACT_CONFIG[state.connectedNetwork.chainId][
+                state.selectedAsset.toUpperCase()
+              ].address,
+              ethers.utils.parseUnits(
+                state.userInputValue || '0',
+                CONTRACT_CONFIG[state.connectedNetwork.chainId][
+                  state.selectedAsset.toUpperCase()
+                ].decimals,
+              ),
+              {
+                value: ethers.utils.parseEther(state.userInputValue || '0'),
+              },
+            ]
           : [
               CONTRACT_CONFIG[state.connectedNetwork.chainId][
                 state.selectedAsset.toUpperCase()
@@ -399,15 +414,6 @@ const StakeCard = () => {
                   state.selectedAsset.toUpperCase()
                 ].decimals,
               ),
-              ...[
-                state.selectedAsset === Assets.ETH
-                  ? {
-                      value: ethers.utils.parseEther(
-                        state.userInputValue || '0',
-                      ),
-                    }
-                  : undefined,
-              ],
             ],
       )
     } catch (e) {
