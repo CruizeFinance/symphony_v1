@@ -1,5 +1,17 @@
 @import '../style/functions.scss';
 
+.layer-0 {
+  width: 100%;
+  height: 100%;
+  max-width: 2560px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0 0 toRem(12) toRem(12) var(--white) inset;
+}
 .wrapper {
   width: 100%;
   height: 100%;

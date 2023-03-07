@@ -30,7 +30,7 @@ const App = () => {
       new WalletConnectConnector({
         chains,
         options: {
-          qrcode: true,
+          qrcode: false,
         },
       }),
     ],

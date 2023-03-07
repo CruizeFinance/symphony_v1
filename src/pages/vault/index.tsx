@@ -54,37 +54,47 @@ const Vault = () => {
         </div>
         <div className="vault-options">
           <VaultCard
-            cardTitle="Downside Protection"
+            cardTitle="Bullish Ascent"
             cardInfo={
               <>
-                This vault generates interest while providing capital protection
-                against market downturns. Any drawdowns below the protection
-                level (price floor) result in additional profits.
+                Ride on the waves of the rallying markets by profiting linearly
+                as the market keeps rising in moderately bullish trends
               </>
             }
-            cardIcons={DROPDOWN_OPTIONS.slice(0, 2)}
+            cardIcons={['wbtc', 'weth', 'usdc']}
             apy={'6.78%'}
             buttonOptions={{
               label: 'Coming Soon',
               disabled: true,
             }}
+            cardTagLabel={'Principal Protected'}
+            vaultType={'full-principal-protected'}
+            active={false}
           />
           <VaultCard
-            cardTitle="Protected Twin Peaks"
+            cardTitle="Bearish Ascent"
             cardInfo={
               <>
-                This vault generates income by taking advantage of weekly price
-                changes, no matter if the market is going up or down. Capital
-                remains{' '}
-                <span
-                  style={{
-                    fontFamily: 'GroteskMedium',
-                    color: 'inherit',
-                  }}
-                >
-                  100%
-                </span>{' '}
-                protected.&nbsp;
+                Beat moderately bearish trends in the market by capturing big
+                returns in falling markets.
+              </>
+            }
+            cardIcons={['wbtc', 'weth', 'usdc']}
+            apy={'6.78%'}
+            buttonOptions={{
+              label: 'Coming Soon',
+              disabled: true,
+            }}
+            cardTagLabel={'Principal Protected'}
+            vaultType={'full-principal-protected'}
+            active={false}
+          />
+          <VaultCard
+            cardTitle="Twin Peaks"
+            cardInfo={
+              <>
+                Generate returns in both rising as well as falling markets by
+                capitalising on moderately range bound markets.&nbsp;
                 <a
                   href="https://docs.cruize.finance/vaults/protected-twin-peaks"
                   rel="noreferrer noopener"
@@ -108,6 +118,63 @@ const Vault = () => {
               ),
               onClick: () => navigate('/vaults/twinpeaks'),
             }}
+            active
+            cardTagLabel={'Principal Protected'}
+            vaultType={'full-principal-protected'}
+          />
+          <VaultCard
+            cardTitle="ETH-USDC"
+            cardInfo={
+              <>
+                Boost your spNFT earnings by using the USDC generated on your
+                position to fund a principal protected terest strategy.
+              </>
+            }
+            cardIcons={['eth', 'usdc']}
+            apy={'6.78%'}
+            buttonOptions={{
+              label: 'Coming Soon',
+              disabled: true,
+            }}
+            cardTagLabel={'Yield Booster'}
+            vaultType={'camelot-yield-booster'}
+            active={false}
+          />
+          <VaultCard
+            cardTitle="WBTC-ETH"
+            cardInfo={
+              <>
+                Boost your spNFT earnings by using the USDC generated on your
+                position to fund a principal protected terest strategy.
+              </>
+            }
+            cardIcons={['wbtc', 'eth']}
+            apy={'6.78%'}
+            buttonOptions={{
+              label: 'Coming Soon',
+              disabled: true,
+            }}
+            cardTagLabel={'Yield Booster'}
+            vaultType={'camelot-yield-booster'}
+            active={false}
+          />
+          <VaultCard
+            cardTitle="USDT-USDC"
+            cardInfo={
+              <>
+                Boost your spNFT earnings by using the USDC generated on your
+                position to fund a principal protected terest strategy.
+              </>
+            }
+            cardIcons={['usdc']}
+            apy={'6.78%'}
+            buttonOptions={{
+              label: 'Coming Soon',
+              disabled: true,
+            }}
+            cardTagLabel={'Yield Booster'}
+            vaultType={'camelot-yield-booster'}
+            active={false}
           />
         </div>
       </div>

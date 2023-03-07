@@ -19,6 +19,7 @@
     "graphql": "^16.6.0",
     "jquery": "^3.6.3",
     "node-sass": "^8.0.0",
+    "postcss-normalize": "^10.0.1",
     "react": "^18.2.0",
     "react-confetti-explosion": "^2.0.2",
     "react-dom": "^18.2.0",

@@ -9,17 +9,20 @@ const Wrapper = () => {
   const [state] = useContext(AppContext)
 
   return (
-    <div
-      className="wrapper"
-      style={{
-        background: `var(--${state.bgColor}-background)`,
-      }}
-    >
-      <Header />
-      <div className="fake-div"></div>
-      <AppRoutes />
-      <Footer />
-    </div>
+    <>
+      <div className='layer-0' style={{ backgroundImage: `url(/assets/background-layer-0.svg)` }} />
+      <div
+        className="wrapper"
+        style={{
+          background: `var(--${state.bgColor}-background)`,
+        }}
+      >
+        <Header />
+        <div className="fake-div"></div>
+        <AppRoutes />
+        <Footer />
+      </div>
+    </>
   )
 }
 

@@ -2,15 +2,39 @@
 @import '../../style/mixins.scss';
 
 .vault-card {
-  padding: toRem(30);
+  position: relative;
+  padding: toRem(40) toRem(20) toRem(20);
   border-radius: toRem(16);
   @include flex(column, center, center, toRem(30));
-  max-width: toRem(450);
-  background: var(--vault-card-background);
+  height: auto;
+  max-width: toRem(415);
   border: toRem(1) solid var(--vault-card-border);
+  box-shadow: 0 toRem(4) toRem(4) var(--go-back-button-border);
+  background: var(--white);
+  .card-tag {
+    border-radius: toRem(16) 0 0 toRem(16);
+    padding: toRem(4) toRem(12);
+    @include flex(row, center, center, toRem(4));
+    position: absolute;
+    top: toRem(10);
+    right: 0;
+    &.full-principal-protected {
+      background: var(--full-principal-protected-background);
+      .full-principal-protected-label {
+        @include typography(GroteskMedium, toRem(12), toRem(12), var(--full-principal-protected-color));
+      }
+    }
+    &.camelot-yield-booster {
+      background: var(--camelot-yield-booster-background);
+      .camelot-yield-booster-label {
+        @include typography(GroteskMedium, toRem(12), toRem(12), var(--camelot-yield-booster-color));
+      }
+    }
+  }
   .card-section {
     @include flex(column, center, center, toRem(8));
     text-align: center;
+    width: 100%;
     .card-title {
       @include typography(GroteskSemiBold, toRem(28), 120%, var(--black));
     }
@@ -34,8 +58,24 @@
         @include typography(GroteskMedium, toRem(24), toRem(30), var(--black));
       }
     }
+    .vault-details {
+      @include flex(column, center, center, toRem(8));
+      padding: 0 toRem(30);
+      width: 100%;
+      .vault-detail {
+        width: 100%;
+        @include flex(row, center, space-between, '');
+        .vault-detail-field {
+          @include typography(GroteskRegular, toRem(16), toRem(20), var(--small-dropdown-color));
+        }
+        .vault-detail-value {
+          @include typography(GroteskMedium, toRem(16), toRem(20), var(--small-dropdown-color));
+        }
+      }
+    }
   }
-  @media screen and (min-width: 320px) and (max-width: 1024px) {
-    padding: toRem(20) toRem(12);
+  &.inset {
+    box-shadow: inset 0 toRem(4) toRem(4) var(--go-back-button-border);
+    background: var(--vault-card-inactive-background);
   }
 }
