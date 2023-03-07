@@ -7,13 +7,12 @@ interface VaultCardProps {
   cardInfo: ReactNode
   cardIcons: string[]
   apy: string
+  onClick?: () => void
   buttonOptions?: {
     label?: string
-    onClick?: () => void
     buttonIcon?: ReactNode,
     disabled?: boolean
   }
-  active?: boolean
   vaultType?: 'full-principal-protected' | 'camelot-yield-booster'
   cardTagLabel?: string
 }
@@ -23,13 +22,13 @@ const VaultCard = ({
   cardInfo,
   cardIcons,
   apy,
+  onClick,
   buttonOptions,
-  active,
   vaultType,
   cardTagLabel
 }: VaultCardProps) => {
   return (
-    <div className={`vault-card ${active ? '' : 'inset'}`}>
+    <div className={`vault-card`} onClick={onClick}>
       <div className={`card-tag ${vaultType}`}>
         <Sprite id={`${vaultType}-icon`} width={19} height={18} />
         <label className={`${vaultType}-label`}>{cardTagLabel}</label>
@@ -72,7 +71,7 @@ const VaultCard = ({
         </div>
       </div> */}
       {buttonOptions ? (
-        <Button onClick={buttonOptions.onClick} disabled={buttonOptions.disabled}>
+        <Button disabled={buttonOptions.disabled}>
           {buttonOptions.label} {buttonOptions.buttonIcon}
         </Button>
       ) : null}

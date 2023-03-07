@@ -1,8 +1,21 @@
 @import '../../style/mixins.scss';
 @import '../../style/functions.scss';
 
+.layer-0 {
+  width: 100%;
+  height: 90vh;
+  max-width: 2560px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0 0 toRem(12) toRem(12) var(--white) inset;
+}
 .vault-container {
-  padding: toRem(60);
+  position: relative;
+  padding: toRem(120) toRem(60);
   @media screen and (min-width: 320px) and (max-width: 1024px) {
     padding: toRem(120) toRem(16);
   }
@@ -33,11 +46,16 @@
       @include typography(GroteskSemiBold, toRem(36), toRem(40), var(--black));
     }
   }
+  .vault-filters {
+    @include flex(row, center, center, toRem(14));
+    .filter-button {
+      background: var(--filter-inactive-button-background);
+      color: var(--black);
+      border: toRem(1) solid var(--black);
+    }
+  }
   .vault-options {
     @include flex(row, baseline, center, toRem(30));
     flex-wrap: wrap;
-    @media screen and (min-width: 320px) and (max-width: 1024px) {
-      flex-direction: column-reverse;
-    }
   }
 }

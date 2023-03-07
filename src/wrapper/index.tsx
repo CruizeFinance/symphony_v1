@@ -10,7 +10,6 @@ const Wrapper = () => {
 
   return (
     <>
-      <div className='layer-0' style={{ backgroundImage: `url(/assets/background-layer-0.svg)` }} />
       <div
         className="wrapper"
         style={{
