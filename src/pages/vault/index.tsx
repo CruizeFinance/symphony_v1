@@ -40,10 +40,11 @@ const Vault = () => {
   return (
     <>
       <div className="vault-container">
-      <div
-        className="layer-0"
-        style={{ backgroundImage: `url(/assets/background-layer-0.svg)` }}
-      />
+        <div
+          className="layer-0"
+          style={{ backgroundImage: `url(/assets/background-layer-0.svg)` }}
+        />
+        <div className="layer-1" />
         <div className="vault">
           <div className="page-title">
             <h1 className="title">Vaults</h1>
@@ -83,6 +84,7 @@ const Vault = () => {
               Yield Booster
             </Button>
           </div>
+            <div className="vault-options-container">
           <div className="vault-options">
             {filter !== 'camelot-yield-booster' ? (
               <>
@@ -155,64 +157,67 @@ const Vault = () => {
                 />
               </>
             ) : null}
-            {filter !== 'full-principal-protected' ? (
-              <>
-                <VaultCard
-                  cardTitle="ETH-USDC"
-                  cardInfo={
-                    <>
-                      Boost your spNFT earnings by using the USDC generated on
-                      your position to fund a principal protected terest
-                      strategy.
-                    </>
-                  }
-                  cardIcons={['eth', 'usdc']}
-                  apy={'6.78%'}
-                  buttonOptions={{
-                    label: 'Coming Soon',
-                    disabled: true,
-                  }}
-                  cardTagLabel={'Yield Booster'}
-                  vaultType={'camelot-yield-booster'}
-                />
-                <VaultCard
-                  cardTitle="WBTC-ETH"
-                  cardInfo={
-                    <>
-                      Boost your spNFT earnings by using the USDC generated on
-                      your position to fund a principal protected terest
-                      strategy.
-                    </>
-                  }
-                  cardIcons={['wbtc', 'eth']}
-                  apy={'6.78%'}
-                  buttonOptions={{
-                    label: 'Coming Soon',
-                    disabled: true,
-                  }}
-                  cardTagLabel={'Yield Booster'}
-                  vaultType={'camelot-yield-booster'}
-                />
-                <VaultCard
-                  cardTitle="USDT-USDC"
-                  cardInfo={
-                    <>
-                      Boost your spNFT earnings by using the USDC generated on
-                      your position to fund a principal protected terest
-                      strategy.
-                    </>
-                  }
-                  cardIcons={['usdc']}
-                  apy={'6.78%'}
-                  buttonOptions={{
-                    label: 'Coming Soon',
-                    disabled: true,
-                  }}
-                  cardTagLabel={'Yield Booster'}
-                  vaultType={'camelot-yield-booster'}
-                />
-              </>
-            ) : null}
+            </div>
+          <div className="vault-options">
+              {filter !== 'full-principal-protected' ? (
+                <>
+                  <VaultCard
+                    cardTitle="ETH-USDC"
+                    cardInfo={
+                      <>
+                        Boost your spNFT earnings by using the USDC generated on
+                        your position to fund a principal protected terest
+                        strategy.
+                      </>
+                    }
+                    cardIcons={['eth', 'usdc']}
+                    apy={'6.78%'}
+                    buttonOptions={{
+                      label: 'Coming Soon',
+                      disabled: true,
+                    }}
+                    cardTagLabel={'Yield Booster'}
+                    vaultType={'camelot-yield-booster'}
+                  />
+                  <VaultCard
+                    cardTitle="WBTC-ETH"
+                    cardInfo={
+                      <>
+                        Boost your spNFT earnings by using the USDC generated on
+                        your position to fund a principal protected terest
+                        strategy.
+                      </>
+                    }
+                    cardIcons={['wbtc', 'eth']}
+                    apy={'6.78%'}
+                    buttonOptions={{
+                      label: 'Coming Soon',
+                      disabled: true,
+                    }}
+                    cardTagLabel={'Yield Booster'}
+                    vaultType={'camelot-yield-booster'}
+                  />
+                  <VaultCard
+                    cardTitle="USDT-USDC"
+                    cardInfo={
+                      <>
+                        Boost your spNFT earnings by using the USDC generated on
+                        your position to fund a principal protected terest
+                        strategy.
+                      </>
+                    }
+                    cardIcons={['usdc']}
+                    apy={'6.78%'}
+                    buttonOptions={{
+                      label: 'Coming Soon',
+                      disabled: true,
+                    }}
+                    cardTagLabel={'Yield Booster'}
+                    vaultType={'camelot-yield-booster'}
+                  />
+                </>
+              ) : null}
+            </div>
           </div>
         </div>
       </div>
