@@ -1,6 +1,6 @@
 import { useContext, useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Button, Sprite, VaultCard } from '../../components'
+import { /* Button, */ Sprite, VaultCard } from '../../components'
 import { AppContext } from '../../context'
 import { Actions } from '../../enums/actions'
 import { DROPDOWN_OPTIONS } from '../../utils'
@@ -11,7 +11,7 @@ const Vault = () => {
 
   const [state, dispatch] = useContext(AppContext)
 
-  const [filter, setFilter] = useState('all')
+  /* const [filter, setFilter] = useState('all') */
 
   useEffect(() => {
     dispatch({ type: Actions.SET_BG_COLOR_VALUE, payload: 'vault' })
@@ -40,11 +40,11 @@ const Vault = () => {
   return (
     <>
       <div className="vault-container">
-        <div
+        {/* <div
           className="layer-0"
           style={{ backgroundImage: `url(/assets/background-layer-0.svg)` }}
         />
-        <div className="layer-1" />
+        <div className="layer-1" /> */}
         <div className="vault">
           <div className="page-title">
             <h1 className="title">Vaults</h1>
@@ -60,7 +60,7 @@ const Vault = () => {
               {totalTVL ? `$${totalTVL.toLocaleString()}` : <>&#8212;</>}
             </label>
           </div>
-          <div className="vault-filters">
+          {/* <div className="vault-filters">
             <Button
               className={filter === 'all' ? '' : 'filter-button'}
               onClick={() => setFilter('all')}
@@ -83,10 +83,10 @@ const Vault = () => {
             >
               Yield Booster
             </Button>
-          </div>
+          </div> */}
             <div className="vault-options-container">
           <div className="vault-options">
-            {filter !== 'camelot-yield-booster' ? (
+            {/* {filter !== 'camelot-yield-booster' ? ( */}
               <>
                 <VaultCard
                   cardTitle="Bullish Ascent"
@@ -155,10 +155,10 @@ const Vault = () => {
                   cardTagLabel={'Principal Protected'}
                   vaultType={'full-principal-protected'}
                 />
-              </>
-            ) : null}
+              </>{/* 
+            ) : null} */}
             </div>
-          <div className="vault-options">
+          {/* <div className="vault-options">
               {filter !== 'full-principal-protected' ? (
                 <>
                   <VaultCard
@@ -217,7 +217,7 @@ const Vault = () => {
                   />
                 </>
               ) : null}
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

@@ -32,7 +32,7 @@ const Footer = () => {
               className="link"
               to="/vaults/twinpeaks"
             >
-              Protected Twin Peaks
+              Twin Peaks
             </Link>
             <a
               className="link"
@@ -41,7 +41,16 @@ const Footer = () => {
                 cursor: 'not-allowed',
               }}
             >
-              Downside Protected
+              Bullish Ascent
+            </a>
+            <a
+              className="link"
+              style={{
+                color: 'var(--vault-card-border)',
+                cursor: 'not-allowed',
+              }}
+            >
+              Bearish Ascent
             </a>
           </div>
           <div className="col-2">

@@ -1,4 +1,4 @@
-import { /* arbitrum, */ arbitrum, arbitrumGoerli, /* avalancheFuji, polygonMumbai */ } from '@wagmi/chains'
+import { arbitrum, arbitrumGoerli, /* avalancheFuji, polygonMumbai */ } from '@wagmi/chains'
 import { goerli } from 'wagmi'
 import { Assets } from '../enums/assets'
 import { NetworkIDs, Networks } from '../enums/networks'
@@ -7,25 +7,29 @@ import { NetworkConfig } from '../interfaces'
 export const VAULT_NAV_LINKS = [
   {
     link: 'twinpeaks',
-    label: 'Protected Twin Peaks',
+    label: 'Twin Peaks',
   },
   {
-    link: 'downside',
-    label: 'Downside Protection',
+    link: 'bullishascent',
+    label: 'Bullish Ascent',
+  },
+  {
+    link: 'bearishascent',
+    label: 'Bearish Ascent',
   },
 ]
 
 export const DROPDOWN_OPTIONS = [Assets.ETH, Assets.WETH, Assets.WBTC, Assets.USDC]
 
 export const NETWORK_CONFIG: NetworkConfig = {
-  /* MAINNET: {
+  MAINNET: {
     [Networks.ARBITRUM]: {
       chainId: NetworkIDs.ARBITRUM,
       label: Networks.ARBITRUM,
       icon: Networks.ARBITRUM,
       networkEnv: 'mainnet'
     }
-  }, */
+  },
   TESTNET: {
     [Networks.ETHEREUM]: {
       chainId: NetworkIDs.ETHEREUM_GOERLI,
@@ -127,7 +131,7 @@ export const CONTRACT_CONFIG = {
 }
 
 export const SUPPORTED_CHAINS = [
-  /* arbitrum, */
+  arbitrum,
   goerli,
   arbitrumGoerli,
   /* polygonMumbai,

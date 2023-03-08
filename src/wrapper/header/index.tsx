@@ -29,7 +29,7 @@ const Header = () => {
           className={`vault-dropdown-option ${
             location.pathname.includes(link.link) ? 'vault-selected' : ''
           }`}
-          {...(link.link === 'downside'
+          {...(link.link !== 'twinpeaks'
             ? { style: { cursor: 'not-allowed' } }
             : {
                 onClick: () => {
@@ -43,7 +43,7 @@ const Header = () => {
         >
           <label className="vault-label">
             {link.label}
-            {link.link === 'downside' ? (
+            {link.link !== 'twinpeaks' ? (
               <>
                 &nbsp;
                 <span

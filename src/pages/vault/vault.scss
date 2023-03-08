@@ -1,7 +1,7 @@
 @import '../../style/mixins.scss';
 @import '../../style/functions.scss';
 
-.layer-0 {
+/* .layer-0 {
   width: 100%;
   height: 90vh;
   max-width: 2560px;
@@ -22,7 +22,7 @@
   left: 0;
   z-index: -2;
   background: var(--layer-1-background);
-}
+} */
 .vault-container {
   position: relative;
   padding: toRem(120) toRem(60);
@@ -78,6 +78,9 @@
     .vault-options {
       @include flex(row, baseline, center, toRem(30));
       flex-wrap: wrap;
+      @media screen and (min-width: 320px) and (max-width: 1024px) {
+        flex-direction: column-reverse;
+      }
     }
   }
 }
