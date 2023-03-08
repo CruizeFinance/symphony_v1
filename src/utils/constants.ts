@@ -1,5 +1,5 @@
 import { arbitrum, arbitrumGoerli, /* avalancheFuji, polygonMumbai */ } from '@wagmi/chains'
-import { goerli } from 'wagmi'
+/* import { goerli } from 'wagmi' */
 import { Assets } from '../enums/assets'
 import { NetworkIDs, Networks } from '../enums/networks'
 import { NetworkConfig } from '../interfaces'
@@ -31,12 +31,12 @@ export const NETWORK_CONFIG: NetworkConfig = {
     }
   },
   TESTNET: {
-    [Networks.ETHEREUM]: {
+    /* [Networks.ETHEREUM]: {
       chainId: NetworkIDs.ETHEREUM_GOERLI,
       label: Networks.ETHEREUM_GOERLI,
       icon: Networks.ETHEREUM,
       networkEnv: 'testnet'
-    },
+    }, */
     /*[Networks.POLYGON]: {
       chainId: NetworkIDs.POLYGON_MUMBAI,
       label: Networks.POLYGON_MUMBAI,
@@ -84,7 +84,7 @@ export const CONTRACT_CONFIG = {
       decimals: 8,
     },
   },
-  [goerli.id]: {
+  /* [goerli.id]: {
     CRUIZE_CONTRACT: {
       address: '0x8b8163a3c2C77f3DF29a2BA3150d4061aD4Ca126',
       decimals: 0,
@@ -105,7 +105,7 @@ export const CONTRACT_CONFIG = {
       address: '0x69CC084f5F336AC46f191721f55751cfBF2A0Ef3',
       decimals: 8,
     },
-  },
+  }, */
   [arbitrumGoerli.id]: {
     CRUIZE_CONTRACT: {
       address: '0x632C4cbB61802083363662b9CC3889C7bC2C4648',
@@ -132,7 +132,7 @@ export const CONTRACT_CONFIG = {
 
 export const SUPPORTED_CHAINS = [
   arbitrum,
-  goerli,
+  /* goerli, */
   arbitrumGoerli,
   /* polygonMumbai,
   avalancheFuji, */

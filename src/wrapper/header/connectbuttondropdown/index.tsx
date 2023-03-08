@@ -7,6 +7,7 @@ import {
   useBalance,
   useDisconnect,
   useEnsName,
+  useProvider,
 } from 'wagmi'
 import { Button, Loader, Sprite } from '../../../components'
 import { AppContext } from '../../../context'
@@ -53,10 +54,8 @@ const ConnectButtonDropdown = () => {
     address: accountAddress,
   })
   const { disconnect } = useDisconnect()
-  const { data: userBalance } = useBalance({
-    address: accountAddress,
-    formatUnits: 'ether',
-  })
+
+  const provider = useProvider()
 
   const dropdownRef = useRef(null)
   useOutsideAlerter(dropdownRef, () => setShowDropdown(false))
@@ -67,6 +66,14 @@ const ConnectButtonDropdown = () => {
     },
   })
 
+  const [showDropdown, setShowDropdown] = useState(false)
+  const [bal, setBal] = useState('')
+
+  const loadBalance = async () => {
+    const bal = await provider.getBalance(accountAddress || '')
+    setBal(ethers.utils.formatUnits(bal, 18))
+  }
+
   useEffect(() => {
     if (transactionData) {
       dispatch({
@@ -76,7 +83,9 @@ const ConnectButtonDropdown = () => {
     }
   }, [transactionData])
 
-  const [showDropdown, setShowDropdown] = useState(false)
+  useEffect(() => {
+    loadBalance()
+  }, [])
 
   return (
     <div className="connect-button-dropdown" ref={dropdownRef}>
@@ -124,7 +133,7 @@ const ConnectButtonDropdown = () => {
                   )}`}
               </label>
               <label className="wallet-balance">
-                {userBalance?.formatted.slice(0, 8)}
+                {bal}
               </label>
             </div>
             <div className="wallet-actions">
