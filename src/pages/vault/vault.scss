@@ -39,7 +39,8 @@
     max-width: toRem(775);
     text-align: center;
     .title {
-      @include typography(CochinItalic, toRem(56), toRem(72), var(--black));
+      @include typography(CochinItalic, toRem(100), toRem(100), var(--black));
+      margin-bottom: toRem(11);
     }
     .sub-title {
       @include typography(

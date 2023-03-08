@@ -98,7 +98,7 @@ const Vault = () => {
                     </>
                   }
                   cardIcons={['wbtc', 'weth', 'usdc']}
-                  apy={'6.78%'}
+                  apy={'7.34%'}
                   buttonOptions={{
                     label: 'Coming Soon',
                     disabled: true,
@@ -115,7 +115,7 @@ const Vault = () => {
                     </>
                   }
                   cardIcons={['wbtc', 'weth', 'usdc']}
-                  apy={'6.78%'}
+                  apy={'8.62%'}
                   buttonOptions={{
                     label: 'Coming Soon',
                     disabled: true,
