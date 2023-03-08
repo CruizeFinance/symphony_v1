@@ -754,7 +754,7 @@ const StakeCard = () => {
                   state.connectedNetwork.networkEnv === 'mainnet' ? rem(16) : 0,
               }}
             >
-              Add {state.selectedAsset.toUpperCase()} to wallet
+              Show {state.selectedAsset.toUpperCase()} in wallet
             </div>
           ) : null}
           {state.connectedNetwork.networkEnv === 'testnet' ? (
