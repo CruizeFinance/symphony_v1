@@ -1,8 +1,9 @@
 import { ConnectKitButton } from 'connectkit'
-import { useEffect, useRef, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useAccount } from 'wagmi'
 import { Button, Sprite } from '../../components'
+import { AppContext } from '../../context'
 import { useOutsideAlerter } from '../../hooks'
 import { rem, VAULT_NAV_LINKS } from '../../utils'
 import ConnectButtonDropdown from './connectbuttondropdown'
@@ -10,6 +11,8 @@ import './header.scss'
 import NetworkDropdown from './networkdropdown'
 
 const Header = () => {
+  const [state] = useContext(AppContext)
+
   const { isConnected } = useAccount()
 
   const location = useLocation()
@@ -68,7 +71,7 @@ const Header = () => {
   )
 
   return (
-    <div className="header">
+    <div className="header" {...state.approveTokenModal ? { style: { zIndex: 0 } } : undefined}>
       <div className="logo-area">
         <Sprite id="cruize-header-icon" width={128} height={46} />
         <div className="links">

@@ -1,5 +1,13 @@
 import './stakearea.scss'
-import { Button, Card, Input, Sprite, Tabs, Tooltip } from '../../../components'
+import {
+  Button,
+  Card,
+  Input,
+  Modal,
+  Sprite,
+  Tabs,
+  Tooltip,
+} from '../../../components'
 import ConfirmStake from './confirmstake'
 import { useContext, useEffect, useState } from 'react'
 import { ConnectKitButton } from 'connectkit'
@@ -223,6 +231,7 @@ const StakeCard = () => {
           .address,
         ethers.constants.MaxUint256,
       )
+      dispatch({ type: Actions.SET_APPROVE_TOKEN_MODAL, payload: false })
       const data = await transactionExecution(tx, 'approve')
       dispatch({
         type: Actions.SET_SELCTED_ASSET_APPROVED,
@@ -322,6 +331,7 @@ const StakeCard = () => {
       type: Actions.SET_USER_INPUT_VALUE,
       payload: '',
     })
+    dispatch({ type: Actions.SET_APPROVE_TOKEN_MODAL, payload: false })
     setOpenConfirm(false)
   }
 
@@ -689,7 +699,11 @@ const StakeCard = () => {
             onClick={
               state.selectedAssetApproved
                 ? () => setOpenConfirm(true)
-                : () => approveToken()
+                : () =>
+                    dispatch({
+                      type: Actions.SET_APPROVE_TOKEN_MODAL,
+                      payload: true,
+                    })
             }
             disabled={
               (Number(state.userInputValue) <= 0 &&
@@ -767,6 +781,47 @@ const StakeCard = () => {
           ) : null}
         </Card>
       ) : null}
+      <Modal
+        open={state.approveTokenModal}
+        hide={() =>
+          dispatch({ type: Actions.SET_APPROVE_TOKEN_MODAL, payload: false })
+        }
+      >
+        <div className="approve-token-modal">
+          <div className="approve-modal-header">
+            <Sprite
+              id={`big-${state.selectedAsset}-icon`}
+              width={48}
+              height={48}
+            />
+            <p
+              style={{
+                color: 'var(--link-inactive)',
+                fontSize: rem(24),
+                cursor: 'pointer',
+              }}
+              onClick={() =>
+                dispatch({
+                  type: Actions.SET_APPROVE_TOKEN_MODAL,
+                  payload: false,
+                })
+              }
+            >
+              &#10005;
+            </p>
+          </div>
+          <div className="approve-modal-content">
+            <label className="modal-content-title">Approve Currency</label>
+            <p className="modal-content-desc">
+              You will be asked to approve this currency from your wallet. You
+              will need to approve each currency only once.
+            </p>
+          </div>
+          <Button className="approve-button" onClick={approveToken}>
+            Continue
+          </Button>
+        </div>
+      </Modal>
     </>
   )
 }

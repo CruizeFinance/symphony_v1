@@ -96,3 +96,28 @@
     @include typography(GroteskMedium, toRem(12), toRem(24), var(--white));
   }
 }
+.approve-token-modal {
+  padding: toRem(24);
+  background: var(--white);
+  max-width: toRem(600);
+  border-radius: toRem(12);
+  @include flex(column, flex-start, center, toRem(16));
+  .approve-modal-header {
+    @include flex(row, center, space-between, '');
+    width: 100%;
+  }
+  .approve-modal-content {
+    padding: 0;
+    @include flex(column, flex-start, center, toRem(4));
+    margin-bottom: toRem(16);
+    .modal-content-title {
+      @include typography(GroteskMedium, toRem(24), 150%, var(--black));
+    }
+    .modal-content-desc {
+      @include typography(GroteskRegular, toRem(14), toRem(20), var(--small-dropdown-color));
+    }
+  }
+  .approve-button {
+    width: 100%;
+  }
+}
