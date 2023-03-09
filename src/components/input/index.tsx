@@ -62,13 +62,16 @@ const Input = ({
   }, [inputValue])
 
   useEffect(() => {
-    dispatch({type: Actions.SET_USER_INPUT_VALUE, payload: state.selectedTab === 'withdraw' &&
-    state.withdrawType === 'request' &&
-    Number(
-      state.balances.withdraw.requestBalance.fundsAvailableToWithdraw,
-    ) > 0
-      ? state.balances.withdraw.requestBalance
-          .fundsAvailableToWithdraw : ''})
+    if (
+      state.selectedTab === 'withdraw' &&
+      state.withdrawType === 'request' &&
+      Number(state.balances.withdraw.requestBalance.fundsAvailableToWithdraw) >
+        0
+    )
+      dispatch({
+        type: Actions.SET_USER_INPUT_VALUE,
+        payload: state.balances.withdraw.requestBalance,
+      })
   }, [state.selectedTab, state.withdrawType, state.balances])
 
   return (
@@ -113,11 +116,15 @@ const Input = ({
             }}
             placeholder="0"
             className="input-field"
-            disabled={state.selectedTab === 'withdraw' &&
-            state.withdrawType === 'request' &&
-            Number(
-              state.balances.withdraw.requestBalance.fundsAvailableToWithdraw,
-            ) > 0}
+            disabled={
+              (state.selectedTab === 'withdraw' &&
+                state.withdrawType === 'request' &&
+                Number(
+                  state.balances.withdraw.requestBalance
+                    .fundsAvailableToWithdraw,
+                ) > 0) ||
+              !state.selectedAssetApproved
+            }
           />
           <p className="usd-value">
             ~
