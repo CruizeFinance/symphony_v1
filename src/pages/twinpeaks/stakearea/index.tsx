@@ -674,29 +674,41 @@ const StakeCard = () => {
             )}
           </div>
         ) : null}
-        {state.selectedAssetApproved ? null : (
-          <div
-            className="error-area"
-            style={{ background: 'var(--contained-tab-background)' }}
-          >
-            <div className="error-title">
-              <Sprite id="guide-icon" width={17} height={16} />
-              <label className="title-label" style={{ color: 'var(--link-inactive)' }}>Guide</label>
-            </div>
-            <p className="error-text" style={{ color: 'var(--link-inactive)' }}>
-              You will be asked to approve this currency from your wallet. You
-              will need to approve each currency only once.
-            </p>
-          </div>
-        )}
-        {state.appError ? (
-          <div className="error-area">
-            <div className="error-title">
-              <Sprite id="error-icon" width={17} height={16} />
-              <label className="title-label">ERROR</label>
-            </div>
-            <p className="error-text">{state.appError}</p>
-          </div>
+        {isConnected ? (
+          <>
+            {state.selectedAssetApproved ? null : (
+              <div
+                className="error-area"
+                style={{ background: 'var(--contained-tab-background)' }}
+              >
+                <div className="error-title">
+                  <Sprite id="guide-icon" width={17} height={16} />
+                  <label
+                    className="title-label"
+                    style={{ color: 'var(--link-inactive)' }}
+                  >
+                    Guide
+                  </label>
+                </div>
+                <p
+                  className="error-text"
+                  style={{ color: 'var(--link-inactive)' }}
+                >
+                  You will be asked to approve this currency from your wallet.
+                  You will need to approve each currency only once.
+                </p>
+              </div>
+            )}
+            {state.appError ? (
+              <div className="error-area">
+                <div className="error-title">
+                  <Sprite id="error-icon" width={17} height={16} />
+                  <label className="title-label">ERROR</label>
+                </div>
+                <p className="error-text">{state.appError}</p>
+              </div>
+            ) : null}
+          </>
         ) : null}
         {!isConnected ? (
           <ConnectKitButton.Custom>

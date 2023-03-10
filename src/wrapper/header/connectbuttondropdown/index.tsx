@@ -4,7 +4,6 @@ import Jazzicon from 'react-jazzicon/dist/Jazzicon'
 import {
   goerli,
   useAccount,
-  useBalance,
   useDisconnect,
   useEnsName,
   useProvider,
