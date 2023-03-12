@@ -1,3 +1,6 @@
+import { gql, useQuery } from '@apollo/client'
+import { arbitrum } from '@wagmi/chains'
+import { ethers } from 'ethers'
 import { useContext, useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { /* Button, */ Sprite, VaultCard } from '../../components'
@@ -6,10 +9,24 @@ import { Actions } from '../../enums/actions'
 import { DROPDOWN_OPTIONS } from '../../utils'
 import './vault.scss'
 
+export const GET_TVL = gql`
+  {
+    tokens(first: 10, where: { type: "BASE" }) {
+      symbol
+      info {
+        id
+        amountInUSD
+      }
+    }
+  }
+`
+
 const Vault = () => {
   const navigate = useNavigate()
 
   const [state, dispatch] = useContext(AppContext)
+
+  const { data: tvlData } = useQuery(GET_TVL)
 
   /* const [filter, setFilter] = useState('all') */
 
@@ -17,7 +34,19 @@ const Vault = () => {
     dispatch({ type: Actions.SET_BG_COLOR_VALUE, payload: 'vault' })
   }, [])
 
-  const totalTVL = useMemo(
+  const calcTVL = useMemo(
+    () =>
+      tvlData && tvlData.tokens && tvlData.tokens.length
+        ? tvlData.tokens
+            .map((token: { info: { amountInUSD: string } }) =>
+              Number(ethers.utils.formatUnits(token.info.amountInUSD, 8)),
+            )
+            .reduce((acc: number, currValue: number) => acc + currValue)
+        : 0,
+    [tvlData],
+  )
+
+  const testnetTVL = useMemo(
     () =>
       state.lockedAsset && state.assetPrice
         ? state.lockedAsset['usdc'] * state.assetPrice['usdc'] +
@@ -57,7 +86,14 @@ const Vault = () => {
           <div className="tvl-info">
             <label className="tvl-label">Total Value Locked in Cruize</label>
             <label className="tvl-value">
-              {totalTVL ? `$${totalTVL.toLocaleString()}` : <>&#8212;</>}
+              {state.connectedNetwork &&
+              state.connectedNetwork.chainId === arbitrum.id ? (
+                <>{calcTVL ? `$${calcTVL.toLocaleString()}` : <>&#8212;</>}</>
+              ) : (
+                <>
+                  {testnetTVL ? `$${testnetTVL.toLocaleString()}` : <>&#8212;</>}
+                </>
+              )}
             </label>
           </div>
           {/* <div className="vault-filters">
@@ -84,9 +120,9 @@ const Vault = () => {
               Yield Booster
             </Button>
           </div> */}
-            <div className="vault-options-container">
-          <div className="vault-options">
-            {/* {filter !== 'camelot-yield-booster' ? ( */}
+          <div className="vault-options-container">
+            <div className="vault-options">
+              {/* {filter !== 'camelot-yield-booster' ? ( */}
               <>
                 <VaultCard
                   cardTitle="Bullish Ascent"
@@ -155,10 +191,11 @@ const Vault = () => {
                   cardTagLabel={'Principal Protected'}
                   vaultType={'full-principal-protected'}
                 />
-              </>{/* 
+              </>
+              {/* 
             ) : null} */}
             </div>
-          {/* <div className="vault-options">
+            {/* <div className="vault-options">
               {filter !== 'full-principal-protected' ? (
                 <>
                   <VaultCard
