@@ -57,7 +57,6 @@ export const AppContextProvider = ({ children }: ContextProps) => {
 
   const initialAPICall = async () => {
     try {
-      loadTVL()
       const { eth, wbtc, weth, usdc } = await getAssetPrice()
       dispatch({
         type: Actions.SET_ASSET_PRICE,
@@ -118,11 +117,6 @@ export const AppContextProvider = ({ children }: ContextProps) => {
     } catch (e) {
       console.log(e)
     }
-  }
-
-  const loadTVL = async () => {
-    const totalTVL = await getTVL('testnet')
-    dispatch({ type: Actions.SET_LOCKED_ASSET, payload: totalTVL.message })
   }
 
   useEffect(() => {

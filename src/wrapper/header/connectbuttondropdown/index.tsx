@@ -211,8 +211,8 @@ const ConnectButtonDropdown = () => {
                             state.connectedNetwork.chainId === arbitrum.id
                               ? 'arbiscan'
                               : state.connectedNetwork.chainId === goerli.id
-                              ? 'goerli.etherscan'
-                              : 'testnet.arbiscan'
+                              ? 'goerli.etherscan.io'
+                              : 'testnet.arbiscan.io'
                           }/tx/${transaction.txHash}`,
                           '_blank',
                           'noreferrer noopener',

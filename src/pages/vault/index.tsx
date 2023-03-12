@@ -3,6 +3,7 @@ import { arbitrum } from '@wagmi/chains'
 import { ethers } from 'ethers'
 import { useContext, useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { getTVL } from '../../apis'
 import { /* Button, */ Sprite, VaultCard } from '../../components'
 import { AppContext } from '../../context'
 import { Actions } from '../../enums/actions'
@@ -26,13 +27,16 @@ const Vault = () => {
 
   const [state, dispatch] = useContext(AppContext)
 
-  const { data: tvlData } = useQuery(GET_TVL)
+  const { data: tvlData, loading: tvlLoading } = useQuery(GET_TVL)
+
+  const [tvl, setTVL] = useState(0)
 
   /* const [filter, setFilter] = useState('all') */
 
-  useEffect(() => {
-    dispatch({ type: Actions.SET_BG_COLOR_VALUE, payload: 'vault' })
-  }, [])
+  const loadTVL = async (env: 'mainnet' | 'testnet') => {
+    const totalTVL = await getTVL(env)
+    dispatch({ type: Actions.SET_LOCKED_ASSET, payload: totalTVL.message })
+  }
 
   const calcTVL = useMemo(
     () =>
@@ -46,7 +50,7 @@ const Vault = () => {
     [tvlData],
   )
 
-  const testnetTVL = useMemo(
+  const fallbackTVL = useMemo(
     () =>
       state.lockedAsset && state.assetPrice
         ? state.lockedAsset['usdc'] * state.assetPrice['usdc'] +
@@ -65,6 +69,22 @@ const Vault = () => {
     })
     return maxValue
   }, [state.assetAPYs])
+
+  useEffect(() => {
+    if (state.connectedNetwork && !tvlLoading && !tvlData) {
+      loadTVL(state.connectedNetwork.networkEnv)
+    } else {
+      setTVL(calcTVL)
+    }
+  }, [state.connectedNetwork, tvlLoading, tvlData, calcTVL])
+
+  useEffect(() => {
+    if (fallbackTVL) setTVL(fallbackTVL)
+  }, [fallbackTVL])
+
+  useEffect(() => {
+    dispatch({ type: Actions.SET_BG_COLOR_VALUE, payload: 'vault' })
+  }, [])
 
   return (
     <>
@@ -86,14 +106,7 @@ const Vault = () => {
           <div className="tvl-info">
             <label className="tvl-label">Total Value Locked in Cruize</label>
             <label className="tvl-value">
-              {state.connectedNetwork &&
-              state.connectedNetwork.chainId === arbitrum.id ? (
-                <>{calcTVL ? `$${calcTVL.toLocaleString()}` : <>&#8212;</>}</>
-              ) : (
-                <>
-                  {testnetTVL ? `$${testnetTVL.toLocaleString()}` : <>&#8212;</>}
-                </>
-              )}
+              {tvl ? `$${tvl.toLocaleString()}` : <>&#8212;</>}
             </label>
           </div>
           {/* <div className="vault-filters">
