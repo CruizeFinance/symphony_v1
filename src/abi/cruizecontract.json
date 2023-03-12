@@ -29,7 +29,31 @@
     "type": "error"
   },
   { "inputs": [], "name": "FailedToTransferETH", "type": "error" },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "VaultBalance", "type": "uint256" },
+      { "internalType": "uint256", "name": "newCap", "type": "uint256" }
+    ],
+    "name": "InvalidCap",
+    "type": "error"
+  },
   { "inputs": [], "name": "InvalidFee", "type": "error" },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "tokenAddressArray",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "tokenBalanceArray",
+        "type": "uint256"
+      }
+    ],
+    "name": "InvalidLength",
+    "type": "error"
+  },
   {
     "inputs": [
       {
@@ -87,6 +111,25 @@
       { "internalType": "address", "name": "guard_", "type": "address" }
     ],
     "name": "NotIERC165Compliant",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "tokenBalance", "type": "uint256" }
+    ],
+    "name": "TokenBalanceShouldBeZero",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "TotalDeposit", "type": "uint256" },
+      {
+        "internalType": "uint256",
+        "name": "vaultTotalBalance",
+        "type": "uint256"
+      }
+    ],
+    "name": "VaultBalanceIsLessThenTheTotalDeposit",
     "type": "error"
   },
   {
@@ -241,7 +284,7 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "round",
+        "name": "vaultFee",
         "type": "uint256"
       }
     ],
@@ -289,6 +332,19 @@
       }
     ],
     "name": "CreateToken",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "token",
+        "type": "address"
+      }
+    ],
+    "name": "DeListToken",
     "type": "event"
   },
   {
@@ -428,6 +484,19 @@
     "inputs": [
       {
         "indexed": false,
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "Paused",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
         "internalType": "uint256",
         "name": "performanceFee",
         "type": "uint256"
@@ -440,6 +509,44 @@
       }
     ],
     "name": "PerformanceFeeSet",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "oldModule",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "newModule",
+        "type": "address"
+      }
+    ],
+    "name": "SetCruizeModule",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "oldRoundPerYer",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "newRoundPerYear",
+        "type": "uint256"
+      }
+    ],
+    "name": "SetRoundPerYear",
     "type": "event"
   },
   {
@@ -484,6 +591,44 @@
       }
     ],
     "name": "TargetSet",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "token",
+        "type": "address"
+      }
+    ],
+    "name": "TransferFromSafe",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "Unpaused",
     "type": "event"
   },
   {
@@ -534,9 +679,18 @@
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "token", "type": "address" }
+      {
+        "internalType": "address[]",
+        "name": "tokensList",
+        "type": "address[]"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "totalTokensBalance",
+        "type": "uint256[]"
+      }
     ],
-    "name": "closeRound",
+    "name": "closeTokensRound",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -553,7 +707,6 @@
       { "internalType": "string", "name": "name", "type": "string" },
       { "internalType": "string", "name": "symbol", "type": "string" },
       { "internalType": "address", "name": "token", "type": "address" },
-      { "internalType": "uint8", "name": "decimal", "type": "uint8" },
       { "internalType": "uint104", "name": "tokenCap", "type": "uint104" }
     ],
     "name": "createToken",
@@ -580,6 +733,15 @@
     "name": "currentQueuedWithdrawalShares",
     "outputs": [{ "internalType": "uint128", "name": "", "type": "uint128" }],
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "token", "type": "address" }
+    ],
+    "name": "deListTokens",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -614,13 +776,6 @@
   {
     "inputs": [],
     "name": "feeRecipient",
-    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "getFeeRecipient",
     "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
     "stateMutability": "view",
     "type": "function"
@@ -743,6 +898,20 @@
   },
   {
     "inputs": [],
+    "name": "pause",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "paused",
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "performanceFee",
     "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
     "stateMutability": "view",
@@ -789,6 +958,19 @@
       { "internalType": "uint256", "name": "newCap", "type": "uint256" }
     ],
     "name": "setCap",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "newCruizeModule",
+        "type": "address"
+      }
+    ],
+    "name": "setCruizeModule",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -847,6 +1029,19 @@
       }
     ],
     "name": "setPerformanceFee",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "NewRoundPerYear",
+        "type": "uint256"
+      }
+    ],
+    "name": "setRoundPerYear",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -919,7 +1114,7 @@
     "inputs": [
       { "internalType": "address", "name": "_paymentToken", "type": "address" },
       { "internalType": "address", "name": "_receiver", "type": "address" },
-      { "internalType": "address", "name": "cruizeProxy", "type": "address" },
+      { "internalType": "address", "name": "_cruizeProxy", "type": "address" },
       { "internalType": "uint256", "name": "_amount", "type": "uint256" }
     ],
     "name": "transferFromSafe",
@@ -932,6 +1127,13 @@
       { "internalType": "address", "name": "newOwner", "type": "address" }
     ],
     "name": "transferOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "unpause",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

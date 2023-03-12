@@ -70,7 +70,7 @@ const Input = ({
     )
       dispatch({
         type: Actions.SET_USER_INPUT_VALUE,
-        payload: state.balances.withdraw.requestBalance,
+        payload: state.balances.withdraw.requestBalance.fundsAvailableToWithdraw,
       })
   }, [state.selectedTab, state.withdrawType, state.balances])
 
