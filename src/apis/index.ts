@@ -16,13 +16,13 @@ export const getAssetPrice = async () => {
     )
     return {
       eth:
-      data && data.data && data.data.length
-      ? Number(
-          data.data.filter(
-            (a: { base: string; amount: string }) => a.base === 'ETH',
-          )[0].amount,
-        )
-      : 0,
+        data && data.data && data.data.length
+          ? Number(
+              data.data.filter(
+                (a: { base: string; amount: string }) => a.base === 'ETH',
+              )[0].amount,
+            )
+          : 0,
       weth:
         data && data.data && data.data.length
           ? Number(
@@ -39,7 +39,14 @@ export const getAssetPrice = async () => {
               )[0].amount,
             )
           : 0,
-      usdc: 1,
+      usdc:
+        data && data.data && data.data.length
+          ? Number(
+              data.data.filter(
+                (a: { base: string; amount: string }) => a.base === 'USDC',
+              )[0].amount,
+            )
+          : 0,
       error: null,
     }
   } catch (e) {

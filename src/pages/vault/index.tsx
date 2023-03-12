@@ -1,5 +1,4 @@
 import { gql, useQuery } from '@apollo/client'
-import { arbitrum } from '@wagmi/chains'
 import { ethers } from 'ethers'
 import { useContext, useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -53,7 +52,8 @@ const Vault = () => {
   const fallbackTVL = useMemo(
     () =>
       state.lockedAsset && state.assetPrice
-        ? state.lockedAsset['usdc'] * state.assetPrice['usdc'] +
+        ? state.lockedAsset['eth'] * state.assetPrice['eth'] +
+          state.lockedAsset['usdc'] * state.assetPrice['usdc'] +
           state.lockedAsset['weth'] * state.assetPrice['weth'] +
           state.lockedAsset['wbtc'] * state.assetPrice['wbtc']
         : 0,
