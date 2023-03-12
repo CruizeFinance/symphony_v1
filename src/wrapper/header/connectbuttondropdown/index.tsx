@@ -2,7 +2,6 @@ import { ConnectKitButton } from 'connectkit'
 import { useContext, useEffect, useRef, useState } from 'react'
 import Jazzicon from 'react-jazzicon/dist/Jazzicon'
 import {
-  goerli,
   useAccount,
   useDisconnect,
   useEnsName,
@@ -170,10 +169,7 @@ const ConnectButtonDropdown = () => {
                       window.open(
                         `https://${
                           state.connectedNetwork.chainId === arbitrum.id
-                            ? 'arbiscan'
-                            : state.connectedNetwork.chainId === goerli.id
-                            ? 'goerli.etherscan'
-                            : 'testnet.arbiscan'
+                            ? 'arbiscan' : 'testnet.arbiscan'
                         }.io/tx/${state.transactionDetails.hash}`,
                         '_blank',
                         'noreferrer noopener',
@@ -209,9 +205,7 @@ const ConnectButtonDropdown = () => {
                         window.open(
                           `https://${
                             state.connectedNetwork.chainId === arbitrum.id
-                              ? 'arbiscan'
-                              : state.connectedNetwork.chainId === goerli.id
-                              ? 'goerli.etherscan.io'
+                              ? 'arbiscan.io'
                               : 'testnet.arbiscan.io'
                           }/tx/${transaction.txHash}`,
                           '_blank',
@@ -262,8 +256,6 @@ const ConnectButtonDropdown = () => {
                           `https://${
                             state.connectedNetwork.chainId === arbitrum.id
                               ? 'arbiscan'
-                              : state.connectedNetwork.chainId === goerli.id
-                              ? 'goerli.etherscan'
                               : 'testnet.arbiscan'
                           }.io/address/${
                             CONTRACT_CONFIG[state.connectedNetwork.chainId][
@@ -277,10 +269,7 @@ const ConnectButtonDropdown = () => {
                     >
                       <div className="details-label" style={{ width: '90%' }}>
                         <label className="transaction-info">
-                          View more on{' '}
-                          {state.connectedNetwork.chainId === goerli.id
-                            ? 'Etherscan'
-                            : 'Arbiscan'}
+                          View more on Arbiscan
                         </label>
                       </div>
                       <div className="icon">
