@@ -34,6 +34,13 @@ export const AppContext = createContext<[State, React.Dispatch<Action>]>([
   () => {},
 ])
 
+const arbitrumClient = new ApolloClient({
+  link: new HttpLink({
+    uri: 'https://api.studio.thegraph.com/query/43660/cruize-vaults/v0.0.1',
+  }),
+  cache: new InMemoryCache(),
+})
+
 const arbitrumGoerliClient = new ApolloClient({
   link: new HttpLink({
     uri:
@@ -182,7 +189,16 @@ export const AppContextProvider = ({ children }: ContextProps) => {
 
   return (
     <AppContext.Provider value={[state, dispatch]}>
-      <ApolloProvider client={arbitrumGoerliClient}>{children}</ApolloProvider>
+      <ApolloProvider
+        client={
+          state.connectedNetwork &&
+          state.connectedNetwork.chainId === arbitrumGoerli.id
+            ? arbitrumGoerliClient
+            : arbitrumClient
+        }
+      >
+        {children}
+      </ApolloProvider>
     </AppContext.Provider>
   )
 }
