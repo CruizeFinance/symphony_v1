@@ -15,7 +15,7 @@ import { useAccount, useProvider } from 'wagmi'
 import { AppContext } from '../../../context'
 import { BigNumber, ethers } from 'ethers'
 import { Actions } from '../../../enums/actions'
-import { CONTRACT_CONFIG, rem } from '../../../utils'
+import { CONTRACT_CONFIG, rem, toFixed } from '../../../utils'
 import { TransactionReceipt, TransactionResponse } from '../../../interfaces'
 import TransactionDetail from './transactiondetail'
 import ConfettiExplosion from 'react-confetti-explosion'
@@ -391,7 +391,8 @@ const StakeCard = () => {
                   state.selectedAsset.toUpperCase()
                 ].address,
                 ethers.utils.parseUnits(
-                  (Number(state.userInputValue) / roundPrice).toFixed(
+                  toFixed(
+                    Number(state.userInputValue) / roundPrice,
                     CONTRACT_CONFIG[state.connectedNetwork.chainId][
                       state.selectedAsset.toUpperCase()
                     ].decimals,
@@ -649,28 +650,35 @@ const StakeCard = () => {
                 <WithdrawDetail
                   label="Complete withdrawal"
                   icon="tooltip-icon"
-                  amount={Number(
-                    state.balances.withdraw.requestBalance
-                      .fundsAvailableToWithdraw,
-                  ).toFixed(4)}
+                  amount={toFixed(
+                    Number(
+                      state.balances.withdraw.requestBalance
+                        .fundsAvailableToWithdraw,
+                    ),
+                    4,
+                  )}
                   unit={state.selectedAsset.toUpperCase()}
                   tooltip={`The assets that you requested to withdraw are available.`}
                 />
                 <WithdrawDetail
                   label="Funds in queue"
                   icon="tooltip-icon"
-                  amount={Number(
-                    state.balances.withdraw.requestBalance.fundsInQueue,
-                  ).toFixed(4)}
+                  amount={toFixed(
+                    Number(state.balances.withdraw.requestBalance.fundsInQueue),
+                    4,
+                  )}
                   unit={state.selectedAsset.toUpperCase()}
                   tooltip={`Your assets that are currently active in a vault and can only be withdrawn at the end of the epoch.`}
                 />
                 <WithdrawDetail
                   label="Funds in active use"
                   icon="tooltip-icon"
-                  amount={Number(
-                    state.balances.withdraw.requestBalance.fundsInActiveUse,
-                  ).toFixed(4)}
+                  amount={toFixed(
+                    Number(
+                      state.balances.withdraw.requestBalance.fundsInActiveUse,
+                    ),
+                    4,
+                  )}
                   unit={state.selectedAsset.toUpperCase()}
                   tooltip={`Your total assets that are currently active in vaults making you money brrrrrrrr.`}
                 />

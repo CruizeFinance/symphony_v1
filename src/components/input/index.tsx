@@ -4,6 +4,7 @@ import { useContext, useEffect, useMemo, useState } from 'react'
 import { AppContext } from '../../context'
 import { useAccount } from 'wagmi'
 import { Actions } from '../../enums/actions'
+import { toFixed } from '../../utils'
 
 interface InputProps {
   prependSymbol?: string
@@ -128,9 +129,9 @@ const Input = ({
           />
           <p className="usd-value">
             ~
-            {(
+            {toFixed((
               Number(input || 0) * state.assetPrice[state.selectedAsset]
-            ).toFixed(4)}
+            ), 4)}
           </p>
         </div>
         <div className="asset-section">

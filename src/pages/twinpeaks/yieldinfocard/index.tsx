@@ -11,6 +11,7 @@ import { loadYieldInfoGraph } from '../../../apis'
 import { Card } from '../../../components'
 import { AppContext } from '../../../context'
 import { Actions } from '../../../enums/actions'
+import { toFixed } from '../../../utils'
 import './yieldinfocard.scss'
 
 const YieldInfoCard = () => {
@@ -123,10 +124,10 @@ const YieldInfoCard = () => {
               <Tooltip
                 contentStyle={{ textTransform: 'uppercase' }}
                 formatter={function (value, name) {
-                  return `${Number(value).toFixed(3)}%`
+                  return `${toFixed(Number(value), 3)}%`
                 }}
                 labelFormatter={function (value) {
-                  return `Price change: ${Number(value).toFixed(3)}%`
+                  return `Price change: ${toFixed(Number(value), 3)}%`
                 }}
               />
               <Area
