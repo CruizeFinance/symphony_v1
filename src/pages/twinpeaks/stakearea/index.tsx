@@ -391,8 +391,11 @@ const StakeCard = () => {
                   state.selectedAsset.toUpperCase()
                 ].address,
                 ethers.utils.parseUnits(
-                  (Number(state.userInputValue) / roundPrice).toFixed(18) ||
-                    '0',
+                  (Number(state.userInputValue) / roundPrice).toFixed(
+                    CONTRACT_CONFIG[state.connectedNetwork.chainId][
+                      state.selectedAsset.toUpperCase()
+                    ].decimals,
+                  ) || '0',
                   CONTRACT_CONFIG[state.connectedNetwork.chainId][
                     state.selectedAsset.toUpperCase()
                   ].decimals,
@@ -427,6 +430,7 @@ const StakeCard = () => {
             ],
       )
     } catch (e) {
+      console.log(e)
       dispatch({
         type: Actions.SET_APP_ERROR,
         payload: (e as { message: string }).message,
