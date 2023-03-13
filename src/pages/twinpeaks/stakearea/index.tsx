@@ -630,7 +630,7 @@ const StakeCard = () => {
           onMaxClick={(val) =>
             dispatch({
               type: Actions.SET_USER_INPUT_VALUE,
-              payload: val,
+              payload: toFixed(Number(val), 4),
             })
           }
         />

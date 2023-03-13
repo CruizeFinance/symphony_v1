@@ -45,15 +45,15 @@ const Input = ({
   const assetBalance = useMemo(
     () =>
       state.selectedTab === 'deposit'
-        ? state.balances.depositBalance
+        ? toFixed(Number(state.balances.depositBalance), 4)
         : state.selectedTab === 'withdraw'
         ? state.withdrawType === 'instant'
           ? state.balances.withdraw.instantBalance
           : Number(
               state.balances.withdraw.requestBalance.fundsAvailableToWithdraw,
             )
-          ? state.balances.withdraw.requestBalance.fundsAvailableToWithdraw
-          : state.balances.withdraw.requestBalance.fundsInActiveUse
+          ? toFixed(Number(state.balances.withdraw.requestBalance.fundsAvailableToWithdraw), 4)
+          : toFixed(Number(state.balances.withdraw.requestBalance.fundsInActiveUse), 4)
         : '0' || '0',
     [state.balances],
   )
@@ -71,7 +71,7 @@ const Input = ({
     )
       dispatch({
         type: Actions.SET_USER_INPUT_VALUE,
-        payload: state.balances.withdraw.requestBalance.fundsAvailableToWithdraw,
+        payload: toFixed(Number(state.balances.withdraw.requestBalance.fundsAvailableToWithdraw), 4),
       })
   }, [state.selectedTab, state.withdrawType, state.balances])
 
