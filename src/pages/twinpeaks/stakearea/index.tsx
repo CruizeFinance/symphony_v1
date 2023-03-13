@@ -1,5 +1,13 @@
 import './stakearea.scss'
-import { Button, Card, Input, Sprite, Tabs, Tooltip } from '../../../components'
+import {
+  Button,
+  Card,
+  Input,
+  Modal,
+  Sprite,
+  Tabs,
+  Tooltip,
+} from '../../../components'
 import ConfirmStake from './confirmstake'
 import { useContext, useEffect, useState } from 'react'
 import { ConnectKitButton } from 'connectkit'
@@ -7,7 +15,7 @@ import { useAccount, useProvider } from 'wagmi'
 import { AppContext } from '../../../context'
 import { BigNumber, ethers } from 'ethers'
 import { Actions } from '../../../enums/actions'
-import { CONTRACT_CONFIG, rem } from '../../../utils'
+import { CONTRACT_CONFIG, rem, toFixed } from '../../../utils'
 import { TransactionReceipt, TransactionResponse } from '../../../interfaces'
 import TransactionDetail from './transactiondetail'
 import ConfettiExplosion from 'react-confetti-explosion'
@@ -54,7 +62,7 @@ const StakeCard = () => {
   const [openConfirm, setOpenConfirm] = useState(false)
   const [disableRequest, setDisableRequest] = useState(false)
   const [openTransactionDetail, setOpenTransactionDetail] = useState(false)
-  const [roundPrice, setRoundPrice] = useState(0)
+  const [roundPrice, setRoundPrice] = useState(BigNumber.from(0))
 
   const getBalance = async () => {
     try {
@@ -98,16 +106,7 @@ const StakeCard = () => {
         ].address,
         withdrawals.round < vault.round ? withdrawals.round : vault.round,
       )
-      setRoundPrice(
-        Number(
-          ethers.utils.formatUnits(
-            roundPricePerShare,
-            CONTRACT_CONFIG[state.connectedNetwork.chainId][
-              state.selectedAsset.toUpperCase()
-            ].decimals,
-          ),
-        ),
-      )
+      setRoundPrice(roundPricePerShare)
       dispatch({
         type: Actions.SET_BALANCES,
         payload: {
@@ -223,6 +222,7 @@ const StakeCard = () => {
           .address,
         ethers.constants.MaxUint256,
       )
+      dispatch({ type: Actions.SET_APPROVE_TOKEN_MODAL, payload: false })
       const data = await transactionExecution(tx, 'approve')
       dispatch({
         type: Actions.SET_SELCTED_ASSET_APPROVED,
@@ -322,6 +322,7 @@ const StakeCard = () => {
       type: Actions.SET_USER_INPUT_VALUE,
       payload: '',
     })
+    dispatch({ type: Actions.SET_APPROVE_TOKEN_MODAL, payload: false })
     setOpenConfirm(false)
   }
 
@@ -381,8 +382,28 @@ const StakeCard = () => {
                   state.selectedAsset.toUpperCase()
                 ].address,
                 ethers.utils.parseUnits(
-                  (Number(state.userInputValue) / roundPrice).toFixed(18) ||
-                    '0',
+                  ethers.utils.formatUnits(
+                    ethers.utils
+                      .parseUnits(
+                        state.userInputValue || '0',
+                        CONTRACT_CONFIG[state.connectedNetwork.chainId][
+                          state.selectedAsset.toUpperCase()
+                        ].decimals,
+                      )
+                      .mul(
+                        BigNumber.from('10').pow(
+                          BigNumber.from(
+                            CONTRACT_CONFIG[state.connectedNetwork.chainId][
+                              state.selectedAsset.toUpperCase()
+                            ].decimals,
+                          ),
+                        ),
+                      )
+                      .div(roundPrice),
+                    CONTRACT_CONFIG[state.connectedNetwork.chainId][
+                      state.selectedAsset.toUpperCase()
+                    ].decimals,
+                  ),
                   CONTRACT_CONFIG[state.connectedNetwork.chainId][
                     state.selectedAsset.toUpperCase()
                   ].decimals,
@@ -417,6 +438,7 @@ const StakeCard = () => {
             ],
       )
     } catch (e) {
+      console.log(e)
       dispatch({
         type: Actions.SET_APP_ERROR,
         payload: (e as { message: string }).message,
@@ -615,7 +637,7 @@ const StakeCard = () => {
           onMaxClick={(val) =>
             dispatch({
               type: Actions.SET_USER_INPUT_VALUE,
-              payload: val,
+              payload: toFixed(Number(val), 4),
             })
           }
         />
@@ -635,28 +657,35 @@ const StakeCard = () => {
                 <WithdrawDetail
                   label="Complete withdrawal"
                   icon="tooltip-icon"
-                  amount={Number(
-                    state.balances.withdraw.requestBalance
-                      .fundsAvailableToWithdraw,
-                  ).toFixed(4)}
+                  amount={toFixed(
+                    Number(
+                      state.balances.withdraw.requestBalance
+                        .fundsAvailableToWithdraw,
+                    ),
+                    4,
+                  )}
                   unit={state.selectedAsset.toUpperCase()}
                   tooltip={`The assets that you requested to withdraw are available.`}
                 />
                 <WithdrawDetail
                   label="Funds in queue"
                   icon="tooltip-icon"
-                  amount={Number(
-                    state.balances.withdraw.requestBalance.fundsInQueue,
-                  ).toFixed(4)}
+                  amount={toFixed(
+                    Number(state.balances.withdraw.requestBalance.fundsInQueue),
+                    4,
+                  )}
                   unit={state.selectedAsset.toUpperCase()}
                   tooltip={`Your assets that are currently active in a vault and can only be withdrawn at the end of the epoch.`}
                 />
                 <WithdrawDetail
                   label="Funds in active use"
                   icon="tooltip-icon"
-                  amount={Number(
-                    state.balances.withdraw.requestBalance.fundsInActiveUse,
-                  ).toFixed(4)}
+                  amount={toFixed(
+                    Number(
+                      state.balances.withdraw.requestBalance.fundsInActiveUse,
+                    ),
+                    4,
+                  )}
                   unit={state.selectedAsset.toUpperCase()}
                   tooltip={`Your total assets that are currently active in vaults making you money brrrrrrrr.`}
                 />
@@ -664,14 +693,41 @@ const StakeCard = () => {
             )}
           </div>
         ) : null}
-        {state.appError ? (
-          <div className="error-area">
-            <div className="error-title">
-              <Sprite id="error-icon" width={17} height={16} />
-              <label className="title-label">ERROR</label>
-            </div>
-            <p className="error-text">{state.appError}</p>
-          </div>
+        {isConnected ? (
+          <>
+            {state.selectedAssetApproved ? null : (
+              <div
+                className="error-area"
+                style={{ background: 'var(--contained-tab-background)' }}
+              >
+                <div className="error-title">
+                  <Sprite id="guide-icon" width={17} height={16} />
+                  <label
+                    className="title-label"
+                    style={{ color: 'var(--link-inactive)' }}
+                  >
+                    Guide
+                  </label>
+                </div>
+                <p
+                  className="error-text"
+                  style={{ color: 'var(--link-inactive)' }}
+                >
+                  You will be asked to approve this currency from your wallet.
+                  You will need to approve each currency only once.
+                </p>
+              </div>
+            )}
+            {state.appError ? (
+              <div className="error-area">
+                <div className="error-title">
+                  <Sprite id="error-icon" width={17} height={16} />
+                  <label className="title-label">ERROR</label>
+                </div>
+                <p className="error-text">{state.appError}</p>
+              </div>
+            ) : null}
+          </>
         ) : null}
         {!isConnected ? (
           <ConnectKitButton.Custom>
@@ -689,7 +745,11 @@ const StakeCard = () => {
             onClick={
               state.selectedAssetApproved
                 ? () => setOpenConfirm(true)
-                : () => approveToken()
+                : () =>
+                    dispatch({
+                      type: Actions.SET_APPROVE_TOKEN_MODAL,
+                      payload: true,
+                    })
             }
             disabled={
               (Number(state.userInputValue) <= 0 &&
@@ -740,7 +800,7 @@ const StakeCard = () => {
                   state.connectedNetwork.networkEnv === 'mainnet' ? rem(16) : 0,
               }}
             >
-              Add {state.selectedAsset.toUpperCase()} to wallet
+              Show {state.selectedAsset.toUpperCase()} in wallet
             </div>
           ) : null}
           {state.connectedNetwork.networkEnv === 'testnet' ? (
@@ -767,6 +827,47 @@ const StakeCard = () => {
           ) : null}
         </Card>
       ) : null}
+      <Modal
+        open={state.approveTokenModal}
+        hide={() =>
+          dispatch({ type: Actions.SET_APPROVE_TOKEN_MODAL, payload: false })
+        }
+      >
+        <div className="approve-token-modal">
+          <div className="approve-modal-header">
+            <Sprite
+              id={`big-${state.selectedAsset}-icon`}
+              width={48}
+              height={48}
+            />
+            <p
+              style={{
+                color: 'var(--link-inactive)',
+                fontSize: rem(24),
+                cursor: 'pointer',
+              }}
+              onClick={() =>
+                dispatch({
+                  type: Actions.SET_APPROVE_TOKEN_MODAL,
+                  payload: false,
+                })
+              }
+            >
+              &#10005;
+            </p>
+          </div>
+          <div className="approve-modal-content">
+            <label className="modal-content-title">Approve Currency</label>
+            <p className="modal-content-desc">
+              You will be asked to approve this currency from your wallet. You
+              will need to approve each currency only once.
+            </p>
+          </div>
+          <Button className="approve-button" onClick={approveToken}>
+            Continue
+          </Button>
+        </div>
+      </Modal>
     </>
   )
 }

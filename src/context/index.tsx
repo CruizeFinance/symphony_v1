@@ -16,7 +16,12 @@ import CRUIZECONTRACTABI from '../abi/cruizecontract.json'
 import MINTTOKENABI from '../abi/minttoken.json'
 import { useOnceCall } from '../hooks'
 import { BigNumber, Contract, ethers, Signer } from 'ethers'
-import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client'
+import {
+  ApolloClient,
+  ApolloProvider,
+  HttpLink,
+  InMemoryCache,
+} from '@apollo/client'
 import { arbitrumGoerli } from '@wagmi/chains'
 import { Assets } from '../enums/assets'
 
@@ -29,15 +34,18 @@ export const AppContext = createContext<[State, React.Dispatch<Action>]>([
   () => {},
 ])
 
-const goerliClient = new ApolloClient({
-  uri:
-    'https://api.studio.thegraph.com/query/41560/cruize-testing-vaults/v0.0.10',
+const arbitrumClient = new ApolloClient({
+  link: new HttpLink({
+    uri: 'https://api.studio.thegraph.com/query/43660/cruize-vaults/v0.0.1',
+  }),
   cache: new InMemoryCache(),
 })
 
-const arbitrumClient = new ApolloClient({
-  uri:
-    'https://api.thegraph.com/subgraphs/name/salmanbao/cruize-testing-module',
+const arbitrumGoerliClient = new ApolloClient({
+  link: new HttpLink({
+    uri:
+      'https://api.thegraph.com/subgraphs/name/salmanbao/cruize-testing-module',
+  }),
   cache: new InMemoryCache(),
 })
 export const AppContextProvider = ({ children }: ContextProps) => {
@@ -111,11 +119,6 @@ export const AppContextProvider = ({ children }: ContextProps) => {
     }
   }
 
-  const loadTVL = async () => {
-    const totalTVL = await getTVL(state.connectedNetwork.networkEnv)
-      dispatch({ type: Actions.SET_LOCKED_ASSET, payload: totalTVL.message })
-  }
-
   useEffect(() => {
     if (chain) {
       dispatch({
@@ -129,7 +132,6 @@ export const AppContextProvider = ({ children }: ContextProps) => {
 
   useEffect(() => {
     if (state.connectedNetwork) {
-      loadTVL()
       setCurrentDeposit()
     }
   }, [state.connectedNetwork])
@@ -185,8 +187,8 @@ export const AppContextProvider = ({ children }: ContextProps) => {
         client={
           state.connectedNetwork &&
           state.connectedNetwork.chainId === arbitrumGoerli.id
-            ? arbitrumClient
-            : goerliClient
+            ? arbitrumGoerliClient
+            : arbitrumClient
         }
       >
         {children}

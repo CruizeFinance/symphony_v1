@@ -1,8 +1,31 @@
 @import '../../style/mixins.scss';
 @import '../../style/functions.scss';
 
+/* .layer-0 {
+  width: 100%;
+  height: 90vh;
+  max-width: 2560px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -2;
+  background-size: cover;
+  background-position: center;
+  box-shadow: 0 0 toRem(12) toRem(12) var(--white) inset;
+}
+.layer-1 {
+  width: 100%;
+  height: 100%;
+  max-width: 2560px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -2;
+  background: var(--layer-1-background);
+} */
 .vault-container {
-  padding: toRem(60);
+  position: relative;
+  padding: toRem(120) toRem(60);
   @media screen and (min-width: 320px) and (max-width: 1024px) {
     padding: toRem(120) toRem(16);
   }
@@ -16,10 +39,16 @@
     max-width: toRem(775);
     text-align: center;
     .title {
-      @include typography(GroteskSemiBold, toRem(56), toRem(72), var(--black));
+      @include typography(CochinItalic, toRem(100), toRem(100), var(--black));
+      margin-bottom: toRem(11);
     }
     .sub-title {
-      @include typography(GroteskMedium, toRem(22), toRem(30), var(--black));
+      @include typography(
+        GroteskRegular,
+        toRem(24),
+        toRem(28),
+        var(--small-dropdown-color)
+      );
     }
   }
   .tvl-info {
@@ -33,10 +62,26 @@
       @include typography(GroteskSemiBold, toRem(36), toRem(40), var(--black));
     }
   }
-  .vault-options {
-    @include flex(row, center, center, toRem(20));
+  .vault-filters {
+    @include flex(row, center, center, toRem(14));
+    .filter-button {
+      background: var(--filter-inactive-button-background);
+      color: var(--black);
+      border: toRem(1) solid var(--black);
+    }
     @media screen and (min-width: 320px) and (max-width: 1024px) {
-      flex-direction: column-reverse;
+      flex-direction: column;
+      align-items: unset;
+    }
+  }
+  .vault-options-container {
+    @include flex(column, center, center, toRem(30));
+    .vault-options {
+      @include flex(row, baseline, center, toRem(30));
+      flex-wrap: wrap;
+      @media screen and (min-width: 320px) and (max-width: 1024px) {
+        flex-direction: column-reverse;
+      }
     }
   }
 }

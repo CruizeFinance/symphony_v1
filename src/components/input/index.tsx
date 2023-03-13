@@ -4,6 +4,7 @@ import { useContext, useEffect, useMemo, useState } from 'react'
 import { AppContext } from '../../context'
 import { useAccount } from 'wagmi'
 import { Actions } from '../../enums/actions'
+import { toFixed } from '../../utils'
 
 interface InputProps {
   prependSymbol?: string
@@ -44,15 +45,15 @@ const Input = ({
   const assetBalance = useMemo(
     () =>
       state.selectedTab === 'deposit'
-        ? state.balances.depositBalance
+        ? toFixed(Number(state.balances.depositBalance), 4)
         : state.selectedTab === 'withdraw'
         ? state.withdrawType === 'instant'
           ? state.balances.withdraw.instantBalance
           : Number(
               state.balances.withdraw.requestBalance.fundsAvailableToWithdraw,
             )
-          ? state.balances.withdraw.requestBalance.fundsAvailableToWithdraw
-          : state.balances.withdraw.requestBalance.fundsInActiveUse
+          ? toFixed(Number(state.balances.withdraw.requestBalance.fundsAvailableToWithdraw), 4)
+          : toFixed(Number(state.balances.withdraw.requestBalance.fundsInActiveUse), 4)
         : '0' || '0',
     [state.balances],
   )
@@ -62,13 +63,16 @@ const Input = ({
   }, [inputValue])
 
   useEffect(() => {
-    dispatch({type: Actions.SET_USER_INPUT_VALUE, payload: state.selectedTab === 'withdraw' &&
-    state.withdrawType === 'request' &&
-    Number(
-      state.balances.withdraw.requestBalance.fundsAvailableToWithdraw,
-    ) > 0
-      ? state.balances.withdraw.requestBalance
-          .fundsAvailableToWithdraw : ''})
+    if (
+      state.selectedTab === 'withdraw' &&
+      state.withdrawType === 'request' &&
+      Number(state.balances.withdraw.requestBalance.fundsAvailableToWithdraw) >
+        0
+    )
+      dispatch({
+        type: Actions.SET_USER_INPUT_VALUE,
+        payload: toFixed(Number(state.balances.withdraw.requestBalance.fundsAvailableToWithdraw), 4),
+      })
   }, [state.selectedTab, state.withdrawType, state.balances])
 
   return (
@@ -113,17 +117,21 @@ const Input = ({
             }}
             placeholder="0"
             className="input-field"
-            disabled={state.selectedTab === 'withdraw' &&
-            state.withdrawType === 'request' &&
-            Number(
-              state.balances.withdraw.requestBalance.fundsAvailableToWithdraw,
-            ) > 0}
+            disabled={
+              (state.selectedTab === 'withdraw' &&
+                state.withdrawType === 'request' &&
+                Number(
+                  state.balances.withdraw.requestBalance
+                    .fundsAvailableToWithdraw,
+                ) > 0) ||
+              !state.selectedAssetApproved
+            }
           />
           <p className="usd-value">
             ~
-            {(
+            {toFixed((
               Number(input || 0) * state.assetPrice[state.selectedAsset]
-            ).toFixed(4)}
+            ), 4)}
           </p>
         </div>
         <div className="asset-section">

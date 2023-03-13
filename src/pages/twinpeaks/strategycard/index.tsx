@@ -205,7 +205,7 @@ const StrategyCard = () => {
                   transition: 'width 0.3s ease-in',
                 }}
               />
-              <label className="deposit-info">
+              <label className="deposit-info" {...state.approveTokenModal ? { style: { zIndex: 0 } } : undefined}>
                 {formatNumberSuffix(state.currentDeposit.tvl)}{' '}
                 {state.selectedAsset.toUpperCase()} /{' '}
                 {formatNumberSuffix(state.currentDeposit.vault_cap)}{' '}

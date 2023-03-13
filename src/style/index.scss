@@ -26,6 +26,10 @@
   font-family: GroteskVariable;
   src: url('./fonts/ClashGrotesk-Variable.ttf') format('truetype');
 }
+@font-face {
+  font-family: CochinItalic;
+  src: url('./fonts/Cochin-Italic.ttf') format('truetype');
+}
 
 html {
   scroll-behavior: smooth;

@@ -71,17 +71,23 @@ async function handleResponse(response: Response) {
 
 export function formatNumberSuffix(amount: number) {
   if (amount <= 0) return 0
-  if (amount < 1) return amount.toFixed(4)
+  if (amount < 1) return toFixed(amount, 4)
   const abbreviations = ['', 'K', 'M', 'B', 'T']
   const abbreviationIndex = Math.floor(Math.log10(amount) / 3)
   return (
-    (amount / Math.pow(10, abbreviationIndex * 3)).toFixed(1) +
+    toFixed(amount / Math.pow(10, abbreviationIndex * 3), 1) +
     abbreviations[abbreviationIndex]
   )
 }
 
 export function percentge(partialValue: number, totalValue: number) {
   return (100 * partialValue) / totalValue
+}
+
+export function toFixed(num: number, digits: number) {
+  const multiplier = Math.pow(10, digits);
+  const result = Math.trunc(num * multiplier) / multiplier;
+  return result.toFixed(digits);
 }
 
 export * from './constants'

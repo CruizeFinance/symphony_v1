@@ -1,6 +1,5 @@
-import { useContext, useEffect, useRef, useState } from 'react'
+import { useContext, useRef, useState } from 'react'
 import { useSwitchNetwork } from 'wagmi'
-import { getTVL } from '../../../apis'
 import { Sprite } from '../../../components'
 import { AppContext } from '../../../context'
 import { Actions } from '../../../enums/actions'

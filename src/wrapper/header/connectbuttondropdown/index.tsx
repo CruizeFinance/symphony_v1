@@ -2,11 +2,10 @@ import { ConnectKitButton } from 'connectkit'
 import { useContext, useEffect, useRef, useState } from 'react'
 import Jazzicon from 'react-jazzicon/dist/Jazzicon'
 import {
-  goerli,
   useAccount,
-  useBalance,
   useDisconnect,
   useEnsName,
+  useProvider,
 } from 'wagmi'
 import { Button, Loader, Sprite } from '../../../components'
 import { AppContext } from '../../../context'
@@ -53,10 +52,8 @@ const ConnectButtonDropdown = () => {
     address: accountAddress,
   })
   const { disconnect } = useDisconnect()
-  const { data: userBalance } = useBalance({
-    address: accountAddress,
-    formatUnits: 'ether',
-  })
+
+  const provider = useProvider()
 
   const dropdownRef = useRef(null)
   useOutsideAlerter(dropdownRef, () => setShowDropdown(false))
@@ -67,6 +64,14 @@ const ConnectButtonDropdown = () => {
     },
   })
 
+  const [showDropdown, setShowDropdown] = useState(false)
+  const [bal, setBal] = useState('')
+
+  const loadBalance = async () => {
+    const bal = await provider.getBalance(accountAddress || '')
+    setBal(ethers.utils.formatUnits(bal, 18))
+  }
+
   useEffect(() => {
     if (transactionData) {
       dispatch({
@@ -76,7 +81,9 @@ const ConnectButtonDropdown = () => {
     }
   }, [transactionData])
 
-  const [showDropdown, setShowDropdown] = useState(false)
+  useEffect(() => {
+    loadBalance()
+  }, [])
 
   return (
     <div className="connect-button-dropdown" ref={dropdownRef}>
@@ -124,7 +131,7 @@ const ConnectButtonDropdown = () => {
                   )}`}
               </label>
               <label className="wallet-balance">
-                {userBalance?.formatted.slice(0, 8)}
+                {bal}
               </label>
             </div>
             <div className="wallet-actions">
@@ -162,10 +169,7 @@ const ConnectButtonDropdown = () => {
                       window.open(
                         `https://${
                           state.connectedNetwork.chainId === arbitrum.id
-                            ? 'arbiscan'
-                            : state.connectedNetwork.chainId === goerli.id
-                            ? 'goerli.etherscan'
-                            : 'testnet.arbiscan'
+                            ? 'arbiscan' : 'testnet.arbiscan'
                         }.io/tx/${state.transactionDetails.hash}`,
                         '_blank',
                         'noreferrer noopener',
@@ -201,10 +205,8 @@ const ConnectButtonDropdown = () => {
                         window.open(
                           `https://${
                             state.connectedNetwork.chainId === arbitrum.id
-                              ? 'arbiscan'
-                              : state.connectedNetwork.chainId === goerli.id
-                              ? 'goerli.etherscan'
-                              : 'testnet.arbiscan'
+                              ? 'arbiscan.io'
+                              : 'testnet.arbiscan.io'
                           }/tx/${transaction.txHash}`,
                           '_blank',
                           'noreferrer noopener',
@@ -254,8 +256,6 @@ const ConnectButtonDropdown = () => {
                           `https://${
                             state.connectedNetwork.chainId === arbitrum.id
                               ? 'arbiscan'
-                              : state.connectedNetwork.chainId === goerli.id
-                              ? 'goerli.etherscan'
                               : 'testnet.arbiscan'
                           }.io/address/${
                             CONTRACT_CONFIG[state.connectedNetwork.chainId][
@@ -269,10 +269,7 @@ const ConnectButtonDropdown = () => {
                     >
                       <div className="details-label" style={{ width: '90%' }}>
                         <label className="transaction-info">
-                          View more on{' '}
-                          {state.connectedNetwork.chainId === goerli.id
-                            ? 'Etherscan'
-                            : 'Arbiscan'}
+                          View more on Arbiscan
                         </label>
                       </div>
                       <div className="icon">

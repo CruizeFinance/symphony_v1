@@ -70,6 +70,7 @@ export default interface State {
   userInputValue: string
   appError: string
   lockedAsset: {
+    [Assets.ETH]: number,
     [Assets.WETH]: number,
     [Assets.WBTC]: number,
     [Assets.USDC]: number

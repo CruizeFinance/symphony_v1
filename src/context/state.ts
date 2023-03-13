@@ -5,7 +5,7 @@ import State from './statemodel'
 const initialState: State = {
   bgColor: 'default',
   selectedAsset: Assets.ETH,
-  connectedNetwork: NETWORK_CONFIG.TESTNET.goerli,
+  connectedNetwork: NETWORK_CONFIG.MAINNET.arbitrum,
   selectedTab: 'deposit',
   assetPrice: {
     [Assets.ETH]: 0,
@@ -50,6 +50,7 @@ const initialState: State = {
   userInputValue: '',
   appError: '',
   lockedAsset: {
+    [Assets.ETH]: 0,
     [Assets.WETH]: 0,
     [Assets.WBTC]: 0,
     [Assets.USDC]: 0
