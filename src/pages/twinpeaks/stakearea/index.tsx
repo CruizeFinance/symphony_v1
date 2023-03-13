@@ -62,7 +62,7 @@ const StakeCard = () => {
   const [openConfirm, setOpenConfirm] = useState(false)
   const [disableRequest, setDisableRequest] = useState(false)
   const [openTransactionDetail, setOpenTransactionDetail] = useState(false)
-  const [roundPrice, setRoundPrice] = useState(0)
+  const [roundPrice, setRoundPrice] = useState(BigNumber.from(0))
 
   const getBalance = async () => {
     try {
@@ -106,16 +106,7 @@ const StakeCard = () => {
         ].address,
         withdrawals.round < vault.round ? withdrawals.round : vault.round,
       )
-      setRoundPrice(
-        Number(
-          ethers.utils.formatUnits(
-            roundPricePerShare,
-            CONTRACT_CONFIG[state.connectedNetwork.chainId][
-              state.selectedAsset.toUpperCase()
-            ].decimals,
-          ),
-        ),
-      )
+      setRoundPrice(roundPricePerShare)
       dispatch({
         type: Actions.SET_BALANCES,
         payload: {
@@ -391,12 +382,28 @@ const StakeCard = () => {
                   state.selectedAsset.toUpperCase()
                 ].address,
                 ethers.utils.parseUnits(
-                  toFixed(
-                    Number(state.userInputValue) / roundPrice,
+                  ethers.utils.formatUnits(
+                    ethers.utils
+                      .parseUnits(
+                        state.userInputValue || '0',
+                        CONTRACT_CONFIG[state.connectedNetwork.chainId][
+                          state.selectedAsset.toUpperCase()
+                        ].decimals,
+                      )
+                      .mul(
+                        BigNumber.from('10').pow(
+                          BigNumber.from(
+                            CONTRACT_CONFIG[state.connectedNetwork.chainId][
+                              state.selectedAsset.toUpperCase()
+                            ].decimals,
+                          ),
+                        ),
+                      )
+                      .div(roundPrice),
                     CONTRACT_CONFIG[state.connectedNetwork.chainId][
                       state.selectedAsset.toUpperCase()
                     ].decimals,
-                  ) || '0',
+                  ),
                   CONTRACT_CONFIG[state.connectedNetwork.chainId][
                     state.selectedAsset.toUpperCase()
                   ].decimals,

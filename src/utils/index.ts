@@ -85,28 +85,9 @@ export function percentge(partialValue: number, totalValue: number) {
 }
 
 export function toFixed(num: number, digits: number) {
-  if (isNaN(num)) {
-    return 'NaN'
-  }
-  if (digits < 0) {
-    throw new RangeError('toFixedNoRound() digits argument must be more than 0')
-  }
-  let str = num.toString()
-  let decimalIndex = str.indexOf('.')
-  if (decimalIndex === -1) {
-    return str + '.' + '0'.repeat(digits)
-  } else if (digits === 0) {
-    return str.substring(0, decimalIndex)
-  } else {
-    let numDigitsAfterDecimal = str.length - decimalIndex - 1
-    if (numDigitsAfterDecimal === digits) {
-      return str
-    } else if (numDigitsAfterDecimal < digits) {
-      return str + '0'.repeat(digits - numDigitsAfterDecimal)
-    } else {
-      return str.substring(0, decimalIndex + digits + 1)
-    }
-  }
+  const multiplier = Math.pow(10, digits);
+  const result = Math.trunc(num * multiplier) / multiplier;
+  return result.toFixed(digits);
 }
 
 export * from './constants'
