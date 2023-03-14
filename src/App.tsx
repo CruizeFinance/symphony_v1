@@ -12,8 +12,8 @@ import { ConnectKitProvider } from 'connectkit'
 import { SUPPORTED_CHAINS } from './utils'
 
 // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
+import { initializeApp } from 'firebase/app'
+import { getAnalytics } from 'firebase/analytics'
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -26,12 +26,14 @@ const firebaseConfig = {
   storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
   messagingSenderId: process.env.REACT_APP_FIREBASE_MESSENGING_SENDER_ID,
   appId: process.env.REACT_APP_FIREBASE_APP_ID,
-  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID
-};
+  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID,
+}
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
-getAnalytics(app);
+if (process.env.REACT_APP_ENV && process.env.REACT_APP_ENV !== 'dev') {
+  const app = initializeApp(firebaseConfig)
+  getAnalytics(app)
+}
 
 const App = () => {
   const {
