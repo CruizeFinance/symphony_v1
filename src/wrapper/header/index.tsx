@@ -73,7 +73,7 @@ const Header = () => {
   return (
     <div className="header" {...state.approveTokenModal ? { style: { zIndex: 0 } } : undefined}>
       <div className="logo-area">
-        <Sprite id="cruize-header-icon" width={128} height={46} />
+        <Sprite id="cruize-header-beta-icon" width={156} height={46} />
         <div className="links">
           <Link
             to={`/vaults`}
