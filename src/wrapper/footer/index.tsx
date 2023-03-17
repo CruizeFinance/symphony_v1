@@ -65,7 +65,7 @@ const Footer = () => {
             </a>
             <a
               className="link"
-              href="https://docs.cruize.finance/implementation/audit"
+              href="https://docs.cruize.finance/technical-details/audits"
               target={'_blank'}
               rel={'noreferrer noopener'}
             >
