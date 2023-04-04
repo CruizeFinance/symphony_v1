@@ -126,16 +126,16 @@ const Vault = () => {
             </Button>
             <Button
               className={
-                filter === 'camelot-yield-booster' ? '' : 'filter-button'
+                filter === 'ramses-yield-booster' ? '' : 'filter-button'
               }
-              onClick={() => setFilter('camelot-yield-booster')}
+              onClick={() => setFilter('ramses-yield-booster')}
             >
               Yield Booster
             </Button>
           </div> */}
           <div className="vault-options-container">
             <div className="vault-options">
-              {/* {filter !== 'camelot-yield-booster' ? ( */}
+              {/* {filter !== 'ramses-yield-booster' ? ( */}
               <>
                 {/* <VaultCard
                   cardTitle="Bullish Ascent"
@@ -187,7 +187,7 @@ const Vault = () => {
                     disabled: true,
                   }}
                   cardTagLabel={'Ramses Yield Booster'}
-                  vaultType={'full-principal-protected'}
+                  vaultType={'ramses-yield-booster'}
                 />
                 <VaultCard
                   cardTitle="RAM-USDC"
@@ -204,7 +204,7 @@ const Vault = () => {
                     disabled: true,
                   }}
                   cardTagLabel={'Ramses Yield Booster'}
-                  vaultType={'full-principal-protected'}
+                  vaultType={'ramses-yield-booster'}
                 />
                 <VaultCard
                   cardTitle="Twin Peaks"
@@ -261,7 +261,7 @@ const Vault = () => {
                       disabled: true,
                     }}
                     cardTagLabel={'Yield Booster'}
-                    vaultType={'camelot-yield-booster'}
+                    vaultType={'ramses-yield-booster'}
                   />
                   <VaultCard
                     cardTitle="WBTC-ETH"
@@ -279,7 +279,7 @@ const Vault = () => {
                       disabled: true,
                     }}
                     cardTagLabel={'Yield Booster'}
-                    vaultType={'camelot-yield-booster'}
+                    vaultType={'ramses-yield-booster'}
                   />
                   <VaultCard
                     cardTitle="USDT-USDC"
@@ -297,7 +297,7 @@ const Vault = () => {
                       disabled: true,
                     }}
                     cardTagLabel={'Yield Booster'}
-                    vaultType={'camelot-yield-booster'}
+                    vaultType={'ramses-yield-booster'}
                   />
                 </>
               ) : null}

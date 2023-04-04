@@ -13,7 +13,7 @@ interface VaultCardProps {
     buttonIcon?: ReactNode,
     disabled?: boolean
   }
-  vaultType?: 'full-principal-protected' | 'camelot-yield-booster'
+  vaultType?: 'full-principal-protected' | 'ramses-yield-booster'
   cardTagLabel?: string
 }
 
