@@ -1,0 +1,86 @@
+@import '../../style/functions.scss';
+@import '../../style/mixins.scss';
+
+.ramses-usdc-usdt {
+  padding: toRem(60);
+  @media screen and (min-width: 320px) and (max-width: 1024px) {
+    padding: toRem(48) toRem(16);
+  }
+}
+.ramses-usdc-usdt-content {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-rows: toRem(30) 1fr;
+  row-gap: toRem(20);
+  .back-button {
+    background: var(--white);
+    padding: toRem(6) toRem(15);
+    color: var(--link-inactive);
+    @include flex(row, center, '', toRem(10));
+    @include typography(
+      GroteskMedium,
+      toRem(14),
+      toRem(18),
+      var(--link-inactive)
+    );
+    border: none;
+    border-radius: toRem(20);
+    width: fit-content;
+    cursor: pointer;
+  }
+  .container {
+    @include flex(row, flex-start, center, toRem(66));
+    width: 100%;
+    .info-col {
+      width: 65%;
+      .title {
+        @include typography(GroteskMedium, toRem(48), toRem(54), var(--black));
+        margin-bottom: toRem(20);
+        @media screen and (min-width: 320px) and (max-width: 1024px) {
+          font-size: toRem(28);
+          line-height: toRem(28);
+        }
+      }
+    }
+    .stake-area {
+      display: block;
+      width: 35%;
+      position: sticky;
+      top: toRem(180);
+      @media screen and (min-width: 320px) and (max-width: 1024px) {
+        display: none;
+      }
+    }
+  }
+  @media screen and (min-width: 320px) and (max-width: 1024px) {
+    display: flex;
+    flex-direction: column;
+    .container {
+      .info-col {
+        width: 100%;
+      }
+    }
+  }
+}
+.approve-modal-content {
+  max-width: toRem(600);
+  padding: toRem(24);
+  border-radius: toRem(12);
+  background: var(--white);
+  @include flex(column, flex-start, center, toRem(16));
+  .approve-desc {
+    @include flex(column, flex-start, center, toRem(4));
+    .approve-desc-title {
+      @include typography(GroteskMedium, toRem(24), 150%, var(--black));
+    }
+    .approve-desc-text {
+      @include typography(GroteskRegular, toRem(14), toRem(20), var(--small-dropdown-color));
+    }
+  }
+  .approve-modal-button {
+    width: 100%;
+    margin-top: toRem(16);
+    @include typography(GroteskSemiBold, toRem(16), toRem(24), var(--white))
+  }
+}
