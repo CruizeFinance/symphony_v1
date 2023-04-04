@@ -4,6 +4,6 @@ export enum Assets {
   WBTC = 'wbtc',
   WETH = 'weth',
   USDC = 'usdc',
-  RAM = 'ram',
-  USDT = 'usdt'
+  // RAM = 'ram',
+  // USDT = 'usdt'
 }
