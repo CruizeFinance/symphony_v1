@@ -137,7 +137,7 @@ const Vault = () => {
             <div className="vault-options">
               {/* {filter !== 'camelot-yield-booster' ? ( */}
               <>
-                <VaultCard
+                {/* <VaultCard
                   cardTitle="Bullish Ascent"
                   cardInfo={
                     <>
@@ -154,8 +154,8 @@ const Vault = () => {
                   }}
                   cardTagLabel={'Principal Protected'}
                   vaultType={'full-principal-protected'}
-                />
-                <VaultCard
+                /> */}
+                {/* <VaultCard
                   cardTitle="Bearish Ascent"
                   cardInfo={
                     <>
@@ -170,6 +170,40 @@ const Vault = () => {
                     disabled: true,
                   }}
                   cardTagLabel={'Principal Protected'}
+                  vaultType={'full-principal-protected'}
+                /> */}
+                <VaultCard
+                  cardTitle="USDC-USDT"
+                  cardInfo={
+                    <>
+                      Boost your veRAM earnings by using the USDC generated 
+                      on your position to fund a principal protected interest strategy. 
+                    </>
+                  }
+                  cardIcons={['usdc', 'usdt']}
+                  apy={'6.78%'}
+                  buttonOptions={{
+                    label: 'Coming Soon',
+                    disabled: true,
+                  }}
+                  cardTagLabel={'Ramses Yield Booster'}
+                  vaultType={'full-principal-protected'}
+                />
+                <VaultCard
+                  cardTitle="RAM-USDC"
+                  cardInfo={
+                    <>
+                      Boost your veRAM earnings by using the USDC generated 
+                      on your position to fund a principal protected interest strategy. 
+                    </>
+                  }
+                  cardIcons={['ram','usdc']}
+                  apy={'6.78%'}
+                  buttonOptions={{
+                    label: 'Coming Soon',
+                    disabled: true,
+                  }}
+                  cardTagLabel={'Ramses Yield Booster'}
                   vaultType={'full-principal-protected'}
                 />
                 <VaultCard

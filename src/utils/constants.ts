@@ -19,7 +19,7 @@ export const VAULT_NAV_LINKS = [
   },
 ]
 
-export const DROPDOWN_OPTIONS = [Assets.ETH, Assets.WETH, Assets.WBTC, Assets.USDC]
+export const DROPDOWN_OPTIONS = [Assets.ETH, Assets.WETH, Assets.WBTC, Assets.USDC, Assets.USDT, Assets.RAM]
 
 export const NETWORK_CONFIG: NetworkConfig = {
   MAINNET: {
