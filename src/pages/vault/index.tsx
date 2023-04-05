@@ -148,6 +148,7 @@ const Vault = () => {
                   }
                   cardIcons={['usdc', 'usdt']}
                   apy={'6.78%'}
+                  onClick={() => navigate('/vaults/ramsesusdcusdt')}
                   buttonOptions={{
                     label: 'Coming Soon',
                     disabled: true,
