@@ -13,7 +13,7 @@ export default interface State {
     | 'default'
   selectedAsset: Assets.ETH | Assets.USDC | Assets.WBTC | Assets.WETH
   connectedNetwork: NetworkConfigDetail
-  selectedTab: 'deposit' | 'withdraw'
+  selectedTab: 'deposit' | 'withdraw' | 'stake' | 'vest'
   assetPrice: {
     [Assets.ETH]: number,
     [Assets.WETH]: number,
