@@ -126,51 +126,52 @@ const Vault = () => {
             </Button>
             <Button
               className={
-                filter === 'camelot-yield-booster' ? '' : 'filter-button'
+                filter === 'ramses-yield-booster' ? '' : 'filter-button'
               }
-              onClick={() => setFilter('camelot-yield-booster')}
+              onClick={() => setFilter('ramses-yield-booster')}
             >
               Yield Booster
             </Button>
           </div> */}
           <div className="vault-options-container">
             <div className="vault-options">
-              {/* {filter !== 'camelot-yield-booster' ? ( */}
+              {/* {filter !== 'ramses-yield-booster' ? ( */}
               <>
                 <VaultCard
-                  cardTitle="Bullish Ascent"
+                  cardTitle="RAM-USDC"
                   cardInfo={
                     <>
-                      Ride on the waves of the rallying markets by profiting
-                      linearly as the market keeps rising in moderately bullish
-                      trends
+                      Boost your veRAM earnings by using the USDC generated on
+                      your position to fund a principal protected interest
+                      strategy.
                     </>
                   }
-                  cardIcons={['wbtc', 'weth', 'usdc']}
-                  apy={'7.34%'}
+                  cardIcons={['rama-image', 'usdc']}
+                  apy={'6.78%'}
                   buttonOptions={{
                     label: 'Coming Soon',
                     disabled: true,
                   }}
-                  cardTagLabel={'Principal Protected'}
-                  vaultType={'full-principal-protected'}
+                  cardTagLabel={'Ramses Yield Booster'}
+                  vaultType={'ramses-yield-booster'}
                 />
                 <VaultCard
-                  cardTitle="Bearish Ascent"
+                  cardTitle="USDC-USDT"
                   cardInfo={
                     <>
-                      Beat moderately bearish trends in the market by capturing
-                      big returns in falling markets.
+                      Boost your veRAM earnings by using the USDC generated on
+                      your position to fund a principal protected interest
+                      strategy.
                     </>
                   }
-                  cardIcons={['wbtc', 'weth', 'usdc']}
-                  apy={'8.62%'}
+                  cardIcons={['usdc', 'usdt']}
+                  apy={'6.78%'}
                   buttonOptions={{
                     label: 'Coming Soon',
                     disabled: true,
                   }}
-                  cardTagLabel={'Principal Protected'}
-                  vaultType={'full-principal-protected'}
+                  cardTagLabel={'Ramses Yield Booster'}
+                  vaultType={'ramses-yield-booster'}
                 />
                 <VaultCard
                   cardTitle="Twin Peaks"
@@ -227,7 +228,7 @@ const Vault = () => {
                       disabled: true,
                     }}
                     cardTagLabel={'Yield Booster'}
-                    vaultType={'camelot-yield-booster'}
+                    vaultType={'ramses-yield-booster'}
                   />
                   <VaultCard
                     cardTitle="WBTC-ETH"
@@ -245,7 +246,7 @@ const Vault = () => {
                       disabled: true,
                     }}
                     cardTagLabel={'Yield Booster'}
-                    vaultType={'camelot-yield-booster'}
+                    vaultType={'ramses-yield-booster'}
                   />
                   <VaultCard
                     cardTitle="USDT-USDC"
@@ -263,7 +264,7 @@ const Vault = () => {
                       disabled: true,
                     }}
                     cardTagLabel={'Yield Booster'}
-                    vaultType={'camelot-yield-booster'}
+                    vaultType={'ramses-yield-booster'}
                   />
                 </>
               ) : null}

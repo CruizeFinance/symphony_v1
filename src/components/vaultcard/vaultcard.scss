@@ -25,10 +25,10 @@
         @include typography(GroteskMedium, toRem(12), toRem(12), var(--full-principal-protected-color));
       }
     }
-    &.camelot-yield-booster {
-      background: var(--camelot-yield-booster-background);
-      .camelot-yield-booster-label {
-        @include typography(GroteskMedium, toRem(12), toRem(12), var(--camelot-yield-booster-color));
+    &.ramses-yield-booster {
+      background: var(--ramses-yield-booster-background);
+      .ramses-yield-booster-label {
+        @include typography(GroteskMedium, toRem(12), toRem(12), var(--ramses-yield-booster-color));
       }
     }
   }

@@ -10,10 +10,10 @@ interface VaultCardProps {
   onClick?: () => void
   buttonOptions?: {
     label?: string
-    buttonIcon?: ReactNode,
+    buttonIcon?: ReactNode
     disabled?: boolean
   }
-  vaultType?: 'full-principal-protected' | 'camelot-yield-booster'
+  vaultType?: 'full-principal-protected' | 'ramses-yield-booster'
   cardTagLabel?: string
 }
 
@@ -25,7 +25,7 @@ const VaultCard = ({
   onClick,
   buttonOptions,
   vaultType,
-  cardTagLabel
+  cardTagLabel,
 }: VaultCardProps) => {
   return (
     <div className={`vault-card`} onClick={onClick}>
@@ -39,9 +39,18 @@ const VaultCard = ({
       </div>
       <div className="card-section">
         <div className="card-icons">
-          {cardIcons.map((icon, index) => (
-            <Sprite key={index} id={`${icon}-icon`} width={30} height={30} />
-          ))}
+          {cardIcons.map((icon, index) =>
+            icon.includes('image') ? (
+              <img
+                src={`assets/icons/${icon}-icon.svg`}
+                alt={`${icon}-icon`}
+                width={30}
+                height={30}
+              />
+            ) : (
+              <Sprite key={index} id={`${icon}-icon`} width={30} height={30} />
+            ),
+          )}
         </div>
         <div className="vault-apy">
           <div className="apy-label">Earn up to</div>
