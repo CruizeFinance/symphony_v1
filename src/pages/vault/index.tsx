@@ -141,7 +141,7 @@ const Vault = () => {
                   cardTitle="RAM-WETH"
                   cardInfo={
                     <>
-                      Boost your veRAM earnings by using the USDC generated on
+                      Boost your veRAM earnings by using the WETH generated on
                       your position to fund a principal protected interest
                       strategy.
                     </>
