@@ -138,7 +138,7 @@ const Vault = () => {
               {/* {filter !== 'ramses-yield-booster' ? ( */}
               <>
                 <VaultCard
-                  cardTitle="RAM-USDC"
+                  cardTitle="RAM-WETH"
                   cardInfo={
                     <>
                       Boost your veRAM earnings by using the USDC generated on
@@ -146,8 +146,8 @@ const Vault = () => {
                       strategy.
                     </>
                   }
-                  cardIcons={['rama-image', 'usdc']}
-                  apy={'6.78%'}
+                  cardIcons={['rama-image', 'weth']}
+                  apy={'328.77%'}
                   buttonOptions={{
                     label: 'Coming Soon',
                     disabled: true,
@@ -165,7 +165,7 @@ const Vault = () => {
                     </>
                   }
                   cardIcons={['usdc', 'usdt']}
-                  apy={'6.78%'}
+                  apy={'36.67%'}
                   buttonOptions={{
                     label: 'Coming Soon',
                     disabled: true,
