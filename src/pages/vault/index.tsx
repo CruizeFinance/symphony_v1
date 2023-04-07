@@ -165,7 +165,7 @@ const Vault = () => {
                     </>
                   }
                   cardIcons={['usdc', 'usdt']}
-                  apy={'36.67%'}
+                  apy={'56.67%'}
                   buttonOptions={{
                     label: 'Coming Soon',
                     disabled: true,
