@@ -52,15 +52,16 @@
     }
   }
   .tvl-info {
-    @include flex(column, center, center, toRem(4));
-    margin-bottom: toRem(14);
-    text-align: center;
-    .tvl-label {
-      @include typography(GroteskMedium, toRem(24), toRem(30), var(--black));
-    }
-    .tvl-value {
-      @include typography(GroteskSemiBold, toRem(36), toRem(40), var(--black));
-    }
+    visibility: hidden;
+    // @include flex(column, center, center, toRem(4));
+    // margin-bottom: toRem(14);
+    // text-align: center;
+    // .tvl-label {
+    //   @include typography(GroteskMedium, toRem(24), toRem(30), var(--black));
+    // }
+    // .tvl-value {
+    //   @include typography(GroteskSemiBold, toRem(36), toRem(40), var(--black));
+    // }
   }
   .vault-filters {
     @include flex(row, center, center, toRem(14));
