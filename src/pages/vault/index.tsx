@@ -3,7 +3,7 @@ import { ethers } from 'ethers'
 import { useContext, useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getTVL } from '../../apis'
-import { /* Button, */ Sprite, VaultCard } from '../../components'
+import { /* Button, */ Button, Sprite, VaultCard } from '../../components'
 import { AppContext } from '../../context'
 import { Actions } from '../../enums/actions'
 import { DROPDOWN_OPTIONS } from '../../utils'
@@ -30,7 +30,7 @@ const Vault = () => {
 
   const [tvl, setTVL] = useState(0)
 
-  /* const [filter, setFilter] = useState('all') */
+  const [filter, setFilter] = useState('all')
 
   const loadTVL = async (env: 'mainnet' | 'testnet') => {
     const totalTVL = await getTVL(env)
@@ -59,16 +59,6 @@ const Vault = () => {
         : 0,
     [state.lockedAsset, state.assetPrice],
   )
-
-  const maxAPY = useMemo(() => {
-    let maxValue = '0'
-    Object.values(state.assetAPYs).forEach((v) => {
-      if (Number(v.max_apy.slice(0, v.max_apy.length - 1)) > Number(maxValue)) {
-        maxValue = v.max_apy.slice(0, v.max_apy.length - 1)
-      }
-    })
-    return maxValue
-  }, [state.assetAPYs])
 
   useEffect(() => {
     if (state.connectedNetwork && !tvlLoading && !tvlData) {
@@ -109,7 +99,7 @@ const Vault = () => {
               {tvl ? `$${tvl.toLocaleString()}` : <>&#8212;</>}
             </label>
           </div>
-          {/* <div className="vault-filters">
+          <div className="vault-filters">
             <Button
               className={filter === 'all' ? '' : 'filter-button'}
               onClick={() => setFilter('all')}
@@ -130,145 +120,115 @@ const Vault = () => {
               }
               onClick={() => setFilter('ramses-yield-booster')}
             >
-              Yield Booster
+              Ramses Yield Booster
             </Button>
-          </div> */}
+          </div>
           <div className="vault-options-container">
             <div className="vault-options">
-              {/* {filter !== 'ramses-yield-booster' ? ( */}
-              <>
-                <VaultCard
-                  cardTitle="RAM-WETH"
-                  cardInfo={
-                    <>
-                      Boost your veRAM earnings by using the WETH generated on
-                      your position to fund a principal protected interest
-                      strategy.
-                    </>
-                  }
-                  cardIcons={['rama-image', 'weth']}
-                  apy={'328.77%'}
-                  buttonOptions={{
-                    label: 'Coming Soon',
-                    disabled: true,
-                  }}
-                  cardTagLabel={'Ramses Yield Booster'}
-                  vaultType={'ramses-yield-booster'}
-                />
-                <VaultCard
-                  cardTitle="USDC-USDT"
-                  cardInfo={
-                    <>
-                      Boost your veRAM earnings by using the USDC generated on
-                      your position to fund a principal protected interest
-                      strategy.
-                    </>
-                  }
-                  cardIcons={['usdc', 'usdt']}
-                  apy={'56.67%'}
-                  buttonOptions={{
-                    label: 'Coming Soon',
-                    disabled: true,
-                  }}
-                  cardTagLabel={'Ramses Yield Booster'}
-                  vaultType={'ramses-yield-booster'}
-                />
-                <VaultCard
-                  cardTitle="Twin Peaks"
-                  cardInfo={
-                    <>
-                      Generate returns in both rising as well as falling markets
-                      by capitalising on moderately range bound markets.&nbsp;
-                      <a
-                        href="https://docs.cruize.finance/vaults/protected-twin-peaks"
-                        rel="noreferrer noopener"
-                        target={'_blank'}
-                        style={{
-                          fontFamily: 'GroteskMedium',
-                          color: 'inherit',
-                          textDecoration: 'none',
-                        }}
-                      >
-                        Learn More
-                      </a>
-                    </>
-                  }
-                  cardIcons={DROPDOWN_OPTIONS}
-                  apy={maxAPY && Number(maxAPY) ? maxAPY + '%' : '??'}
-                  onClick={() => navigate('/vaults/twinpeaks')}
-                  buttonOptions={{
-                    label: 'Start Earning',
-                    buttonIcon: (
-                      <Sprite id="arrow-left-icon" width={16} height={16} />
-                    ),
-                  }}
-                  cardTagLabel={'Principal Protected'}
-                  vaultType={'full-principal-protected'}
-                />
-              </>
-              {/* 
-            ) : null} */}
+              {filter !== 'ramses-yield-booster' ? (
+                <>
+                  <VaultCard
+                    cardTitle="WBTC"
+                    cardIcons={['wbtc']}
+                    apy={state.assetAPYs.wbtc.max_apy}
+                    onClick={() => {
+                      dispatch({
+                        type: Actions.SET_SELECTED_ASSET,
+                        payload: 'wbtc',
+                      })
+                      navigate('/vaults/twinpeaks')
+                    }}
+                    buttonOptions={{
+                      label: 'Start Earning',
+                      buttonIcon: (
+                        <Sprite id="arrow-left-icon" width={16} height={16} />
+                      ),
+                    }}
+                    cardTagLabel={'Principal Protected'}
+                    vaultType={'full-principal-protected'}
+                  />
+                  <VaultCard
+                    cardTitle="WETH"
+                    cardIcons={['weth']}
+                    apy={state.assetAPYs.weth.max_apy}
+                    onClick={() => {
+                      dispatch({
+                        type: Actions.SET_SELECTED_ASSET,
+                        payload: 'weth',
+                      })
+                      navigate('/vaults/twinpeaks')
+                    }}
+                    buttonOptions={{
+                      label: 'Start Earning',
+                      buttonIcon: (
+                        <Sprite id="arrow-left-icon" width={16} height={16} />
+                      ),
+                    }}
+                    cardTagLabel={'Principal Protected'}
+                    vaultType={'full-principal-protected'}
+                  />
+                  <VaultCard
+                    cardTitle="USDC"
+                    cardIcons={['usdc']}
+                    apy={state.assetAPYs.usdc.max_apy}
+                    onClick={() => {
+                      dispatch({
+                        type: Actions.SET_SELECTED_ASSET,
+                        payload: 'usdc',
+                      })
+                      navigate('/vaults/twinpeaks')
+                    }}
+                    buttonOptions={{
+                      label: 'Start Earning',
+                      buttonIcon: (
+                        <Sprite id="arrow-left-icon" width={16} height={16} />
+                      ),
+                    }}
+                    cardTagLabel={'Principal Protected'}
+                    vaultType={'full-principal-protected'}
+                  />
+                </>
+              ) : null}
             </div>
-            {/* <div className="vault-options">
+            <div className="vault-options">
               {filter !== 'full-principal-protected' ? (
                 <>
                   <VaultCard
-                    cardTitle="ETH-USDC"
-                    cardInfo={
-                      <>
-                        Boost your spNFT earnings by using the USDC generated on
-                        your position to fund a principal protected terest
-                        strategy.
-                      </>
-                    }
-                    cardIcons={['eth', 'usdc']}
+                    cardTitle="RAM-WETH"
+                    cardIcons={['rama-image', 'weth']}
                     apy={'6.78%'}
                     buttonOptions={{
                       label: 'Coming Soon',
                       disabled: true,
                     }}
-                    cardTagLabel={'Yield Booster'}
+                    cardTagLabel={'Ramses Yield Booster'}
                     vaultType={'ramses-yield-booster'}
                   />
                   <VaultCard
-                    cardTitle="WBTC-ETH"
-                    cardInfo={
-                      <>
-                        Boost your spNFT earnings by using the USDC generated on
-                        your position to fund a principal protected terest
-                        strategy.
-                      </>
-                    }
-                    cardIcons={['wbtc', 'eth']}
+                    cardTitle="USDC-USDT"
+                    cardIcons={['usdc', 'usdt']}
                     apy={'6.78%'}
                     buttonOptions={{
                       label: 'Coming Soon',
                       disabled: true,
                     }}
-                    cardTagLabel={'Yield Booster'}
+                    cardTagLabel={'Ramses Yield Booster'}
                     vaultType={'ramses-yield-booster'}
                   />
                   <VaultCard
-                    cardTitle="USDT-USDC"
-                    cardInfo={
-                      <>
-                        Boost your spNFT earnings by using the USDC generated on
-                        your position to fund a principal protected terest
-                        strategy.
-                      </>
-                    }
-                    cardIcons={['usdc']}
+                    cardTitle="WETH-USDC"
+                    cardIcons={['weth', 'usdc']}
                     apy={'6.78%'}
                     buttonOptions={{
                       label: 'Coming Soon',
                       disabled: true,
                     }}
-                    cardTagLabel={'Yield Booster'}
+                    cardTagLabel={'Ramses Yield Booster'}
                     vaultType={'ramses-yield-booster'}
                   />
                 </>
               ) : null}
-            </div> */}
+            </div>
           </div>
         </div>
       </div>

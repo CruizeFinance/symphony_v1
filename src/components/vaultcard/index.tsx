@@ -4,7 +4,6 @@ import './vaultcard.scss'
 
 interface VaultCardProps {
   cardTitle: string
-  cardInfo: ReactNode
   cardIcons: string[]
   apy: string
   onClick?: () => void
@@ -19,7 +18,6 @@ interface VaultCardProps {
 
 const VaultCard = ({
   cardTitle,
-  cardInfo,
   cardIcons,
   apy,
   onClick,
@@ -34,51 +32,28 @@ const VaultCard = ({
         <label className={`${vaultType}-label`}>{cardTagLabel}</label>
       </div>
       <div className="card-section">
-        <div className="card-title">{cardTitle}</div>
-        <div className="card-info">{cardInfo}</div>
-      </div>
-      <div className="card-section">
-        <div className="card-icons">
+      <div className="card-icons">
           {cardIcons.map((icon, index) =>
             icon.includes('image') ? (
               <img
                 src={`assets/icons/${icon}-icon.svg`}
                 alt={`${icon}-icon`}
-                width={30}
-                height={30}
+                width={82}
+                height={82}
               />
             ) : (
-              <Sprite key={index} id={`${icon}-icon`} width={30} height={30} />
+              <Sprite key={index} id={`${icon}-icon`} width={82} height={82} />
             ),
           )}
         </div>
+        <div className="card-title">{cardTitle}</div>
+      </div>
+      <div className="card-section">
         <div className="vault-apy">
           <div className="apy-label">Earn up to</div>
           <div className="apy-value">{apy}&nbsp; APY</div>
         </div>
       </div>
-      {/* <div className="card-section">
-      <div className="vault-details">
-          <div className="vault-detail">
-            <p className="vault-detail-field">Total Staked Value</p>
-            <p className="vault-detail-value">
-              8.67%
-            </p>
-          </div>
-          <div className="vault-detail">
-            <p className="vault-detail-field">Deposit Limit</p>
-            <p className="vault-detail-value">
-              8.67%
-            </p>
-          </div>
-          <div className="vault-detail">
-            <p className="vault-detail-field">Available Liquidity</p>
-            <p className="vault-detail-value">
-              8.67%
-            </p>
-          </div>
-        </div>
-      </div> */}
       {buttonOptions ? (
         <Button disabled={buttonOptions.disabled}>
           {buttonOptions.label} {buttonOptions.buttonIcon}
