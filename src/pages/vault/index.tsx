@@ -205,8 +205,8 @@ const Vault = () => {
                     vaultType={'ramses-yield-booster'}
                   />
                   <VaultCard
-                    cardTitle="USDC-USDT"
-                    cardIcons={['usdc', 'usdt']}
+                    cardTitle="FRAX-USDC"
+                    cardIcons={['frax-image', 'usdc']}
                     apy={'56.67%'}
                     buttonOptions={{
                       label: 'Coming Soon',
