@@ -195,7 +195,7 @@ const Vault = () => {
                 <>
                   <VaultCard
                     cardTitle="RAM-WETH"
-                    cardIcons={['rama-image', 'weth']}
+                    cardIcons={['rama-image', 'wethgray-image']}
                     apy={'328.77%'}
                     buttonOptions={{
                       label: 'Coming Soon',
@@ -217,7 +217,7 @@ const Vault = () => {
                   />
                   <VaultCard
                     cardTitle="WETH-USDC"
-                    cardIcons={['weth', 'usdc']}
+                    cardIcons={['wethgray-image', 'usdc']}
                     apy={'104.63%'}
                     buttonOptions={{
                       label: 'Coming Soon',
