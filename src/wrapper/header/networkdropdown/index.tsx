@@ -1,5 +1,4 @@
 import { useContext, useRef, useState } from 'react'
-import { useSwitchNetwork } from 'wagmi'
 import { Sprite } from '../../../components'
 import { AppContext } from '../../../context'
 import { Actions } from '../../../enums/actions'
@@ -7,11 +6,10 @@ import { useOutsideAlerter } from '../../../hooks'
 import { NetworkConfigDetail } from '../../../interfaces'
 import { NETWORK_CONFIG } from '../../../utils'
 import './networkdropdown.scss'
+import onboard from '@web3-onboard/core'
 
 const NetworkDropdown = () => {
   const [state, dispatch] = useContext(AppContext)
-
-  const { switchNetworkAsync } = useSwitchNetwork()
 
   const networkRef = useRef(null)
   useOutsideAlerter(networkRef, () => setShowNetworks(false))
@@ -20,12 +18,12 @@ const NetworkDropdown = () => {
 
   const onClick = async (val: NetworkConfigDetail) => {
     try {
-      await switchNetworkAsync?.(val.chainId)
+      await (onboard as any).setChain({ chainId: val.chainId.toLowerCase() })
       dispatch({
         type: Actions.SET_CONNECTED_NETWORK,
         payload: Object.values(NETWORK_CONFIG)
           .flatMap((innerObj) => Object.values(innerObj))
-          .filter((net) => net.chainId === val.chainId)[0],
+          .filter((net) => net.chainId.toLowerCase() === val.chainId.toLowerCase())[0],
       })
       setShowNetworks(false)
     } catch (e) {
@@ -57,7 +55,7 @@ const NetworkDropdown = () => {
             : undefined)}
         />
       </div>
-      {showNetworks ? (
+      {showNetworks && state.connectedNetwork ? (
         <div className={`network-options`}>
           {Object.values(NETWORK_CONFIG)
             .flatMap((innerObj) => Object.values(innerObj))

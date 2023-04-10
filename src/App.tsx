@@ -2,18 +2,17 @@ import { BrowserRouter, Routes as Switch, Route } from 'react-router-dom'
 import { AppContextProvider } from './context'
 import './style/app.scss'
 import Wrapper from './wrapper'
-import { configureChains } from '@wagmi/core'
-import { publicProvider } from '@wagmi/core/providers/public'
-import { infuraProvider } from '@wagmi/core/providers/infura'
-import { MetaMaskConnector } from '@wagmi/core/connectors/metaMask'
-import { WalletConnectConnector } from '@wagmi/core/connectors/walletConnect'
-import { WagmiConfig, createClient } from 'wagmi'
-import { ConnectKitProvider } from 'connectkit'
-import { SUPPORTED_CHAINS } from './utils'
-
+import {
+  Web3OnboardProvider,
+  init,
+} from '@web3-onboard/react'
+import injectedModule from '@web3-onboard/injected-wallets'
+import frontierModule from '@web3-onboard/frontier'
+import walletConnectModule from '@web3-onboard/walletconnect'
 // Import the functions you need from the SDKs you need
 import { initializeApp } from 'firebase/app'
 import { getAnalytics } from 'firebase/analytics'
+import { SUPPORTED_CHAINS } from './utils'
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -35,47 +34,30 @@ if (process.env.REACT_APP_ENV && process.env.REACT_APP_ENV !== 'dev') {
   getAnalytics(app)
 }
 
+const chains = SUPPORTED_CHAINS
+const wallets = [injectedModule(), frontierModule(), walletConnectModule()]
+const web3Onboard = init({
+  wallets,
+  chains,
+  appMetadata: {
+    name: 'Cruize Finance',
+    description: 'Cruize Finance dApp',
+  },
+})
+
 const App = () => {
-  const {
-    chains,
-    provider,
-    webSocketProvider,
-  } = configureChains(SUPPORTED_CHAINS, [
-    infuraProvider({ apiKey: process.env.REACT_APP_INFURA_ID!, priority: 0 }),
-    publicProvider({ priority: 1 }),
-  ])
-
-  const client = createClient({
-    autoConnect: true,
-    connectors: [
-      new MetaMaskConnector({
-        chains,
-      }),
-      new WalletConnectConnector({
-        chains,
-        options: {
-          qrcode: false,
-        },
-      }),
-    ],
-    provider,
-    webSocketProvider,
-  })
-
   return (
-    <WagmiConfig client={client}>
-      <ConnectKitProvider theme="soft">
-        <AppContextProvider>
-          <div className="app">
-            <BrowserRouter>
-              <Switch>
-                <Route path="/*" element={<Wrapper />} />
-              </Switch>
-            </BrowserRouter>
-          </div>
-        </AppContextProvider>
-      </ConnectKitProvider>
-    </WagmiConfig>
+    <Web3OnboardProvider web3Onboard={web3Onboard}>
+      <AppContextProvider>
+        <div className="app">
+          <BrowserRouter>
+            <Switch>
+              <Route path="/*" element={<Wrapper />} />
+            </Switch>
+          </BrowserRouter>
+        </div>
+      </AppContextProvider>
+    </Web3OnboardProvider>
   )
 }
 

@@ -1,12 +1,5 @@
-import { ConnectKitButton } from 'connectkit'
 import { useContext, useEffect, useRef, useState } from 'react'
 import Jazzicon from 'react-jazzicon/dist/Jazzicon'
-import {
-  useAccount,
-  useDisconnect,
-  useEnsName,
-  useProvider,
-} from 'wagmi'
 import { Button, Loader, Sprite } from '../../../components'
 import { AppContext } from '../../../context'
 import { useOutsideAlerter } from '../../../hooks'
@@ -14,8 +7,9 @@ import './connectbuttondropdown.scss'
 import { gql, useQuery } from '@apollo/client'
 import { Actions } from '../../../enums/actions'
 import { ethers } from 'ethers'
-import { CONTRACT_CONFIG } from '../../../utils'
-import { arbitrum } from '@wagmi/chains'
+import { CHAIN_ID, CONTRACT_CONFIG } from '../../../utils'
+import { NetworkIDs } from '../../../enums/networks'
+import { useConnectWallet } from '@web3-onboard/react'
 
 const GET_TRANSACTIONS = gql`
   query Transactions($account: String!) {
@@ -47,20 +41,14 @@ const GET_TRANSACTIONS = gql`
 const ConnectButtonDropdown = () => {
   const [state, dispatch] = useContext(AppContext)
 
-  const { address: accountAddress, isConnected } = useAccount()
-  const { data: ensName } = useEnsName({
-    address: accountAddress,
-  })
-  const { disconnect } = useDisconnect()
-
-  const provider = useProvider()
+  const [{ wallet }, connect, disconnect] = useConnectWallet()
 
   const dropdownRef = useRef(null)
   useOutsideAlerter(dropdownRef, () => setShowDropdown(false))
 
   const { data: transactionData, loading } = useQuery(GET_TRANSACTIONS, {
     variables: {
-      account: accountAddress,
+      account: wallet?.label,
     },
   })
 
@@ -68,7 +56,8 @@ const ConnectButtonDropdown = () => {
   const [bal, setBal] = useState('')
 
   const loadBalance = async () => {
-    const bal = await provider.getBalance(accountAddress || '')
+    const provider = new ethers.providers.Web3Provider(wallet!.provider, 'any')
+    const bal = await provider.getBalance(wallet?.label || '')
     setBal(ethers.utils.formatUnits(bal, 18))
   }
 
@@ -82,21 +71,17 @@ const ConnectButtonDropdown = () => {
   }, [transactionData])
 
   useEffect(() => {
-    loadBalance()
-  }, [])
+    if (wallet) loadBalance()
+  }, [wallet])
 
   return (
     <div className="connect-button-dropdown" ref={dropdownRef}>
-      {!isConnected ? (
-        <ConnectKitButton.Custom>
-          {({ show }) => {
-            return (
-              <Button className="connect-wallet-button" onClick={show}>
-                Connect Wallet
-              </Button>
-            )
-          }}
-        </ConnectKitButton.Custom>
+      {!wallet ? (
+        <>
+          <Button className="connect-wallet-button" onClick={connect}>
+            Connect Wallet
+          </Button>
+        </>
       ) : (
         <div className="wallet-dropdown-button">
           <button
@@ -105,8 +90,8 @@ const ConnectButtonDropdown = () => {
           >
             <Jazzicon diameter={24} seed={40} />
             <label className="label">
-              {ensName ||
-                `${accountAddress?.slice(0, 4)}...${accountAddress?.slice(-4)}`}
+              {wallet.accounts[0].address?.slice(0, 4)}...
+              {wallet.accounts[0].address?.slice(-4)}
             </label>
             <Sprite
               id="dropdown-expand-icon"
@@ -125,20 +110,15 @@ const ConnectButtonDropdown = () => {
             <Jazzicon diameter={74} seed={40} />
             <div className="wallet-name-balance">
               <label className="wallet-name">
-                {ensName ||
-                  `${accountAddress?.slice(0, 4)}...${accountAddress?.slice(
-                    -4,
-                  )}`}
+                {wallet?.accounts[0].address.slice(0, 4)}...${wallet?.accounts[0].address.slice(-4)}
               </label>
-              <label className="wallet-balance">
-                {bal}
-              </label>
+              <label className="wallet-balance">{bal}</label>
             </div>
             <div className="wallet-actions">
               <div
                 className="action"
                 onClick={() => {
-                  window.navigator.clipboard.writeText(accountAddress || '')
+                  window.navigator.clipboard.writeText(wallet?.accounts[0].address || '')
                   setShowDropdown(false)
                 }}
               >
@@ -148,7 +128,7 @@ const ConnectButtonDropdown = () => {
               <div
                 className="action"
                 onClick={() => {
-                  disconnect()
+                  disconnect({ label: wallet!.label })
                   setShowDropdown(false)
                 }}
               >
@@ -168,8 +148,9 @@ const ConnectButtonDropdown = () => {
                     onClick={() =>
                       window.open(
                         `https://${
-                          state.connectedNetwork.chainId === arbitrum.id
-                            ? 'arbiscan' : 'testnet.arbiscan'
+                          state.connectedNetwork.chainId === NetworkIDs.ARBITRUM
+                            ? 'arbiscan'
+                            : 'testnet.arbiscan'
                         }.io/tx/${state.transactionDetails.hash}`,
                         '_blank',
                         'noreferrer noopener',
@@ -204,7 +185,8 @@ const ConnectButtonDropdown = () => {
                       onClick={() => {
                         window.open(
                           `https://${
-                            state.connectedNetwork.chainId === arbitrum.id
+                            state.connectedNetwork.chainId ===
+                            NetworkIDs.ARBITRUM
                               ? 'arbiscan.io'
                               : 'testnet.arbiscan.io'
                           }/tx/${transaction.txHash}`,
@@ -254,13 +236,15 @@ const ConnectButtonDropdown = () => {
                       onClick={() =>
                         window.open(
                           `https://${
-                            state.connectedNetwork.chainId === arbitrum.id
+                            state.connectedNetwork.chainId ===
+                            NetworkIDs.ARBITRUM
                               ? 'arbiscan'
                               : 'testnet.arbiscan'
                           }.io/address/${
-                            CONTRACT_CONFIG[state.connectedNetwork.chainId][
-                              'CRUIZE_CONTRACT'
-                            ]['address']
+                            CONTRACT_CONFIG[
+                              state.connectedNetwork
+                                .chainId as keyof typeof CHAIN_ID
+                            ]['CRUIZE_CONTRACT']['address']
                           }`,
                           '_blank',
                           'noreferrer noopener',

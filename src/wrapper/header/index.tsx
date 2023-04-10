@@ -1,7 +1,5 @@
-import { ConnectKitButton } from 'connectkit'
-import { useContext, useEffect, useRef, useState } from 'react'
+import { useContext, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { useAccount } from 'wagmi'
 import { Button, Sprite } from '../../components'
 import { AppContext } from '../../context'
 import { useOutsideAlerter } from '../../hooks'
@@ -9,11 +7,12 @@ import { rem, VAULT_NAV_LINKS } from '../../utils'
 import ConnectButtonDropdown from './connectbuttondropdown'
 import './header.scss'
 import NetworkDropdown from './networkdropdown'
+import { useConnectWallet } from '@web3-onboard/react'
 
 const Header = () => {
   const [state] = useContext(AppContext)
 
-  const { isConnected } = useAccount()
+  const [{ wallet }, connect] = useConnectWallet()
 
   const location = useLocation()
   const navigate = useNavigate()
@@ -71,7 +70,10 @@ const Header = () => {
   )
 
   return (
-    <div className="header" {...state.approveTokenModal ? { style: { zIndex: 0 } } : undefined}>
+    <div
+      className="header"
+      {...(state.approveTokenModal ? { style: { zIndex: 0 } } : undefined)}
+    >
       <div className="logo-area">
         <Sprite id="cruize-header-beta-icon" width={156} height={46} />
         <div className="links">
@@ -123,7 +125,7 @@ const Header = () => {
         </div>
       </div>
       <div className="connection-area">
-        {isConnected ? <NetworkDropdown /> : null}
+        {wallet ? <NetworkDropdown /> : null}
         <ConnectButtonDropdown />
       </div>
       <Sprite
@@ -190,21 +192,17 @@ const Header = () => {
                 {'Portfolio'}
               </Link>
             </div>
-            {isConnected ? null : (
-              <div className="mobile-header-section-container">
-                <ConnectKitButton.Custom>
-                  {({ show }) => {
-                    return (
-                      <Button
-                        className="mobile-connect-wallet-button"
-                        onClick={show}
-                      >
-                        Connect Wallet
-                      </Button>
-                    )
-                  }}
-                </ConnectKitButton.Custom>
-              </div>
+            {wallet ? null : (
+              <>
+                <div className="mobile-header-section-container">
+                  <Button
+                    className="mobile-connect-wallet-button"
+                    onClick={connect}
+                  >
+                    Connect Wallet
+                  </Button>
+                </div>
+              </>
             )}
           </div>
         </div>

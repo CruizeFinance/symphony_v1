@@ -40,6 +40,7 @@ const VaultCard = ({
                 alt={`${icon}-icon`}
                 width={82}
                 height={82}
+                key={index}
               />
             ) : (
               <Sprite key={index} id={`${icon}-icon`} width={82} height={82} />

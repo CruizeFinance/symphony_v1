@@ -2,9 +2,9 @@ import './input.scss'
 import AssetDropdown from '../assetdropdown'
 import { useContext, useEffect, useMemo, useState } from 'react'
 import { AppContext } from '../../context'
-import { useAccount } from 'wagmi'
 import { Actions } from '../../enums/actions'
 import { toFixed } from '../../utils'
+import { useConnectWallet } from '@web3-onboard/react'
 
 interface InputProps {
   prependSymbol?: string
@@ -27,7 +27,7 @@ const Input = ({
 }: InputProps) => {
   const [state, dispatch] = useContext(AppContext)
 
-  const { isConnected } = useAccount()
+  const [{ wallet }] = useConnectWallet()
 
   const [input, setInputValue] = useState<string | undefined>('')
 
@@ -136,7 +136,7 @@ const Input = ({
         </div>
         <div className="asset-section">
           <AssetDropdown optionsStyle={{ right: '0' }} />
-          {isConnected ? (
+          {wallet?.label ? (
             <div className="balance-button-container">
               <p className="asset-balance">
                 {state.selectedTab === 'deposit' ? 'Balance' : 'Limit'}:{' '}
