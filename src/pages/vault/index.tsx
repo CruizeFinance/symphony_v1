@@ -196,7 +196,7 @@ const Vault = () => {
                   <VaultCard
                     cardTitle="RAM-WETH"
                     cardIcons={['rama-image', 'weth']}
-                    apy={'6.78%'}
+                    apy={'328.77%'}
                     buttonOptions={{
                       label: 'Coming Soon',
                       disabled: true,
@@ -205,9 +205,9 @@ const Vault = () => {
                     vaultType={'ramses-yield-booster'}
                   />
                   <VaultCard
-                    cardTitle="USDC-USDT"
-                    cardIcons={['usdc', 'usdt']}
-                    apy={'6.78%'}
+                    cardTitle="FRAX-USDC"
+                    cardIcons={['frax-image', 'usdc']}
+                    apy={'56.67%'}
                     buttonOptions={{
                       label: 'Coming Soon',
                       disabled: true,
@@ -218,7 +218,7 @@ const Vault = () => {
                   <VaultCard
                     cardTitle="WETH-USDC"
                     cardIcons={['weth', 'usdc']}
-                    apy={'6.78%'}
+                    apy={'104.63%'}
                     buttonOptions={{
                       label: 'Coming Soon',
                       disabled: true,
