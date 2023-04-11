@@ -34,6 +34,14 @@ const VaultCard = ({
       <div className="card-section">
       <div className="card-icons">
           {cardIcons.map((icon, index) =>
+          icon.includes('rama-wethgray-image') ? (
+            <img
+              src={`assets/icons/${icon}-icon.svg`}
+              alt={`${icon}-icon`}
+              width={240}
+              height={82}
+            />
+          ) :
             icon.includes('image') ? (
               <img
                 src={`assets/icons/${icon}-icon.svg`}

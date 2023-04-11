@@ -195,7 +195,7 @@ const Vault = () => {
                 <>
                   <VaultCard
                     cardTitle="RAM-WETH"
-                    cardIcons={['rama-image', 'wethgray-image']}
+                    cardIcons={['rama-wethgray-image']}
                     apy={'328.77%'}
                     buttonOptions={{
                       label: 'Coming Soon',
