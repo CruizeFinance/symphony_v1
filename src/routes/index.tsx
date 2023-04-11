@@ -8,6 +8,10 @@ const AppRoutes = () => {
       <Route path="/vaults" element={<Vault />}></Route>
       <Route path="/vaults/twinpeaks" element={<TwinPeaks />} />
       <Route path="/portfolio" element={<Portfolio />} />
+      <Route path="/vaults/twinpeaks/eth" element={<TwinPeaks />} />
+      <Route path="/vaults/twinpeaks/weth" element={<TwinPeaks />} />
+      <Route path="/vaults/twinpeaks/wbtc" element={<TwinPeaks />} />
+      <Route path="/vaults/twinpeaks/usdc" element={<TwinPeaks />} />
       <Route path='*' element={<PageNotFound />} />
     </Switch>
   )
