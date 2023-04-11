@@ -136,7 +136,7 @@ const Vault = () => {
                         type: Actions.SET_SELECTED_ASSET,
                         payload: 'wbtc',
                       })
-                      navigate('/vaults/twinpeaks')
+                      navigate('/vaults/twinpeaks/wbtc')
                     }}
                     buttonOptions={{
                       label: 'Start Earning',
@@ -156,7 +156,7 @@ const Vault = () => {
                         type: Actions.SET_SELECTED_ASSET,
                         payload: 'weth',
                       })
-                      navigate('/vaults/twinpeaks')
+                      navigate('/vaults/twinpeaks/weth')
                     }}
                     buttonOptions={{
                       label: 'Start Earning',
@@ -176,7 +176,7 @@ const Vault = () => {
                         type: Actions.SET_SELECTED_ASSET,
                         payload: 'usdc',
                       })
-                      navigate('/vaults/twinpeaks')
+                      navigate('/vaults/twinpeaks/usdc')
                     }}
                     buttonOptions={{
                       label: 'Start Earning',
