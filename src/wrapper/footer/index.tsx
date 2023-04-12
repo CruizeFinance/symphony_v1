@@ -26,7 +26,7 @@ const Footer = () => {
               generating outsized returns in every market condition.
             </p>
           </div>
-          <div className="col-2">
+          {/* <div className="col-2">
             <label className="link-title">Product</label>
             <Link
               className="link"
@@ -52,7 +52,7 @@ const Footer = () => {
             >
               Bearish Ascent
             </a>
-          </div>
+          </div> */}
           <div className="col-2">
             <label className="link-title">Resources</label>
             <a

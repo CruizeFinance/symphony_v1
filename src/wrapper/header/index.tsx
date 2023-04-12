@@ -81,9 +81,9 @@ const Header = () => {
               location.pathname === '/vaults' ? ' active' : ''
             }`}
           >
-            {'Home'}
+            {'Vaults'}
           </Link>
-          <div
+          {/* <div
             className="vault-link"
             onMouseEnter={() => setOpenVaultLinks(true)}
             onMouseLeave={() => setOpenVaultLinks(false)}
@@ -111,7 +111,7 @@ const Header = () => {
                 </div>
               ) : null}
             </div>
-          </div>
+          </div> */}
           <Link
             to={`/portfolio`}
             className={`link ${
@@ -144,11 +144,11 @@ const Header = () => {
                 }`}
                 onClick={() => setOpenMobileHeader(false)}
               >
-                {'Home'}
+                {'Vaults'}
               </Link>
             </div>
             <div className="mobile-header-section-container">
-              <div
+              {/* <div
                 className="vault-link"
                 onClick={() => setOpenMobileVaultLinks(!openMobileVaultLinks)}
               >
@@ -172,7 +172,7 @@ const Header = () => {
                     })`,
                   }}
                 />
-              </div>
+              </div> */}
               {openMobileVaultLinks ? (
                 <div className={`vault-dropdown`}>
                   <VaultLinks type="mobile" />
