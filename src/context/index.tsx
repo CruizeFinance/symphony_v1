@@ -36,7 +36,7 @@ export const AppContext = createContext<[State, React.Dispatch<Action>]>([
 
 const arbitrumClient = new ApolloClient({
   link: new HttpLink({
-    uri: 'https://api.studio.thegraph.com/query/43660/cruize-vaults/v0.0.1',
+    uri: 'https://gateway-arbitrum.network.thegraph.com/api/894244c94e096b6887eacefa63eb4dcf/subgraphs/id/AbqrZxFy9mU9Rb55e3N6aAMJbrZaEcLA2GDx1iCScpKj',
   }),
   cache: new InMemoryCache(),
 })
