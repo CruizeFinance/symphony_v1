@@ -1,5 +1,3 @@
-import { arbitrum, arbitrumGoerli, /* avalancheFuji, polygonMumbai */ } from '@wagmi/chains'
-/* import { goerli } from 'wagmi' */
 import { Assets } from '../enums/assets'
 import { NetworkIDs, Networks } from '../enums/networks'
 import { NetworkConfig } from '../interfaces'
@@ -8,15 +6,7 @@ export const VAULT_NAV_LINKS = [
   {
     link: 'twinpeaks',
     label: 'Twin Peaks',
-  },
-  {
-    link: 'bullishascent',
-    label: 'Bullish Ascent',
-  },
-  {
-    link: 'bearishascent',
-    label: 'Bearish Ascent',
-  },
+  }
 ]
 
 export const DROPDOWN_OPTIONS = [Assets.ETH, Assets.WETH, Assets.WBTC, Assets.USDC]
@@ -31,27 +21,6 @@ export const NETWORK_CONFIG: NetworkConfig = {
     }
   },
   TESTNET: {
-    /* [Networks.ETHEREUM]: {
-      chainId: NetworkIDs.ETHEREUM_GOERLI,
-      label: Networks.ETHEREUM_GOERLI,
-      icon: Networks.ETHEREUM,
-      networkEnv: 'testnet'
-    }, */
-    /*[Networks.POLYGON]: {
-      chainId: NetworkIDs.POLYGON_MUMBAI,
-      label: Networks.POLYGON_MUMBAI,
-      icon: Networks.POLYGON,
-    },
-     [Networks.OPTIMISM]: {
-      chainId: NetworkIDs.OPTIMISM_GOERLI,
-      label: Networks.OPTIMISM_GOERLI,
-      icon: Networks.OPTIMISM,
-    }, 
-    [Networks.AVALANCHE]: {
-      chainId: NetworkIDs.AVALANCHE_FUJI,
-      label: Networks.AVALANCHE_FUJI,
-      icon: Networks.AVALANCHE
-    },*/
     [Networks.ARBITRUM]: {
       chainId: NetworkIDs.ARBITRUM_GOERLI,
       label: Networks.ARBITRUM_GOERLI,
@@ -62,7 +31,7 @@ export const NETWORK_CONFIG: NetworkConfig = {
 }
 
 export const CONTRACT_CONFIG = {
-  [arbitrum.id]: {
+  [NetworkIDs.ARBITRUM]: {
     CRUIZE_CONTRACT: {
       address: '0xaA553dEdd3Cd9f6E2cd36A1E9B102Eb4e70322c0',
       decimals: 0,
@@ -84,29 +53,7 @@ export const CONTRACT_CONFIG = {
       decimals: 8,
     },
   },
-  /* [goerli.id]: {
-    CRUIZE_CONTRACT: {
-      address: '0x8b8163a3c2C77f3DF29a2BA3150d4061aD4Ca126',
-      decimals: 0,
-    },
-    [Assets.ETH.toUpperCase()]: {
-      address: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
-      decimals: 18
-    },
-    [Assets.WETH.toUpperCase()]: {
-      address: '0x2f87d4CF0D02248EB38CD06A3F3266C7Bc6e5bd2',
-      decimals: 18,
-    },
-    [Assets.USDC.toUpperCase()]: {
-      address: '0xf029E7204D23A97CCd788e808c0f45ddB6745b25',
-      decimals: 6,
-    },
-    [Assets.WBTC.toUpperCase()]: {
-      address: '0x69CC084f5F336AC46f191721f55751cfBF2A0Ef3',
-      decimals: 8,
-    },
-  }, */
-  [arbitrumGoerli.id]: {
+  [NetworkIDs.ARBITRUM_GOERLI]: {
     CRUIZE_CONTRACT: {
       address: '0x632C4cbB61802083363662b9CC3889C7bC2C4648',
       decimals: 0,
@@ -130,13 +77,30 @@ export const CONTRACT_CONFIG = {
   },
 }
 
+const MAINNET_RPC = `https://arbitrum-mainnet.infura.io/v3/${process.env
+  .REACT_APP_INFURA_ID!}`
+const GOERLI_RPC = `https://arbitrum-mainnet.infura.io/v3/${process.env
+  .REACT_APP_INFURA_ID!}`
+
 export const SUPPORTED_CHAINS = [
-  arbitrum,
-  /* goerli, */
-  arbitrumGoerli,
-  /* polygonMumbai,
-  avalancheFuji, */
+  {
+    id: '0xA4B1',
+    token: 'ETH',
+    label: 'Arbitrum Mainnet',
+    rpcUrl: MAINNET_RPC,
+  },
+  {
+    id: '0x66EED',
+    token: 'ETH',
+    label: 'Arbitrum Goerli',
+    rpcUrl: GOERLI_RPC,
+  },
 ]
+
+export const CHAIN_ID = {
+  '0xA4B1': 42161,
+  '0x66EED': 421613
+}
 
 export const API_PARAMS = {
   [Assets.ETH]: 'ethereum',

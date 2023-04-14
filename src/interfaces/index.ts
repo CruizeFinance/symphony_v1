@@ -120,8 +120,15 @@ export interface NetworkConfig {
 }
 
 export interface NetworkConfigDetail {
-  chainId: number
+  chainId: string
   label: string
   icon: string
   networkEnv: 'mainnet' | 'testnet'
+}
+
+export interface ChainConfigDetail {
+  id: string
+  token: string
+  label: string
+  rpcUrl: string
 }

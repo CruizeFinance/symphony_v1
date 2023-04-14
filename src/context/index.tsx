@@ -1,11 +1,10 @@
-import { createContext, ReactNode, useEffect, useReducer } from 'react'
+import { createContext, ReactNode, useEffect, useReducer, useState } from 'react'
 import initialState from './state'
 import State from './statemodel'
 import { Action } from './action'
 import reducer from './reducer'
-import { erc20ABI, useAccount, useSigner, useNetwork } from 'wagmi'
 import { Actions } from '../enums/actions'
-import { CONTRACT_CONFIG, NETWORK_CONFIG, SUPPORTED_CHAINS } from '../utils'
+import { CHAIN_ID, CONTRACT_CONFIG, NETWORK_CONFIG, SUPPORTED_CHAINS } from '../utils'
 import {
   getAssetAPYs,
   getAssetPrice,
@@ -14,16 +13,17 @@ import {
 } from '../apis'
 import CRUIZECONTRACTABI from '../abi/cruizecontract.json'
 import MINTTOKENABI from '../abi/minttoken.json'
+import ERC20ABI from '../abi/erc20abi.json'
 import { useOnceCall } from '../hooks'
-import { BigNumber, Contract, ethers, Signer } from 'ethers'
+import { BigNumber, Contract, ethers } from 'ethers'
 import {
   ApolloClient,
   ApolloProvider,
   HttpLink,
   InMemoryCache,
 } from '@apollo/client'
-import { arbitrumGoerli } from '@wagmi/chains'
 import { Assets } from '../enums/assets'
+import { useConnectWallet, useSetChain } from '@web3-onboard/react'
 
 interface ContextProps {
   children: ReactNode
@@ -49,11 +49,16 @@ const arbitrumGoerliClient = new ApolloClient({
   cache: new InMemoryCache(),
 })
 export const AppContextProvider = ({ children }: ContextProps) => {
+
+  const [{ wallet }] = useConnectWallet()
+
   // context hook
   const [state, dispatch] = useReducer(reducer, initialState)
-  const { chain } = useNetwork()
-  const { data: signer } = useSigner()
-  const { address } = useAccount()
+  const [
+    {
+      connectedChain
+    }
+  ] = useSetChain()
 
   const initialAPICall = async () => {
     try {
@@ -81,7 +86,7 @@ export const AppContextProvider = ({ children }: ContextProps) => {
     try {
       const currentDeposit = await getCurrentDeposits(
         state.selectedAsset.toUpperCase(),
-        state.connectedNetwork.chainId,
+        CHAIN_ID[state.connectedNetwork.chainId as keyof typeof CHAIN_ID],
       )
       dispatch({
         type: Actions.SET_CURRENT_DEPOSIT,
@@ -106,8 +111,8 @@ export const AppContextProvider = ({ children }: ContextProps) => {
   const checkAllowance = async (contract: Contract) => {
     try {
       const data: BigNumber = await contract.allowance(
-        address!,
-        CONTRACT_CONFIG[state.connectedNetwork.chainId]['CRUIZE_CONTRACT']
+        wallet?.label!,
+        CONTRACT_CONFIG[state.connectedNetwork.chainId as keyof typeof CHAIN_ID]['CRUIZE_CONTRACT']
           .address,
       )
       dispatch({
@@ -120,15 +125,16 @@ export const AppContextProvider = ({ children }: ContextProps) => {
   }
 
   useEffect(() => {
-    if (chain) {
+    console.log(connectedChain)
+    if (connectedChain) {
       dispatch({
         type: Actions.SET_CONNECTED_NETWORK,
         payload: Object.values(NETWORK_CONFIG)
           .flatMap((innerObj) => Object.values(innerObj))
-          .filter((net) => net.chainId === chain.id)[0],
+          .filter((net) => net.chainId.toLowerCase() === connectedChain.id.toLowerCase())[0],
       })
     }
-  }, [chain])
+  }, [connectedChain])
 
   useEffect(() => {
     if (state.connectedNetwork) {
@@ -138,36 +144,36 @@ export const AppContextProvider = ({ children }: ContextProps) => {
 
   useEffect(() => {
     if (
-      signer &&
-      address &&
+      wallet &&
       state.connectedNetwork &&
       SUPPORTED_CHAINS.some(
         (chain) => chain.id === state.connectedNetwork.chainId,
       )
     ) {
+      const provider = new ethers.providers.Web3Provider(wallet.provider, 'any');
       const cruizeContract = new ethers.Contract(
-        CONTRACT_CONFIG[state.connectedNetwork.chainId].CRUIZE_CONTRACT.address,
+        CONTRACT_CONFIG[state.connectedNetwork.chainId as keyof typeof CHAIN_ID].CRUIZE_CONTRACT.address,
         CRUIZECONTRACTABI,
-        signer as Signer,
+        provider.getSigner(wallet.accounts[0].address)
       )
       dispatch({ type: Actions.SET_CRUIZE_CONTRACT, payload: cruizeContract })
       const selectedAssetContract = new ethers.Contract(
-        CONTRACT_CONFIG[state.connectedNetwork.chainId][
+        CONTRACT_CONFIG[state.connectedNetwork.chainId as keyof typeof CHAIN_ID][
           state.selectedAsset.toUpperCase()
         ].address,
-        erc20ABI,
-        signer as Signer,
+        ERC20ABI,
+        provider.getSigner(wallet.accounts[0].address)
       )
       dispatch({
         type: Actions.SET_SELECTED_ASSET_CONTRACT,
         payload: selectedAssetContract,
       })
       const mintContract: Contract = new ethers.Contract(
-        CONTRACT_CONFIG[state.connectedNetwork.chainId][
+        CONTRACT_CONFIG[state.connectedNetwork.chainId as keyof typeof CHAIN_ID][
           state.selectedAsset.toUpperCase()
         ].address,
         MINTTOKENABI,
-        signer as Signer,
+        provider.getSigner(wallet.accounts[0].address)
       )
       dispatch({ type: Actions.SET_MINT_TOKEN_CONTRACT, payload: mintContract })
       if (state.selectedAsset !== Assets.ETH)
@@ -179,14 +185,14 @@ export const AppContextProvider = ({ children }: ContextProps) => {
         })
       }
     }
-  }, [state.connectedNetwork, address, signer, state.selectedAsset])
+  }, [state.connectedNetwork, wallet, state.selectedAsset])
 
   return (
     <AppContext.Provider value={[state, dispatch]}>
       <ApolloProvider
         client={
-          state.connectedNetwork &&
-          state.connectedNetwork.chainId === arbitrumGoerli.id
+          state.connectedNetwork && connectedChain &&
+          state.connectedNetwork.chainId === connectedChain?.id
             ? arbitrumGoerliClient
             : arbitrumClient
         }

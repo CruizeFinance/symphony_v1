@@ -5,11 +5,11 @@ import { rem } from '../../utils'
 import NetworkDropdown from '../header/networkdropdown'
 import ConnectButtonDropdown from '../header/connectbuttondropdown'
 import './footer.scss'
-import { useAccount } from 'wagmi'
 import { Link, useLocation } from 'react-router-dom'
+import { useConnectWallet } from '@web3-onboard/react'
 
 const Footer = () => {
-  const { isConnected } = useAccount()
+  const [{ wallet }] = useConnectWallet()
 
   const location = useLocation()
 
@@ -215,7 +215,7 @@ const Footer = () => {
         <div className="network-wallet-area">
           <div className="network-wallet-container">
             <div className="dropdown-options">
-              {isConnected ? (
+              {wallet ? (
                 <>
                   <NetworkDropdown />
                   <ConnectButtonDropdown />

@@ -1,10 +1,10 @@
 import { useContext } from 'react'
-import { goerli } from 'wagmi'
 import { Button, Loader, Sprite } from '../../../components'
 import { AppContext } from '../../../context'
 import { Actions } from '../../../enums/actions'
 import { rem } from '../../../utils'
 import './transactiondetail.scss'
+import { useSetChain } from '@web3-onboard/react'
 
 interface TransactionDetailProps {
   open: boolean
@@ -13,6 +13,8 @@ interface TransactionDetailProps {
 
 const TransactionDetail = ({ open, hide }: TransactionDetailProps) => {
   const [state, dispatch] = useContext(AppContext)
+
+  const [{ connectedChain }] = useSetChain()
 
   return (
     <div
@@ -47,11 +49,11 @@ const TransactionDetail = ({ open, hide }: TransactionDetailProps) => {
         <Button
           className="detail-etherscan-button"
           onClick={
-            state.transactionDetails.loading
+            state.transactionDetails.loading && state.connectedNetwork && connectedChain
               ? () =>
                   window.open(
                     `https://${
-                      state.connectedNetwork.chainId === goerli.id
+                      state.connectedNetwork.chainId === connectedChain?.id
                         ? 'goerli.etherscan'
                         : 'testnet.arbiscan'
                     }.io/tx/${state.transactionDetails.hash}`,

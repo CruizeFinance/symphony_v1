@@ -3,7 +3,7 @@ import { getCurrentDeposits } from '../../apis'
 import { AppContext } from '../../context'
 import { Actions } from '../../enums/actions'
 import { useOutsideAlerter } from '../../hooks'
-import { DROPDOWN_OPTIONS } from '../../utils'
+import { CHAIN_ID, DROPDOWN_OPTIONS } from '../../utils'
 import Sprite from '../sprite'
 import './assetdropdown.scss'
 
@@ -40,7 +40,7 @@ const AssetDropdown = ({
   }
 
   const setCurrentDeposit = async (val: string) => {
-    const currentDeposit = await getCurrentDeposits(val, state.connectedNetwork.chainId)
+    const currentDeposit = await getCurrentDeposits(val, CHAIN_ID[state.connectedNetwork.chainId as keyof typeof CHAIN_ID])
     dispatch({
       type: Actions.SET_CURRENT_DEPOSIT,
       payload: {
