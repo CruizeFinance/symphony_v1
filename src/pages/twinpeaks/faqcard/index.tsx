@@ -31,7 +31,7 @@ const data = [
     isOpen: false,
     question: 'What are the costs associated with utilizing the vault?',
     answer:
-      'We impose a 2% management fee on a pro-rated basis and a 10% performance fee charged on the generated profits per cycle.',
+      'We impose a 2% management fee on a pro-rated basis and a 15% performance fee charged on the generated profits per cycle.',
   },
   {
     id: 5,
