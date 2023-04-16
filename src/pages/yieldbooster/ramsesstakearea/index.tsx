@@ -329,13 +329,17 @@ const RamsesStakeCard = () => {
       )
         checkAllowance()
     }
-  }, [balanceLoaded, state.ramsesVaultSelection.assetOne.approved, state.ramsesVaultSelection.assetTwo.approved])
+  }, [
+    balanceLoaded,
+    state.ramsesVaultSelection.assetOne.approved,
+    state.ramsesVaultSelection.assetTwo.approved,
+  ])
 
   useEffect(() => {
     if (assetOneContract && assetTwoContract) {
       getBalance()
     }
-  }, [assetOneContract, assetTwoContract])
+  }, [assetOneContract, assetTwoContract, state.transactionDetails])
 
   useEffect(() => {
     if (signer && isConnected) {
@@ -444,8 +448,8 @@ const RamsesStakeCard = () => {
             disabled={
               state.selectedTab === 'deposit'
                 ? (state.ramsesVaultSelection.assetOne.approved &&
-                    !assetOneInput) &&
-                  (state.ramsesVaultSelection.assetTwo.approved &&
+                    !assetOneInput &&
+                    state.ramsesVaultSelection.assetTwo.approved &&
                     !assetTwoInput) ||
                   state.transactionDetails.loading
                 : state.transactionDetails.loading
@@ -470,6 +474,7 @@ const RamsesStakeCard = () => {
         <TransactionDetail
           open={openTransactionDetail}
           hide={() => setOpenTransactionDetail(false)}
+          {...state.selectedTab === 'withdraw' ? { style: { height: 'auto' } } : undefined}
         />
       </Card>
       <Modal

@@ -218,9 +218,28 @@ const Vault = () => {
                     cardTitle="WETH-USDC"
                     cardIcons={['wethgray-image', 'usdc']}
                     apy={'104.63%'}
+                    onClick={() => {
+                      dispatch({
+                        type: Actions.SET_RAMSES_VAULT_PAIR,
+                        payload: {
+                          ...state.ramsesVaultSelection,
+                          assetOne: {
+                            ...state.ramsesVaultSelection.assetOne,
+                            name: 'weth'
+                          },
+                          assetTwo: {
+                            ...state.ramsesVaultSelection.assetTwo,
+                            name: 'usdc'
+                          }
+                        },
+                      })
+                      navigate('/vaults/yieldbooster')
+                    }}
                     buttonOptions={{
-                      label: 'Coming Soon',
-                      disabled: true,
+                      label: 'Start Earning',
+                      buttonIcon: (
+                        <Sprite id="arrow-left-icon" width={16} height={16} />
+                      ),
                     }}
                     cardTagLabel={'Ramses Yield Booster'}
                     vaultType={'ramses-yield-booster'}

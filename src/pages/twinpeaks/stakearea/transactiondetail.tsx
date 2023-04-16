@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { CSSProperties, useContext } from 'react'
 import { goerli } from 'wagmi'
 import { Button, Loader, Sprite } from '../../../components'
 import { AppContext } from '../../../context'
@@ -9,9 +9,10 @@ import './transactiondetail.scss'
 interface TransactionDetailProps {
   open: boolean
   hide: () => void
+  style?: CSSProperties
 }
 
-const TransactionDetail = ({ open, hide }: TransactionDetailProps) => {
+const TransactionDetail = ({ open, hide, style }: TransactionDetailProps) => {
   const [state, dispatch] = useContext(AppContext)
 
   return (
@@ -20,6 +21,7 @@ const TransactionDetail = ({ open, hide }: TransactionDetailProps) => {
       style={{
         width: open ? '100%' : 0,
         border: open ? `${rem(1)} solid var(--vault-card-border)` : '',
+        ...style
       }}
     >
       <div className="detail-content">

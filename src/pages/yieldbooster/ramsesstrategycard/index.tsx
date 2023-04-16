@@ -96,8 +96,8 @@ const RamsesStrategyCard = () => {
       <div className="card-header">
         <div className="card-icons-info">
           <div className="card-icons">
-            <Sprite id='usdc-icon' width={30} height={30} />
-            <Sprite id='usdt-icon' width={30} height={30} />
+            <Sprite id={`${state.ramsesVaultSelection.assetOne.name}-icon`} width={30} height={30} />
+            <Sprite id={`${state.ramsesVaultSelection.assetTwo.name}-icon`} width={30} height={30} />
           </div>
           <label className="card-icons-label">
             USDC-USDT
