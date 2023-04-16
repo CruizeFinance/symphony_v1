@@ -10,13 +10,9 @@ export const VAULT_NAV_LINKS = [
     label: 'Twin Peaks',
   },
   {
-    link: 'bullishascent',
-    label: 'Bullish Ascent',
-  },
-  {
-    link: 'bearishascent',
-    label: 'Bearish Ascent',
-  },
+    link: 'yieldbooster',
+    label: 'Yield Booster',
+  }
 ]
 
 export const DROPDOWN_OPTIONS = [Assets.ETH, Assets.WETH, Assets.WBTC, Assets.USDC]
@@ -143,4 +139,18 @@ export const API_PARAMS = {
   [Assets.WETH]: 'ethereum',
   [Assets.WBTC]: 'bitcoin',
   [Assets.USDC]: 'usdc',
+}
+
+export const RAMSES_VAULT_CONTRACT_CONFIG = {
+  ['weth-usdc']: {
+    contract: '0x81a191e51b9Ca757A5f66CCd180aF3EdE98a670D',
+    assetOne: {
+      contract: '0x82aF49447D8a07e3bd95BD0d56f35241523fBab1',
+      decimals: 18
+    },
+    assetTwo: {
+      contract: '0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8',
+      decimals: 6
+    }
+  }
 }

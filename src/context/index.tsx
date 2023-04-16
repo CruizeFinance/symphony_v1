@@ -5,7 +5,12 @@ import { Action } from './action'
 import reducer from './reducer'
 import { erc20ABI, useAccount, useSigner, useNetwork } from 'wagmi'
 import { Actions } from '../enums/actions'
-import { CONTRACT_CONFIG, NETWORK_CONFIG, SUPPORTED_CHAINS } from '../utils'
+import {
+  CONTRACT_CONFIG,
+  NETWORK_CONFIG,
+  RAMSES_VAULT_CONTRACT_CONFIG,
+  SUPPORTED_CHAINS,
+} from '../utils'
 import {
   getAssetAPYs,
   getAssetPrice,
@@ -14,6 +19,7 @@ import {
 } from '../apis'
 import CRUIZECONTRACTABI from '../abi/cruizecontract.json'
 import MINTTOKENABI from '../abi/minttoken.json'
+import RAMSESVAULTCONTRACTABI from '../abi/ramsesvault.json'
 import { useOnceCall } from '../hooks'
 import { BigNumber, Contract, ethers, Signer } from 'ethers'
 import {
@@ -180,6 +186,22 @@ export const AppContextProvider = ({ children }: ContextProps) => {
       }
     }
   }, [state.connectedNetwork, address, signer, state.selectedAsset])
+
+  useEffect(() => {
+    if (state.ramsesVaultSelection.assetOne.name && state.ramsesVaultSelection.assetTwo.name && signer) {
+      const ramsesVaultContract: Contract = new ethers.Contract(
+        RAMSES_VAULT_CONTRACT_CONFIG[
+          `${state.ramsesVaultSelection.assetOne.name}-${state.ramsesVaultSelection.assetTwo.name}` as keyof typeof RAMSES_VAULT_CONTRACT_CONFIG
+        ].contract,
+        RAMSESVAULTCONTRACTABI,
+        signer as Signer,
+      )
+      dispatch({
+        type: Actions.SET_RAMSES_VAULT_CONTRACT,
+        payload: ramsesVaultContract,
+      })
+    }
+  }, [state.ramsesVaultSelection, signer])
 
   return (
     <AppContext.Provider value={[state, dispatch]}>

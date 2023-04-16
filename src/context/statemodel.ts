@@ -10,6 +10,7 @@ export default interface State {
     | Assets.WETH
     | Assets.ETH
     | 'portfolio'
+    | 'ramses-yield-amplifier'
     | 'default'
   selectedAsset: Assets.ETH | Assets.USDC | Assets.WBTC | Assets.WETH
   connectedNetwork: NetworkConfigDetail
@@ -107,4 +108,17 @@ export default interface State {
       base_apy: string
     }
   }
+  ramsesVaultSelection: {
+    assetOne: {
+      name: string,
+      approved: boolean,
+      balance: string
+    },
+    assetTwo: {
+      name: string,
+      approved: boolean,
+      balance: string
+    }
+  }
+  ramsesVaultContract: Contract | null
 }

@@ -87,6 +87,19 @@ const initialState: State = {
       base_apy: '??'
     }
   },
+  ramsesVaultContract: null,
+  ramsesVaultSelection: {
+    assetOne: {
+      name: 'weth',
+      approved: false,
+      balance: '0'
+    },
+    assetTwo: {
+      name: 'usdc',
+      approved: false,
+      balance: '0'
+    }
+  }
 }
 
 export default initialState

@@ -46,6 +46,22 @@
     .asset-section {
       @include flex(column, flex-end, center, toRem(8));
       align-self: flex-end;
+      .asset-info {
+        @include flex(row, center, center, '');
+        background: inherit;
+        text-transform: uppercase;
+        cursor: pointer;
+        width: fit-content;
+        padding: toRem(4) toRem(8);
+        border-radius: toRem(100);
+        gap: toRem(4);
+        @include typography(
+          GroteskMedium,
+          toRem(24),
+          toRem(24),
+          var(--small-dropdown-color)
+        );
+      }
       .balance-button-container {
         @include flex(row, center, center, toRem(4));
         .asset-balance {

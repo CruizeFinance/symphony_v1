@@ -12,7 +12,7 @@ interface VaultCardProps {
     buttonIcon?: ReactNode
     disabled?: boolean
   }
-  vaultType?: 'full-principal-protected' | 'ramses-yield-booster'
+  vaultType?: 'protected-twin-peaks' | 'ramses-yield-booster'
   cardTagLabel?: string
 }
 

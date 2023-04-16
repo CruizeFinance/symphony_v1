@@ -41,16 +41,7 @@ const Footer = () => {
                 cursor: 'not-allowed',
               }}
             >
-              Bullish Ascent
-            </a>
-            <a
-              className="link"
-              style={{
-                color: 'var(--vault-card-border)',
-                cursor: 'not-allowed',
-              }}
-            >
-              Bearish Ascent
+              Yield Booster
             </a>
           </div> */}
           <div className="col-2">
