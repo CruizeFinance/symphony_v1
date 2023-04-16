@@ -100,7 +100,7 @@ const RamsesStrategyCard = () => {
             <Sprite id={`${state.ramsesVaultSelection.assetTwo.name}-icon`} width={30} height={30} />
           </div>
           <label className="card-icons-label">
-            USDC-USDT
+            {state.ramsesVaultSelection.assetOne.name.toUpperCase()}-{state.ramsesVaultSelection.assetTwo.name.toUpperCase()}
           </label>
         </div>
         <div className="tvl">
