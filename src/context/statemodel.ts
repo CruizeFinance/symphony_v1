@@ -81,6 +81,7 @@ export default interface State {
     vault_cap: number
   }
   withdrawType: 'request' | 'instant'
+  ramsesDepositType: 'standard' | 'lp'
   yieldInfoData: {
     pcg_moved: {
       [x: number | string]: number,
@@ -115,6 +116,11 @@ export default interface State {
       balance: string
     },
     assetTwo: {
+      name: string,
+      approved: boolean,
+      balance: string
+    },
+    lp: {
       name: string,
       approved: boolean,
       balance: string

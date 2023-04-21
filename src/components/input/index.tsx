@@ -16,6 +16,7 @@ interface InputProps {
   inputValue: string
   assetApproved: boolean
   balance?: string
+  hideDollarValue?: boolean
 }
 
 function escapeRegExp(string: string): string {
@@ -32,6 +33,7 @@ const Input = ({
   showAsset,
   hideLabel,
   balance,
+  hideDollarValue=false
 }: InputProps) => {
   const [state, dispatch] = useContext(AppContext)
 
@@ -150,7 +152,7 @@ const Input = ({
               !assetApproved
             } */
           />
-          <p className="usd-value">
+          {hideDollarValue ? null : <p className="usd-value">
             ~
             {toFixed(
               Number(input || 0) *
@@ -159,12 +161,12 @@ const Input = ({
                   : state.assetPrice[state.selectedAsset]),
               4,
             )}
-          </p>
+          </p>}
         </div>
         <div className="asset-section">
           {showAsset ? (
             <div className="asset-info">
-              <Sprite id={`${showAsset}-icon`} width={32} height={32} />
+              {hideDollarValue ? null : <Sprite id={`${showAsset}-icon`} width={32} height={32} />}
               {showAsset}
             </div>
           ) : (

@@ -68,17 +68,21 @@ const RamsesStakeCard = () => {
   const [openTransactionDetail, setOpenTransactionDetail] = useState(false)
   const [assetOneInput, setAssetOneInput] = useState('')
   const [assetTwoInput, setAssetTwoInput] = useState('')
+  const [lpInput, setLpInput] = useState('')
   const [assetOneContract, setAssetOneContract] = useState<Contract | null>(
     null,
   )
   const [assetTwoContract, setAssetTwoContract] = useState<Contract | null>(
     null,
   )
+  const [lpContract, setLpContract] = useState<Contract | null>(null)
   const [balanceLoaded, setBalanceLoaded] = useState(false)
 
   const getBalance = async () => {
+    try {
     const balanceOne = await assetOneContract!.balanceOf(address)
     const balanceTwo = await assetTwoContract!.balanceOf(address)
+    const balanceLp = await lpContract!.balanceOf(address)
 
     dispatch({
       type: Actions.SET_RAMSES_VAULT_PAIR,
@@ -102,10 +106,22 @@ const RamsesStakeCard = () => {
             ].assetTwo.decimals,
           ),
         },
+        lp: {
+          ...state.ramsesVaultSelection.lp,
+          balance: ethers.utils.formatUnits(
+            balanceLp as BigNumber,
+            RAMSES_VAULT_CONTRACT_CONFIG[
+              `${state.ramsesVaultSelection.assetOne.name}-${state.ramsesVaultSelection.assetTwo.name}` as keyof typeof RAMSES_VAULT_CONTRACT_CONFIG
+            ].lp.decimals,
+          ),
+        },
       },
     })
 
     setBalanceLoaded(true)
+  } catch (e) {
+    resetTransactionDetails()
+  }
   }
 
   const checkAllowance = async () => {
@@ -117,6 +133,12 @@ const RamsesStakeCard = () => {
         ].contract,
       )
       const approvedTwo: BigNumber = await assetTwoContract!.allowance(
+        address!,
+        RAMSES_VAULT_CONTRACT_CONFIG[
+          `${state.ramsesVaultSelection.assetOne.name}-${state.ramsesVaultSelection.assetTwo.name}` as keyof typeof RAMSES_VAULT_CONTRACT_CONFIG
+        ].contract,
+      )
+      const approvedLp: BigNumber = await lpContract!.allowance(
         address!,
         RAMSES_VAULT_CONTRACT_CONFIG[
           `${state.ramsesVaultSelection.assetOne.name}-${state.ramsesVaultSelection.assetTwo.name}` as keyof typeof RAMSES_VAULT_CONTRACT_CONFIG
@@ -134,6 +156,10 @@ const RamsesStakeCard = () => {
             ...state.ramsesVaultSelection.assetTwo,
             approved: BigNumber.from(approvedTwo).gt(BigNumber.from(0)),
           },
+          lp: {
+            ...state.ramsesVaultSelection.lp,
+            approved: BigNumber.from(approvedLp).gt(BigNumber.from(0)),
+          },
         },
       })
     } catch (e) {
@@ -141,7 +167,7 @@ const RamsesStakeCard = () => {
     }
   }
 
-  const approveToken = async (token: 'assetOne' | 'assetTwo') => {
+  const approveToken = async (token: 'assetOne' | 'assetTwo' | 'lp') => {
     try {
       dispatch({
         type: Actions.SET_TRANSACTION_DETAILS,
@@ -161,7 +187,14 @@ const RamsesStakeCard = () => {
               ].contract,
               ethers.constants.MaxUint256,
             )
-          : await assetTwoContract!.approve(
+          : token === 'assetTwo'
+          ? await assetTwoContract!.approve(
+              RAMSES_VAULT_CONTRACT_CONFIG[
+                `${state.ramsesVaultSelection.assetOne.name}-${state.ramsesVaultSelection.assetTwo.name}` as keyof typeof RAMSES_VAULT_CONTRACT_CONFIG
+              ].contract,
+              ethers.constants.MaxUint256,
+            )
+          : await lpContract!.approve(
               RAMSES_VAULT_CONTRACT_CONFIG[
                 `${state.ramsesVaultSelection.assetOne.name}-${state.ramsesVaultSelection.assetTwo.name}` as keyof typeof RAMSES_VAULT_CONTRACT_CONFIG
               ].contract,
@@ -218,6 +251,7 @@ const RamsesStakeCard = () => {
           : [],
       )
     } catch (e) {
+      resetTransactionDetails()
       dispatch({
         type: Actions.SET_APP_ERROR,
         payload: (e as { message: string }).message,
@@ -242,12 +276,34 @@ const RamsesStakeCard = () => {
       const tx = await state.ramsesVaultContract![functionName](...args)
       await transactionExecution(tx, 'transaction')
     } catch (e) {
-      console.log(e)
+      resetTransactionDetails()
       dispatch({
         type: Actions.SET_APP_ERROR,
         payload: 'The transaction was cancelled and could not be completed',
       })
     }
+  }
+
+  const resetTransactionDetails = () => {
+    dispatch({
+      type: Actions.SET_TRANSACTION_DETAILS,
+      payload: {
+        loading: false,
+        hash: '',
+        status: 0,
+        type: '',
+        message: '',
+      },
+    })
+    dispatch({
+      type: Actions.SET_USER_INPUT_VALUE,
+      payload: '',
+    })
+    dispatch({ type: Actions.SET_APPROVE_TOKEN_MODAL, payload: false })
+    setLpInput('')
+    setAssetOneInput('')
+    setAssetTwoInput('')
+    setOpenConfirm(false)
   }
 
   const transactionExecution = async (
@@ -313,12 +369,22 @@ const RamsesStakeCard = () => {
         })
       return data
     } catch (e) {
+      resetTransactionDetails()
       dispatch({
         type: Actions.SET_APP_ERROR,
         payload: (e as { message: string }).message,
       })
     }
   }
+
+  useEffect(() => {
+    if (state.appError) {
+      const timeout = setTimeout(() => {
+        dispatch({ type: Actions.SET_APP_ERROR, payload: '' })
+        clearTimeout(timeout)
+      }, 7000)
+    }
+  }, [state.appError])
 
   useEffect(() => {
     if (balanceLoaded) {
@@ -339,7 +405,7 @@ const RamsesStakeCard = () => {
     if (assetOneContract && assetTwoContract) {
       getBalance()
     }
-  }, [assetOneContract, assetTwoContract, state.transactionDetails])
+  }, [assetOneContract, assetTwoContract, state.transactionDetails, state.ramsesDepositType])
 
   useEffect(() => {
     if (signer && isConnected) {
@@ -359,6 +425,14 @@ const RamsesStakeCard = () => {
         signer as Signer,
       )
       setAssetTwoContract(assetTwoContract)
+      const lpContract = new ethers.Contract(
+        RAMSES_VAULT_CONTRACT_CONFIG[
+          `${state.ramsesVaultSelection.assetOne.name}-${state.ramsesVaultSelection.assetTwo.name}` as keyof typeof RAMSES_VAULT_CONTRACT_CONFIG
+        ].lp.contract,
+        erc20ABI,
+        signer as Signer,
+      )
+      setLpContract(lpContract)
     }
   }, [signer, isConnected])
 
@@ -394,33 +468,106 @@ const RamsesStakeCard = () => {
           defaultTab={state.selectedTab}
         />
         {state.selectedTab === 'deposit' ? (
-          <div className="input-area">
-            <Input
-              onInputChange={(val) => setAssetOneInput(val)}
-              inputValue={assetOneInput}
-              onMaxClick={(val) => setAssetOneInput(toFixed(Number(val), 4))}
-              showAsset={state.ramsesVaultSelection.assetOne.name}
-              assetApproved={state.ramsesVaultSelection.assetOne.approved}
-              balance={state.ramsesVaultSelection.assetOne.balance}
-            />
-            <Input
-              onInputChange={(val) => setAssetTwoInput(val)}
-              inputValue={assetTwoInput}
-              onMaxClick={(val) => setAssetTwoInput(toFixed(Number(val), 4))}
-              showAsset={state.ramsesVaultSelection.assetTwo.name}
-              hideLabel
-              assetApproved={state.ramsesVaultSelection.assetTwo.approved}
-              balance={state.ramsesVaultSelection.assetTwo.balance}
-            />
-            <div className="input-area-plus-icon">
-              <img
-                src="/assets/icons/ramses-stake-area-plus-icon.png"
-                alt="icon"
-                width={32}
-                height={32}
+          <Tabs
+            tabs={[
+              {
+                label: 'standard',
+              },
+              {
+                label: 'lp',
+              },
+            ]}
+            onChange={(val) => {
+              dispatch({
+                type: Actions.SET_USER_INPUT_VALUE,
+                payload: '',
+              })
+              dispatch({
+                type: Actions.SET_RAMSES_DEPOSIT_TYPE,
+                payload: val,
+              })
+            }}
+            type="contained"
+            defaultTab={state.ramsesDepositType}
+          />
+        ) : null}
+        {state.selectedTab === 'deposit' ? (
+          state.ramsesDepositType === 'standard' ? (
+            <div className="input-area">
+              <Input
+                onInputChange={(val) => setAssetOneInput(val)}
+                inputValue={assetOneInput}
+                onMaxClick={(val) => setAssetOneInput(toFixed(Number(val), 4))}
+                showAsset={state.ramsesVaultSelection.assetOne.name}
+                assetApproved={state.ramsesVaultSelection.assetOne.approved}
+                balance={state.ramsesVaultSelection.assetOne.balance}
               />
+              <Input
+                onInputChange={(val) => setAssetTwoInput(val)}
+                inputValue={assetTwoInput}
+                onMaxClick={(val) => setAssetTwoInput(toFixed(Number(val), 4))}
+                showAsset={state.ramsesVaultSelection.assetTwo.name}
+                hideLabel
+                assetApproved={state.ramsesVaultSelection.assetTwo.approved}
+                balance={state.ramsesVaultSelection.assetTwo.balance}
+              />
+              <div className="input-area-plus-icon">
+                <img
+                  src="/assets/icons/ramses-stake-area-plus-icon.png"
+                  alt="icon"
+                  width={32}
+                  height={32}
+                />
+              </div>
             </div>
-          </div>
+          ) : (
+            <Input
+              onInputChange={(val) => setLpInput(val)}
+              inputValue={lpInput}
+              onMaxClick={(val) => setLpInput(toFixed(Number(val), 4))}
+              showAsset={state.ramsesVaultSelection.lp.name}
+              hideLabel
+              hideDollarValue
+              assetApproved={state.ramsesVaultSelection.lp.approved}
+              balance={state.ramsesVaultSelection.lp.balance}
+            />
+          )
+        ) : null}
+        {isConnected ? (
+          <>
+            {state.selectedAssetApproved ? null : (
+              <div
+                className="error-area"
+                style={{ background: 'var(--contained-tab-background)' }}
+              >
+                <div className="error-title">
+                  <Sprite id="guide-icon" width={17} height={16} />
+                  <label
+                    className="title-label"
+                    style={{ color: 'var(--link-inactive)' }}
+                  >
+                    Guide
+                  </label>
+                </div>
+                <p
+                  className="error-text"
+                  style={{ color: 'var(--link-inactive)' }}
+                >
+                  You will be asked to approve this currency from your wallet.
+                  You will need to approve each currency only once.
+                </p>
+              </div>
+            )}
+            {state.appError ? (
+              <div className="error-area">
+                <div className="error-title">
+                  <Sprite id="error-icon" width={17} height={16} />
+                  <label className="title-label">ERROR</label>
+                </div>
+                <p className="error-text">{state.appError}</p>
+              </div>
+            ) : null}
+          </>
         ) : null}
         {!isConnected ? (
           <ConnectKitButton.Custom>
@@ -436,8 +583,16 @@ const RamsesStakeCard = () => {
           <Button
             className="deposit-button"
             onClick={
-              !state.ramsesVaultSelection.assetOne.approved ||
-              !state.ramsesVaultSelection.assetTwo.approved
+              state.ramsesDepositType === 'standard' &&
+              (!state.ramsesVaultSelection.assetOne.approved ||
+                !state.ramsesVaultSelection.assetTwo.approved)
+                ? () =>
+                    dispatch({
+                      type: Actions.SET_APPROVE_TOKEN_MODAL,
+                      payload: true,
+                    })
+                : state.ramsesDepositType === 'lp' &&
+                  !state.ramsesVaultSelection.lp.approved
                 ? () =>
                     dispatch({
                       type: Actions.SET_APPROVE_TOKEN_MODAL,
@@ -447,34 +602,45 @@ const RamsesStakeCard = () => {
             }
             disabled={
               state.selectedTab === 'deposit'
-                ? (state.ramsesVaultSelection.assetOne.approved &&
-                    !assetOneInput &&
-                    state.ramsesVaultSelection.assetTwo.approved &&
-                    !assetTwoInput) ||
-                  state.transactionDetails.loading
+                ? state.ramsesDepositType === 'standard'
+                  ? (state.ramsesVaultSelection.assetOne.approved &&
+                      !assetOneInput &&
+                      state.ramsesVaultSelection.assetTwo.approved &&
+                      !assetTwoInput) ||
+                    state.transactionDetails.loading
+                  : state.ramsesDepositType === 'lp'
+                  ? state.ramsesVaultSelection.lp.approved && !lpInput
+                  : state.transactionDetails.loading
                 : state.transactionDetails.loading
             }
           >
-            {!state.ramsesVaultSelection.assetOne.approved
-              ? `Approve ${state.ramsesVaultSelection.assetOne.name.toUpperCase()}`
-              : !state.ramsesVaultSelection.assetTwo.approved
-              ? `Approve ${state.ramsesVaultSelection.assetTwo.name.toUpperCase()}`
-              : state.transactionDetails.loading
+            {state.transactionDetails.loading
               ? 'Pending Transaction'
+              : state.ramsesDepositType === 'standard'
+              ? !state.ramsesVaultSelection.assetOne.approved
+                ? `Approve ${state.ramsesVaultSelection.assetOne.name.toUpperCase()}`
+                : !state.ramsesVaultSelection.assetTwo.approved
+                ? `Approve ${state.ramsesVaultSelection.assetTwo.name.toUpperCase()}`
+                : 'View Details'
+              : !state.ramsesVaultSelection.lp.approved
+              ? `Approve LP Token`
               : 'View Details'}
           </Button>
         )}
         <ConfirmStake
           open={openConfirm}
           hide={() => setOpenConfirm(false)}
-          amountOne={assetOneInput}
-          amountTwo={assetTwoInput}
+          {...(state.ramsesDepositType === 'lp'
+            ? { amountOne: lpInput, amountTwo: '' }
+            : { amountOne: assetOneInput, amountTwo: assetTwoInput })}
           onConfirm={() => onConfirm()}
         />
         <TransactionDetail
           open={openTransactionDetail}
           hide={() => setOpenTransactionDetail(false)}
-          {...state.selectedTab === 'withdraw' ? { style: { height: 'auto' } } : undefined}
+          {...(state.selectedTab === 'withdraw'
+            ? { style: { height: 'auto' } }
+            : undefined)}
         />
       </Card>
       <Modal
@@ -485,15 +651,30 @@ const RamsesStakeCard = () => {
       >
         <div className="approve-token-modal">
           <div className="approve-modal-header">
-            <Sprite
-              id={`big-${
-                !state.ramsesVaultSelection.assetOne.approved
-                  ? state.ramsesVaultSelection.assetOne.name
-                  : state.ramsesVaultSelection.assetTwo.name
-              }-icon`}
-              width={48}
-              height={48}
-            />
+            {state.ramsesDepositType === 'lp' ? (
+              <div className="card-icons">
+                <Sprite
+                  id={`${state.ramsesVaultSelection.assetOne.name}-icon`}
+                  width={30}
+                  height={30}
+                />
+                <Sprite
+                  id={`${state.ramsesVaultSelection.assetTwo.name}-icon`}
+                  width={30}
+                  height={30}
+                />
+              </div>
+            ) : (
+              <Sprite
+                id={`big-${
+                  !state.ramsesVaultSelection.assetOne.approved
+                    ? state.ramsesVaultSelection.assetOne.name
+                    : state.ramsesVaultSelection.assetTwo.name
+                }-icon`}
+                width={48}
+                height={48}
+              />
+            )}
             <p
               style={{
                 color: 'var(--link-inactive)',
@@ -523,7 +704,9 @@ const RamsesStakeCard = () => {
               approveToken(
                 !state.ramsesVaultSelection.assetOne.approved
                   ? 'assetOne'
-                  : 'assetTwo',
+                  : !state.ramsesVaultSelection.assetTwo.approved
+                  ? 'assetTwo'
+                  : 'lp',
               )
             }
           >

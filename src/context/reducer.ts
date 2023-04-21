@@ -124,6 +124,11 @@ const reducer = (state: State, action: Action): State => {
         ...state,
         ramsesVaultSelection: action.payload,
       }
+    case Actions.SET_RAMSES_DEPOSIT_TYPE:
+      return {
+        ...state,
+        ramsesDepositType: action.payload,
+      }
     default:
       return state
   }

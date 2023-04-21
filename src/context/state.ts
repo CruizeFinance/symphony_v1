@@ -60,6 +60,7 @@ const initialState: State = {
     vault_cap: 0
   },
   withdrawType: 'request',
+  ramsesDepositType: 'standard',
   yieldInfoData: {
     pcg_moved: {
       0: 0
@@ -96,6 +97,11 @@ const initialState: State = {
     },
     assetTwo: {
       name: 'usdc',
+      approved: false,
+      balance: '0'
+    },
+    lp: {
+      name: 'weth-usdc',
       approved: false,
       balance: '0'
     }

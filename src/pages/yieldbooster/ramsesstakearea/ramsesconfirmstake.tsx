@@ -12,7 +12,13 @@ interface ConfirmStakeProps {
   onConfirm: () => void
 }
 
-const ConfirmStake = ({ open, hide, amountOne, amountTwo, onConfirm }: ConfirmStakeProps) => {
+const ConfirmStake = ({
+  open,
+  hide,
+  amountOne,
+  amountTwo,
+  onConfirm,
+}: ConfirmStakeProps) => {
   const [state] = useContext(AppContext)
 
   return (
@@ -42,8 +48,16 @@ const ConfirmStake = ({ open, hide, amountOne, amountTwo, onConfirm }: ConfirmSt
               : undefined)}
           >
             <div className="card-icons">
-              <Sprite id="usdc-icon" width={30} height={30} />
-              <Sprite id="usdt-icon" width={30} height={30} />
+              <Sprite
+                id={`${state.ramsesVaultSelection.assetOne.name}-icon`}
+                width={30}
+                height={30}
+              />
+              <Sprite
+                id={`${state.ramsesVaultSelection.assetTwo.name}-icon`}
+                width={30}
+                height={30}
+              />
             </div>
             <div className="arrow-animation">
               {[1, 2, 3].map((n) => (
@@ -64,20 +78,42 @@ const ConfirmStake = ({ open, hide, amountOne, amountTwo, onConfirm }: ConfirmSt
         <div className="transaction-details">
           <p className="details-header">Transaction details</p>
           <div className="details-list">
-            {state.selectedTab === 'withdraw' ? null : <>
-              <div className="detail">
-                <div className="detail-field">
-                  <label className="detail-label">Deposit amount</label>
-                </div>
-                <label className="detail-value">{amountOne}&nbsp;{state.ramsesVaultSelection.assetOne.name.toUpperCase()}</label>
-              </div>
-              <div className="detail">
-                <div className="detail-field">
-                  <label className="detail-label">Deposit amount</label>
-                </div>
-                <label className="detail-value">{amountTwo}&nbsp;{state.ramsesVaultSelection.assetTwo.name.toUpperCase()}</label>
-              </div>
-            </>}
+            {state.selectedTab === 'withdraw' ? null : (
+              <>
+                {state.ramsesDepositType === 'standard' ? (
+                  <>
+                    <div className="detail">
+                      <div className="detail-field">
+                        <label className="detail-label">Deposit amount</label>
+                      </div>
+                      <label className="detail-value">
+                        {amountOne}&nbsp;
+                        {state.ramsesVaultSelection.assetOne.name.toUpperCase()}
+                      </label>
+                    </div>
+                    <div className="detail">
+                      <div className="detail-field">
+                        <label className="detail-label">Deposit amount</label>
+                      </div>
+                      <label className="detail-value">
+                        {amountTwo}&nbsp;
+                        {state.ramsesVaultSelection.assetTwo.name.toUpperCase()}
+                      </label>
+                    </div>
+                  </>
+                ) : (
+                  <div className="detail">
+                    <div className="detail-field">
+                      <label className="detail-label">Deposit amount</label>
+                    </div>
+                    <label className="detail-value">
+                      {amountOne}&nbsp;
+                      {state.ramsesVaultSelection.lp.name.toUpperCase()}
+                    </label>
+                  </div>
+                )}
+              </>
+            )}
             <div className="detail">
               <div className="detail-field">
                 <label className="detail-label">Vault</label>
