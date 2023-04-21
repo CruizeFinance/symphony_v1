@@ -10,7 +10,7 @@ interface TabsProps {
     tooltip?: string
   }[]
   disabledTab?: string[]
-  defaultTab: string
+  defaultTab?: string
 }
 
 const Tabs = ({ onChange, type, tabs, disabledTab, defaultTab }: TabsProps) => {

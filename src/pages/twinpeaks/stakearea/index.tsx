@@ -640,6 +640,7 @@ const StakeCard = () => {
               payload: toFixed(Number(val), 4),
             })
           }
+          assetApproved={state.selectedAssetApproved}
         />
         {state.selectedTab === 'withdraw' ? (
           <div className="withdraw-details-area">

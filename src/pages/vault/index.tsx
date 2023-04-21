@@ -6,7 +6,6 @@ import { getTVL } from '../../apis'
 import { /* Button, */ Button, Sprite, VaultCard } from '../../components'
 import { AppContext } from '../../context'
 import { Actions } from '../../enums/actions'
-import { DROPDOWN_OPTIONS } from '../../utils'
 import './vault.scss'
 
 export const GET_TVL = gql`
@@ -108,11 +107,11 @@ const Vault = () => {
             </Button>
             <Button
               className={
-                filter === 'full-principal-protected' ? '' : 'filter-button'
+                filter === 'protected-twin-peaks' ? '' : 'filter-button'
               }
-              onClick={() => setFilter('full-principal-protected')}
+              onClick={() => setFilter('protected-twin-peaks')}
             >
-              Principal Protected
+              Protected Twin Peaks
             </Button>
             <Button
               className={
@@ -144,8 +143,8 @@ const Vault = () => {
                         <Sprite id="arrow-left-icon" width={16} height={16} />
                       ),
                     }}
-                    cardTagLabel={'Principal Protected'}
-                    vaultType={'full-principal-protected'}
+                    cardTagLabel={'Protected Twin Peaks'}
+                    vaultType={'protected-twin-peaks'}
                   />
                   <VaultCard
                     cardTitle="WETH"
@@ -164,8 +163,8 @@ const Vault = () => {
                         <Sprite id="arrow-left-icon" width={16} height={16} />
                       ),
                     }}
-                    cardTagLabel={'Principal Protected'}
-                    vaultType={'full-principal-protected'}
+                    cardTagLabel={'Protected Twin Peaks'}
+                    vaultType={'protected-twin-peaks'}
                   />
                   <VaultCard
                     cardTitle="USDC"
@@ -184,14 +183,14 @@ const Vault = () => {
                         <Sprite id="arrow-left-icon" width={16} height={16} />
                       ),
                     }}
-                    cardTagLabel={'Principal Protected'}
-                    vaultType={'full-principal-protected'}
+                    cardTagLabel={'Protected Twin Peaks'}
+                    vaultType={'protected-twin-peaks'}
                   />
                 </>
               ) : null}
             </div>
             <div className="vault-options">
-              {filter !== 'full-principal-protected' ? (
+              {filter !== 'protected-twin-peaks' ? (
                 <>
                   <VaultCard
                     cardTitle="RAM-WETH"
@@ -219,9 +218,28 @@ const Vault = () => {
                     cardTitle="WETH-USDC"
                     cardIcons={['wethgray-image', 'usdc']}
                     apy={'104.63%'}
+                    onClick={() => {
+                      dispatch({
+                        type: Actions.SET_RAMSES_VAULT_PAIR,
+                        payload: {
+                          ...state.ramsesVaultSelection,
+                          assetOne: {
+                            ...state.ramsesVaultSelection.assetOne,
+                            name: 'weth'
+                          },
+                          assetTwo: {
+                            ...state.ramsesVaultSelection.assetTwo,
+                            name: 'usdc'
+                          }
+                        },
+                      })
+                      navigate('/vaults/yieldbooster')
+                    }}
                     buttonOptions={{
-                      label: 'Coming Soon',
-                      disabled: true,
+                      label: 'Start Earning',
+                      buttonIcon: (
+                        <Sprite id="arrow-left-icon" width={16} height={16} />
+                      ),
                     }}
                     cardTagLabel={'Ramses Yield Booster'}
                     vaultType={'ramses-yield-booster'}

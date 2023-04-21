@@ -5,12 +5,18 @@ import { AppContext } from '../../context'
 import { useAccount } from 'wagmi'
 import { Actions } from '../../enums/actions'
 import { toFixed } from '../../utils'
+import Sprite from '../sprite'
 
 interface InputProps {
   prependSymbol?: string
   onInputChange: (val: string) => void
   onMaxClick?: (val: string) => void
+  showAsset?: string
+  hideLabel?: boolean
   inputValue: string
+  assetApproved: boolean
+  balance?: string
+  hideDollarValue?: boolean
 }
 
 function escapeRegExp(string: string): string {
@@ -24,6 +30,10 @@ const Input = ({
   onInputChange,
   onMaxClick,
   inputValue,
+  showAsset,
+  hideLabel,
+  balance,
+  hideDollarValue=false
 }: InputProps) => {
   const [state, dispatch] = useContext(AppContext)
 
@@ -44,7 +54,9 @@ const Input = ({
 
   const assetBalance = useMemo(
     () =>
-      state.selectedTab === 'deposit'
+      balance
+        ? balance
+        : state.selectedTab === 'deposit'
         ? toFixed(Number(state.balances.depositBalance), 4)
         : state.selectedTab === 'withdraw'
         ? state.withdrawType === 'instant'
@@ -52,10 +64,18 @@ const Input = ({
           : Number(
               state.balances.withdraw.requestBalance.fundsAvailableToWithdraw,
             )
-          ? toFixed(Number(state.balances.withdraw.requestBalance.fundsAvailableToWithdraw), 4)
-          : toFixed(Number(state.balances.withdraw.requestBalance.fundsInActiveUse), 4)
+          ? toFixed(
+              Number(
+                state.balances.withdraw.requestBalance.fundsAvailableToWithdraw,
+              ),
+              4,
+            )
+          : toFixed(
+              Number(state.balances.withdraw.requestBalance.fundsInActiveUse),
+              4,
+            )
         : '0' || '0',
-    [state.balances],
+    [state.balances, balance],
   )
 
   useEffect(() => {
@@ -71,13 +91,18 @@ const Input = ({
     )
       dispatch({
         type: Actions.SET_USER_INPUT_VALUE,
-        payload: toFixed(Number(state.balances.withdraw.requestBalance.fundsAvailableToWithdraw), 4),
+        payload: toFixed(
+          Number(
+            state.balances.withdraw.requestBalance.fundsAvailableToWithdraw,
+          ),
+          4,
+        ),
       })
   }, [state.selectedTab, state.withdrawType, state.balances])
 
   return (
     <div className="input-area">
-      <label className="input-label">AMOUNT</label>
+      {hideLabel ? null : <label className="input-label">AMOUNT</label>}
       <div className="input-container">
         <div className="input-section">
           <input
@@ -117,25 +142,36 @@ const Input = ({
             }}
             placeholder="0"
             className="input-field"
-            disabled={
+            /* disabled={
               (state.selectedTab === 'withdraw' &&
                 state.withdrawType === 'request' &&
                 Number(
                   state.balances.withdraw.requestBalance
                     .fundsAvailableToWithdraw,
                 ) > 0) ||
-              !state.selectedAssetApproved
-            }
+              !assetApproved
+            } */
           />
-          <p className="usd-value">
+          {hideDollarValue ? null : <p className="usd-value">
             ~
-            {toFixed((
-              Number(input || 0) * state.assetPrice[state.selectedAsset]
-            ), 4)}
-          </p>
+            {toFixed(
+              Number(input || 0) *
+                (showAsset
+                  ? state.assetPrice[showAsset as keyof typeof state.assetPrice]
+                  : state.assetPrice[state.selectedAsset]),
+              4,
+            )}
+          </p>}
         </div>
         <div className="asset-section">
-          <AssetDropdown optionsStyle={{ right: '0' }} />
+          {showAsset ? (
+            <div className="asset-info">
+              {hideDollarValue ? null : <Sprite id={`${showAsset}-icon`} width={32} height={32} />}
+              {showAsset}
+            </div>
+          ) : (
+            <AssetDropdown optionsStyle={{ right: '0' }} />
+          )}
           {isConnected ? (
             <div className="balance-button-container">
               <p className="asset-balance">

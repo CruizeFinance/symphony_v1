@@ -27,92 +27,107 @@ const reducer = (state: State, action: Action): State => {
     case Actions.SET_ASSET_PRICE:
       return {
         ...state,
-        assetPrice: action.payload
+        assetPrice: action.payload,
       }
     case Actions.SET_PRICE_RANGE:
       return {
         ...state,
-        priceRange: action.payload
+        priceRange: action.payload,
       }
     case Actions.SET_PRINCIPAL_TIME_TO_EXPIRY:
       return {
         ...state,
-        timeToExpiry: action.payload
+        timeToExpiry: action.payload,
       }
     case Actions.SET_CRUIZE_CONTRACT:
       return {
         ...state,
-        cruizeContract: action.payload
+        cruizeContract: action.payload,
       }
     case Actions.SET_SELECTED_ASSET_CONTRACT:
       return {
         ...state,
-        selectedAssetContract: action.payload
+        selectedAssetContract: action.payload,
       }
     case Actions.SET_SELCTED_ASSET_APPROVED:
       return {
         ...state,
-        selectedAssetApproved: action.payload
+        selectedAssetApproved: action.payload,
       }
     case Actions.SET_BALANCES:
       return {
         ...state,
-        balances: action.payload
+        balances: action.payload,
       }
     case Actions.SET_TRANSACTION_DETAILS:
       return {
         ...state,
-        transactionDetails: action.payload
+        transactionDetails: action.payload,
       }
     case Actions.SET_MINT_TOKEN_CONTRACT:
       return {
         ...state,
-        mintTokenContract: action.payload
+        mintTokenContract: action.payload,
       }
     case Actions.SET_TRANSACTION_DATA:
       return {
         ...state,
-        transactionData: action.payload
+        transactionData: action.payload,
       }
     case Actions.SET_USER_INPUT_VALUE:
       return {
         ...state,
-        userInputValue: action.payload
+        userInputValue: action.payload,
       }
     case Actions.SET_APP_ERROR:
       return {
         ...state,
-        appError: action.payload
+        appError: action.payload,
       }
     case Actions.SET_LOCKED_ASSET:
       return {
         ...state,
-        lockedAsset: action.payload
+        lockedAsset: action.payload,
       }
     case Actions.SET_CURRENT_DEPOSIT:
       return {
         ...state,
-        currentDeposit: action.payload
+        currentDeposit: action.payload,
       }
     case Actions.SET_WITHDRAW_TYPE:
       return {
         ...state,
-        withdrawType: action.payload
+        withdrawType: action.payload,
       }
     case Actions.SET_YIELD_INFO_DATA:
       return {
         ...state,
-        yieldInfoData: action.payload
+        yieldInfoData: action.payload,
       }
     case Actions.SET_APPROVE_TOKEN_MODAL:
       return {
         ...state,
-        approveTokenModal: action.payload
+        approveTokenModal: action.payload,
       }
     case Actions.SET_ASSET_APYS:
       return {
         ...state,
-        assetAPYs: action.payload
+        assetAPYs: action.payload,
+      }
+    case Actions.SET_RAMSES_VAULT_CONTRACT:
+      return {
+        ...state,
+        ramsesVaultContract: action.payload,
+      }
+    case Actions.SET_RAMSES_VAULT_PAIR:
+      return {
+        ...state,
+        ramsesVaultSelection: action.payload,
+      }
+    case Actions.SET_RAMSES_DEPOSIT_TYPE:
+      return {
+        ...state,
+        ramsesDepositType: action.payload,
       }
     default:
       return state

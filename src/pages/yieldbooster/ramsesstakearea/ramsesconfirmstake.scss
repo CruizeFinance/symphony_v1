@@ -1,0 +1,115 @@
+@import '../../../style/mixins.scss';
+@import '../../../style/functions.scss';
+
+.confirm-stake-container {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: auto;
+  transition: width ease 0.3s;
+  overflow: hidden;
+  border-radius: toRem(20);
+  background: var(--white);
+  box-shadow: inherit;
+  .stake-content {
+    background: inherit;
+    border-radius: inherit;
+    padding: toRem(24) toRem(20);
+    @include flex(column, center, center, toRem(20));
+    .stake-header {
+      @include flex(row, center, center, toRem(4));
+      align-self: flex-start;
+      .stake-header-label {
+        @include typography(GroteskSemiBold, toRem(16), 130%, var(--black));
+      }
+    }
+    .transfer-area {
+      width: 100%;
+      padding: toRem(24) toRem(24) toRem(0);
+      margin-bottom: toRem(20);
+      @include flex(column, center, center, toRem(20));
+      .graphic-area {
+        @include flex(row, center, center, toRem(32));
+        .card-icons {
+          @include flex(row, center, center, '');
+          svg {
+            &:not(:first-child) {
+              margin-left: toRem(-8);
+            }
+          }
+          img {
+            &:not(:first-child) {
+              margin-left: toRem(-8);
+            }
+          }
+        }
+        .arrow-animation {
+          width: toRem(45);
+          height: auto;
+          @include flex(row, center, center, '');
+        }
+        .arrow {
+          width: toRem(13);
+          height: toRem(13);
+          svg {
+            position: absolute;
+            animation: slide 2.1s linear infinite;
+          }
+        }
+      }
+      .preview-text {
+        @include typography(GroteskMedium, toRem(24), 130%, var(--black));
+        text-transform: capitalize;
+      }
+    }
+    .transaction-details {
+      width: 100%;
+      .details-header {
+        @include typography(GroteskSemiBold, toRem(16), 130%, var(--black));
+        margin-bottom: toRem(16);
+      }
+      .details-list {
+        width: 100%;
+        @include flex(column, center, center, toRem(8));
+        .detail {
+          width: 100%;
+          @include flex(row, center, space-between, '');
+          .detail-field {
+            @include flex(row, center, center, toRem(4));
+            .detail-label {
+              @include typography(
+                GroteskMedium,
+                toRem(16),
+                130%,
+                var(--small-dropdown-color)
+              );
+            }
+          }
+          .detail-value {
+            @include typography(
+              GroteskMedium,
+              toRem(14),
+              130%,
+              var(--small-dropdown-color)
+            );
+          }
+        }
+      }
+    }
+  }
+}
+
+@keyframes slide {
+  0% {
+    opacity: 0;
+  }
+  33% {
+    opacity: 1;
+  }
+  67% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
